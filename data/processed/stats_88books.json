@@ -1,0 +1,11 @@
+{
+  "total_verse_references": 345011,
+  "total_chapter_connections": 143400,
+  "ethiopian_references": 35,
+  "deuterocanonical_references": 197,
+  "canon_distribution": {
+    "Protestant_only": 344779,
+    "Involves_Deuterocanonical": 197,
+    "Involves_Ethiopian": 35
+  }
+}

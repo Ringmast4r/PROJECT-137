@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblical Timeline - 147 Books | PROJECT 147</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .timeline-header {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c94b4b 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        .timeline-container {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline-period {
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-gold);
+        }
+        .period-title {
+            color: var(--accent-gold);
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .period-date {
+            color: #aaa;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .book-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        .book-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+        .book-date {
+            color: var(--accent-gold);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .book-info {
+            color: #aaa;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .canon-ot { border-left-color: #00CED1; }
+        .canon-nt { border-left-color: #4169E1; }
+        .deutero { border-left-color: #9370DB; }
+        .ethiopian { border-left-color: #ff6b9d; }
+        .gnostic { border-left-color: #ff4444; }
+        .lost { border-left-color: #ffa500; }
+        .dss { border-left-color: #00BFFF; }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 3% auto;
+            padding: 30px;
+            border: 2px solid rgba(255, 107, 157, 0.5);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.3);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+        }
+        .modal-title {
+            color: var(--accent-gold);
+            font-size: 1.8em;
+            margin: 0;
+        }
+        .modal-close {
+            color: #aaa;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+        .modal-close:hover {
+            color: var(--accent-gold);
+        }
+        .modal-body {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        .modal-body h3, .modal-body h4 {
+            color: var(--accent-cyan);
+            margin-top: 20px;
+        }
+        .modal-body p {
+            margin: 15px 0;
+        }
+        .verse {
+            margin: 10px 0;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-gold);
+        }
+        .verse-num {
+            color: var(--accent-gold);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .book-meta {
+            background: rgba(255, 107, 157, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .book-meta p {
+            margin: 5px 0;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timeline-header">
+            <h1>📅 Biblical Timeline</h1>
+            <p>Complete Chronology of All 147 Books</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">From Ancient Law (1400 BC) to Modern Discoveries (2006 AD)</p>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color canon-ot"></div>
+                <span>Old Testament (39)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color canon-nt"></div>
+                <span>New Testament (27)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color deutero"></div>
+                <span>Deuterocanonical (14)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color ethiopian"></div>
+                <span>Ethiopian/Pseudepigrapha (21)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color dss"></div>
+                <span>Dead Sea Scrolls (10)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color gnostic"></div>
+                <span>Gnostic/Rejected (22)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color lost"></div>
+                <span>Lost/Referenced (14)</span>
+            </div>
+        </div>
+
+        <div class="timeline-container" id="timeline">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Book Reader Modal -->
+    <div id="book-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-book-title">Book Title</h2>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="book-meta" id="modal-book-meta">
+                <!-- Book metadata will be inserted here -->
+            </div>
+            <div class="modal-body" id="modal-book-content">
+                <!-- Book content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%); border-top: 1px solid rgba(255, 107, 157, 0.2); padding: 20px 0; margin-top: 60px; text-align: center;">
+        <div class="container">
+            <p style="color: #888; margin: 10px 0; font-size: 0.9em;">
+                PROJECT 137 | Truth Seeking Division
+            </p>
+            <div style="margin: 15px 0;">
+                <a href="table-view.html" style="color: var(--accent-cyan); text-decoration: none; margin: 0 15px;">Cross-References</a>
+                <a href="library.html" style="color: var(--accent-cyan); text-decoration: none; margin: 0 15px;">Library</a>
+                <a href="arc-diagram.html" style="color: var(--accent-cyan); text-decoration: none; margin: 0 15px;">Arc Diagram</a>
+                <a href="history.html" style="color: var(--accent-cyan); text-decoration: none; margin: 0 15px;">History</a>
+            </div>
+            <p style="color: #666; margin: 10px 0; font-size: 0.8em;">
+                147 Books Cross-Reference Analysis | Built for biblical research and study
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const booksTimeline = [
+            // ANCIENT PERIOD - LAW & PROPHETS (1400-400 BC)
+            {
+                period: "Torah / Pentateuch",
+                dateRange: "1400-1200 BC",
+                description: "The five books of Moses - foundational law and history",
+                books: [
+                    {title: "Genesis", date: "~1400 BC", info: "Moses writes creation, patriarchs, Joseph", type: "canon-ot"},
+                    {title: "Exodus", date: "~1400 BC", info: "Moses writes deliverance from Egypt, Ten Commandments", type: "canon-ot"},
+                    {title: "Leviticus", date: "~1400 BC", info: "Moses writes priestly law, sacrifices", type: "canon-ot"},
+                    {title: "Numbers", date: "~1400 BC", info: "Moses writes wilderness wanderings", type: "canon-ot"},
+                    {title: "Deuteronomy", date: "~1400 BC", info: "Moses' final sermon before death", type: "canon-ot"}
+                ]
+            },
+            {
+                period: "Book of Jasher & Ancient Chronicles",
+                dateRange: "~1200-900 BC (LOST)",
+                description: "Ancient Hebrew poetry and war chronicles referenced in Joshua and Samuel",
+                books: [
+                    {title: "Book of Jasher", date: "~1200 BC", info: "LOST - Hebrew poetry cited in Joshua 10:13, 2 Samuel 1:18", type: "lost"},
+                    {title: "Book of the Wars of the Lord", date: "~1200 BC", info: "LOST - Ancient war chronicles cited in Numbers 21:14", type: "lost"}
+                ]
+            },
+            {
+                period: "Conquest & Judges",
+                dateRange: "1200-1000 BC",
+                description: "Israel enters Canaan, judges rule before the monarchy",
+                books: [
+                    {title: "Joshua", date: "~1200 BC", info: "Written by Joshua - conquest of Canaan", type: "canon-ot"},
+                    {title: "Judges", date: "~1000 BC", info: "Samuel? - cycles of judges, Samson, Gideon", type: "canon-ot"},
+                    {title: "Ruth", date: "~1000 BC", info: "Samuel? - story of Ruth and Boaz, David's ancestry", type: "canon-ot"}
+                ]
+            },
+            {
+                period: "United Monarchy & Royal Chronicles",
+                dateRange: "1000-900 BC",
+                description: "Samuel, Saul, David, Solomon - Israel's golden age",
+                books: [
+                    {title: "1 Samuel", date: "~930 BC", info: "Samuel, Nathan, Gad - Saul and David", type: "canon-ot"},
+                    {title: "2 Samuel", date: "~930 BC", info: "Nathan, Gad - David's reign", type: "canon-ot"},
+                    {title: "Book of Samuel the Seer", date: "~1000 BC", info: "LOST - Cited in 1 Chronicles 29:29", type: "lost"},
+                    {title: "Book of Nathan the Prophet", date: "~970 BC", info: "LOST - Cited in 1 Chronicles 29:29, 2 Chronicles 9:29", type: "lost"},
+                    {title: "Book of Gad the Seer", date: "~1000 BC", info: "LOST - Cited in 1 Chronicles 29:29", type: "lost"},
+                    {title: "1 Kings", date: "~550 BC", info: "Jeremiah? - Solomon, divided kingdom begins", type: "canon-ot"},
+                    {title: "Book of the Annals of Solomon", date: "~930 BC", info: "LOST - Cited in 1 Kings 11:41", type: "lost"}
+                ]
+            },
+            {
+                period: "Poetry & Wisdom",
+                dateRange: "1000-200 BC",
+                description: "Psalms, wisdom literature, philosophical reflection",
+                books: [
+                    {title: "Psalms", date: "1000-400 BC", info: "David, Asaph, Sons of Korah - 150 psalms", type: "canon-ot"},
+                    {title: "Proverbs", date: "~950-700 BC", info: "Solomon, Hezekiah's men - practical wisdom", type: "canon-ot"},
+                    {title: "Job", date: "Unknown", info: "Ancient, possibly pre-Mosaic - suffering and justice", type: "canon-ot"},
+                    {title: "Song of Solomon", date: "~950 BC", info: "Solomon - love poetry", type: "canon-ot"},
+                    {title: "Ecclesiastes", date: "~935 BC", info: "Solomon in old age - meaning of life", type: "canon-ot"},
+                    {title: "Psalm 151", date: "~200 BC", info: "Additional psalm in LXX, David slaying Goliath", type: "ethiopian"},
+                    {title: "Psalms of Solomon", date: "~50 BC", info: "Pharisaic psalms, Messianic hopes", type: "ethiopian"}
+                ]
+            },
+            {
+                period: "Divided Kingdom Chronicles",
+                dateRange: "930-586 BC (LOST)",
+                description: "Official court records of Israel and Judah - destroyed in conquests",
+                books: [
+                    {title: "Book of the Annals of the Kings of Israel", date: "930-722 BC", info: "LOST - Referenced 17 times, destroyed by Assyria", type: "lost"},
+                    {title: "Book of the Annals of the Kings of Judah", date: "930-586 BC", info: "LOST - Referenced 15 times, destroyed by Babylon", type: "lost"},
+                    {title: "Prophecy of Ahijah", date: "~930 BC", info: "LOST - Cited in 2 Chronicles 9:29", type: "lost"},
+                    {title: "Visions of Iddo the Seer", date: "~900 BC", info: "LOST - Cited 3 times in Chronicles", type: "lost"},
+                    {title: "Book of Shemaiah", date: "~930 BC", info: "LOST - Cited in 2 Chronicles 12:15", type: "lost"},
+                    {title: "Book of Jehu", date: "~870 BC", info: "LOST - Cited in 2 Chronicles 20:34", type: "lost"},
+                    {title: "Sayings of the Seers", date: "~650 BC", info: "LOST - Cited in 2 Chronicles 33:19", type: "lost"}
+                ]
+            },
+            {
+                period: "Major & Minor Prophets",
+                dateRange: "800-400 BC",
+                description: "Prophets call Israel to repentance, predict exile and Messiah",
+                books: [
+                    {title: "Joel", date: "~835 BC", info: "Locusts, Day of the Lord, Spirit poured out", type: "canon-ot"},
+                    {title: "Jonah", date: "~780 BC", info: "Reluctant prophet to Nineveh", type: "canon-ot"},
+                    {title: "Amos", date: "~760 BC", info: "Shepherd prophet, social justice", type: "canon-ot"},
+                    {title: "Hosea", date: "~750 BC", info: "Unfaithful wife = unfaithful Israel", type: "canon-ot"},
+                    {title: "Isaiah", date: "~700 BC", info: "Suffering Servant, virgin birth prophecies", type: "canon-ot"},
+                    {title: "Micah", date: "~700 BC", info: "Bethlehem birthplace prophecy", type: "canon-ot"},
+                    {title: "Nahum", date: "~650 BC", info: "Fall of Nineveh predicted", type: "canon-ot"},
+                    {title: "Zephaniah", date: "~630 BC", info: "Day of the Lord warnings", type: "canon-ot"},
+                    {title: "Habakkuk", date: "~605 BC", info: "Why does God allow evil?", type: "canon-ot"},
+                    {title: "Jeremiah", date: "~600 BC", info: "Weeping prophet, 70-year exile predicted", type: "canon-ot"},
+                    {title: "Lamentations", date: "~586 BC", info: "Jeremiah's lament over Jerusalem's fall", type: "canon-ot"},
+                    {title: "Obadiah", date: "~585 BC", info: "Judgment on Edom", type: "canon-ot"},
+                    {title: "Ezekiel", date: "~570 BC", info: "Visions during Babylonian exile", type: "canon-ot"},
+                    {title: "Daniel", date: "~530 BC", info: "Dreams, lions' den, prophecies of empires", type: "canon-ot"}
+                ]
+            },
+            {
+                period: "Return from Exile",
+                dateRange: "538-400 BC",
+                description: "Jews return to Jerusalem, rebuild temple and walls",
+                books: [
+                    {title: "2 Kings", date: "~550 BC", info: "Jeremiah? - fall of Israel and Judah", type: "canon-ot"},
+                    {title: "1 Chronicles", date: "~450 BC", info: "Ezra? - genealogies, David's reign", type: "canon-ot"},
+                    {title: "2 Chronicles", date: "~450 BC", info: "Ezra? - Solomon to exile", type: "canon-ot"},
+                    {title: "Ezra", date: "~450 BC", info: "Ezra - return and temple rebuilding", type: "canon-ot"},
+                    {title: "Esther", date: "~470 BC", info: "Jews saved from genocide in Persia", type: "canon-ot"},
+                    {title: "Haggai", date: "~520 BC", info: "Rebuild the temple!", type: "canon-ot"},
+                    {title: "Zechariah", date: "~520 BC", info: "Messianic visions, triumphal entry prophecy", type: "canon-ot"},
+                    {title: "Nehemiah", date: "~445 BC", info: "Nehemiah - rebuilding Jerusalem's walls", type: "canon-ot"},
+                    {title: "Malachi", date: "~430 BC", info: "Last OT prophet, Elijah to return", type: "canon-ot"}
+                ]
+            },
+            {
+                period: "Deuterocanonical / Apocrypha",
+                dateRange: "300-50 BC",
+                description: "Books in Catholic/Orthodox canon, not in Protestant Bible",
+                books: [
+                    {title: "Tobit", date: "~225-175 BC", info: "Pious Jew aided by angel Raphael", type: "deutero"},
+                    {title: "Judith", date: "~150 BC", info: "Judith beheads Assyrian general Holofernes", type: "deutero"},
+                    {title: "Baruch", date: "~150 BC", info: "Jeremiah's secretary, prophecy during exile", type: "deutero"},
+                    {title: "Wisdom", date: "~100-50 BC", info: "Wisdom of Solomon - philosophical wisdom", type: "deutero"},
+                    {title: "Sirach", date: "~180 BC", info: "Ecclesiasticus - practical wisdom", type: "deutero"},
+                    {title: "1 Maccabees", date: "~100 BC", info: "Historical account of Maccabean revolt", type: "deutero"},
+                    {title: "2 Maccabees", date: "~100 BC", info: "Theological account of revolt, martyrdom", type: "deutero"}
+                ]
+            },
+            {
+                period: "Jewish Pseudepigrapha - Early",
+                dateRange: "300 BC-100 AD",
+                description: "Ethiopian Orthodox books and Jewish apocalyptic literature",
+                books: [
+                    {title: "1 Enoch", date: "~300-100 BC", info: "Watchers, heavenly journeys, Jude quotes it", type: "ethiopian"},
+                    {title: "Jubilees", date: "~150 BC", info: "Little Genesis, retelling Genesis/Exodus", type: "ethiopian"},
+                    {title: "Testament of the Twelve Patriarchs", date: "~150-50 BC", info: "Jacob's 12 sons give final teachings", type: "ethiopian"},
+                    {title: "3 Maccabees", date: "~100 BC", info: "Egyptian Jews persecuted by Ptolemy", type: "ethiopian"},
+                    {title: "4 Maccabees", date: "~100 BC-100 AD", info: "Philosophy of martyrdom", type: "ethiopian"},
+                    {title: "Testament of Job", date: "~100 BC-100 AD", info: "Expanded Job narrative, 48 years suffering", type: "ethiopian"},
+                    {title: "Testament of Abraham", date: "~100 BC-100 AD", info: "Abraham's heavenly journey, two gates", type: "ethiopian"},
+                    {title: "Testament of Solomon", date: "~100 BC-400 AD", info: "Magical demon control, temple building", type: "ethiopian"},
+                    {title: "4 Ezra", date: "~100 AD", info: "2 Esdras, apocalyptic visions after Jerusalem falls", type: "ethiopian"},
+                    {title: "2 Enoch", date: "~50-100 AD", info: "Slavonic Enoch, ten heavens journey", type: "ethiopian"},
+                    {title: "Apocalypse of Abraham", date: "~80-100 AD", info: "Abraham's vision, four living creatures", type: "ethiopian"},
+                    {title: "Life of Adam and Eve", date: "~100 AD", info: "Satan as angel of light, expanded Eden story", type: "ethiopian"},
+                    {title: "Assumption of Moses", date: "~1st cent AD", info: "Jude quotes dispute over Moses' body", type: "ethiopian"},
+                    {title: "Martyrdom and Ascension of Isaiah", date: "~100-200 AD", info: "Isaiah sawed in two, seven heavens", type: "ethiopian"}
+                ]
+            },
+            {
+                period: "New Testament",
+                dateRange: "50-95 AD",
+                description: "Life of Jesus, apostles' letters, early church",
+                books: [
+                    {title: "James", date: "~45-50 AD", info: "Jesus' brother, faith and works", type: "canon-nt"},
+                    {title: "Earlier Epistle to the Corinthians", date: "~53 AD", info: "LOST - Paul's first letter mentioned in 1 Cor 5:9", type: "lost"},
+                    {title: "Galatians", date: "~49-55 AD", info: "Paul defends justification by faith", type: "canon-nt"},
+                    {title: "1 Thessalonians", date: "~51 AD", info: "Paul's first letter, Jesus' return", type: "canon-nt"},
+                    {title: "2 Thessalonians", date: "~51-52 AD", info: "Paul corrects misunderstanding about return", type: "canon-nt"},
+                    {title: "1 Corinthians", date: "~55 AD", info: "Paul addresses church problems", type: "canon-nt"},
+                    {title: "2 Corinthians", date: "~55-56 AD", info: "Paul defends his ministry", type: "canon-nt"},
+                    {title: "Romans", date: "~57 AD", info: "Paul's systematic theology", type: "canon-nt"},
+                    {title: "Mark", date: "~60-65 AD", info: "Peter's disciple, shortest gospel", type: "canon-nt"},
+                    {title: "Ephesians", date: "~60-62 AD", info: "Paul in prison, church as body", type: "canon-nt"},
+                    {title: "Philippians", date: "~60-62 AD", info: "Paul in prison, joy despite trials", type: "canon-nt"},
+                    {title: "Colossians", date: "~60-62 AD", info: "Paul in prison, Christ's supremacy", type: "canon-nt"},
+                    {title: "Philemon", date: "~60-62 AD", info: "Paul pleads for runaway slave", type: "canon-nt"},
+                    {title: "Epistle to the Laodiceans", date: "~60-62 AD", info: "LOST - Mentioned in Colossians 4:16", type: "lost"},
+                    {title: "Luke", date: "~60-65 AD", info: "Paul's companion, detailed historical account", type: "canon-nt"},
+                    {title: "Acts", date: "~62 AD", info: "Luke writes early church history", type: "canon-nt"},
+                    {title: "1 Timothy", date: "~62-64 AD", info: "Paul's pastoral instructions", type: "canon-nt"},
+                    {title: "Titus", date: "~62-64 AD", info: "Paul's pastoral instructions for Crete", type: "canon-nt"},
+                    {title: "2 Timothy", date: "~66-67 AD", info: "Paul's last letter before execution", type: "canon-nt"},
+                    {title: "1 Peter", date: "~64-65 AD", info: "Peter encourages suffering Christians", type: "canon-nt"},
+                    {title: "Hebrews", date: "~65-69 AD", info: "Christ superior to old covenant", type: "canon-nt"},
+                    {title: "Matthew", date: "~70-85 AD", info: "Jewish focus, fulfillment of prophecy", type: "canon-nt"},
+                    {title: "2 Peter", date: "~65-68 AD", info: "Peter warns of false teachers", type: "canon-nt"},
+                    {title: "Jude", date: "~65-80 AD", info: "Jesus' brother, contend for the faith", type: "canon-nt"},
+                    {title: "John", date: "~85-95 AD", info: "Last gospel, highly theological", type: "canon-nt"},
+                    {title: "1 John", date: "~90-95 AD", info: "John emphasizes love and truth", type: "canon-nt"},
+                    {title: "2 John", date: "~90-95 AD", info: "John warns against false teachers", type: "canon-nt"},
+                    {title: "3 John", date: "~90-95 AD", info: "John commends Gaius", type: "canon-nt"},
+                    {title: "Revelation", date: "~95-96 AD", info: "John's apocalyptic vision on Patmos", type: "canon-nt"}
+                ]
+            },
+            {
+                period: "Early Church Writings",
+                dateRange: "50-150 AD",
+                description: "Nearly canonical works - church manuals and teachings",
+                books: [
+                    {title: "Didache", date: "~50-120 AD", info: "Teaching of Twelve Apostles, earliest church manual", type: "gnostic"},
+                    {title: "Shepherd of Hermas", date: "~90-150 AD", info: "Allegory, nearly made NT canon", type: "gnostic"},
+                    {title: "Epistle of Barnabas", date: "~70-132 AD", info: "Allegorical OT interpretation, nearly canonical", type: "gnostic"}
+                ]
+            },
+            {
+                period: "Gnostic Gospels - 2nd Century",
+                dateRange: "100-200 AD",
+                description: "Alternative gospels rejected by early church",
+                books: [
+                    {title: "Gospel of the Hebrews", date: "~100-150 AD", info: "Jewish Christian gospel, James appearance", type: "gnostic"},
+                    {title: "Gospel of the Egyptians", date: "~120-150 AD", info: "Encratite, extreme anti-marriage stance", type: "gnostic"},
+                    {title: "Infancy Gospel of Thomas", date: "~140-170 AD", info: "Childhood miracles, often bizarre", type: "gnostic"},
+                    {title: "Gospel of Peter", date: "~150 AD", info: "Passion narrative, talking cross", type: "gnostic"},
+                    {title: "Protoevangelium of James", date: "~150 AD", info: "Mary's infancy, perpetual virginity", type: "gnostic"},
+                    {title: "Acts of Paul and Thecla", date: "~160-180 AD", info: "Female apostle preaches and baptizes", type: "gnostic"},
+                    {title: "Secret Gospel of Mark", date: "~150-200 AD?", info: "DISPUTED - Likely modern forgery by Morton Smith", type: "gnostic"},
+                    {title: "Gospel of Thomas", date: "~140-180 AD", info: "114 sayings, Nag Hammadi discovery 1945", type: "gnostic"},
+                    {title: "Gospel of Philip", date: "~180-250 AD", info: "Gnostic sayings, sacred marriage theology", type: "gnostic"},
+                    {title: "Gospel of Mary", date: "~120-180 AD", info: "Mary Magdalene as chief disciple", type: "gnostic"},
+                    {title: "Apocryphon of John", date: "~120-180 AD", info: "Sethian Gnosticism, evil demiurge", type: "gnostic"},
+                    {title: "Gospel of Truth", date: "~140-180 AD", info: "Valentinian Gnostic meditation", type: "gnostic"},
+                    {title: "Sophia of Jesus Christ", date: "~150-200 AD", info: "Post-resurrection Gnostic dialogue", type: "gnostic"},
+                    {title: "Dialogue of the Savior", date: "~150 AD", info: "Gnostic wisdom dialogue", type: "gnostic"},
+                    {title: "Book of Thomas the Contender", date: "~200-225 AD", info: "Ascetic Gnostic teaching", type: "gnostic"},
+                    {title: "Apocalypse of Peter", date: "~135 AD", info: "Graphic heaven and hell visions", type: "gnostic"},
+                    {title: "Gospel of Nicodemus", date: "~150-400 AD", info: "Acts of Pilate, Harrowing of Hell", type: "gnostic"}
+                ]
+            },
+            {
+                period: "Later Gnostic & Jewish Writings",
+                dateRange: "200-400 AD",
+                description: "Advanced Gnostic mythology and mystical Judaism",
+                books: [
+                    {title: "Pistis Sophia", date: "~250-300 AD", info: "11 years secret teaching, complex mythology", type: "gnostic"},
+                    {title: "3 Enoch", date: "~200-700 AD", info: "Hebrew Enoch, Metatron transformation", type: "ethiopian"},
+                    {title: "Odes of Solomon", date: "~100-200 AD", info: "Early Christian hymns", type: "ethiopian"},
+                    {title: "4 Baruch", date: "~135 AD", info: "Paraleipomena Jeremiou", type: "ethiopian"},
+                    {title: "Prayer of Manasseh", date: "~2nd cent BC-1st cent AD", info: "Wicked king's repentance", type: "ethiopian"},
+                    {title: "1 Meqabyan", date: "~5th-6th cent AD", info: "Ethiopian unique Maccabean book", type: "ethiopian"},
+                    {title: "2 Meqabyan", date: "~5th-6th cent AD", info: "Ethiopian unique Maccabean book", type: "ethiopian"},
+                    {title: "3 Meqabyan", date: "~5th-6th cent AD", info: "Ethiopian unique Maccabean book", type: "ethiopian"},
+                    {title: "Testament of Isaac", date: "~2nd cent AD", info: "Isaac's deathbed testament", type: "ethiopian"}
+                ]
+            },
+            {
+                period: "Dead Sea Scrolls (Qumran)",
+                dateRange: "250 BC - 68 AD (Discovered 1947-1956)",
+                description: "Sectarian Jewish texts discovered in caves near the Dead Sea",
+                books: [
+                    {title: "Community Rule", date: "~100 BC", info: "1QS - Rules for Qumran community life", type: "dss"},
+                    {title: "War Scroll", date: "~100 BC", info: "1QM - Eschatological battle of Sons of Light vs Darkness", type: "dss"},
+                    {title: "Temple Scroll", date: "~150-100 BC", info: "11QT - Largest scroll, ideal temple laws", type: "dss"},
+                    {title: "Damascus Document", date: "~100 BC", info: "CD - Community laws and history", type: "dss"},
+                    {title: "Thanksgiving Hymns", date: "~100 BC", info: "1QH - Psalms of thanksgiving and praise", type: "dss"},
+                    {title: "Pesher Habakkuk", date: "~100 BC", info: "1QpHab - Commentary interpreting Habakkuk", type: "dss"},
+                    {title: "Book of Giants", date: "~200 BC", info: "4Q530 - Enochic literature, Nephilim story", type: "dss"},
+                    {title: "Copper Scroll", date: "~50-100 AD", info: "3Q15 - List of treasure locations", type: "dss"},
+                    {title: "Genesis Apocryphon", date: "~100 BC", info: "1QapGen - Expanded Genesis narratives", type: "dss"},
+                    {title: "Songs of Sabbath Sacrifice", date: "~100 BC", info: "4Q400 - Angelic liturgy, heavenly worship", type: "dss"}
+                ]
+            },
+            {
+                period: "Modern Discoveries",
+                dateRange: "1945-2006",
+                description: "Ancient manuscripts discovered in 20th century",
+                books: [
+                    {title: "Nag Hammadi Library", date: "Discovered 1945", info: "52 Gnostic texts found in Egypt (Thomas, Philip, etc.)", type: "gnostic"},
+                    {title: "Gospel of Judas", date: "Published 2006", info: "Discovered 1970s, published 2006 - Judas as hero", type: "gnostic"}
+                ]
+            }
+        ];
+
+        // Populate timeline
+        const timeline = document.getElementById('timeline');
+        booksTimeline.forEach(period => {
+            const periodDiv = document.createElement('div');
+            periodDiv.className = 'timeline-period';
+
+            periodDiv.innerHTML = `
+                <div class="period-title">${period.period}</div>
+                <div class="period-date">${period.dateRange}</div>
+                <p style="color: #ccc; margin-bottom: 20px;">${period.description}</p>
+                <div class="books-grid" id="period-${period.period.replace(/\s+/g, '-')}"></div>
+            `;
+
+            timeline.appendChild(periodDiv);
+
+            const booksGrid = periodDiv.querySelector('.books-grid');
+            period.books.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = `book-card ${book.type}`;
+
+                // Check if book is readable (not lost, not a collection like Nag Hammadi)
+                const isReadable = book.type !== 'lost' && !book.title.includes('Library') && !book.title.includes('Annals');
+
+                bookCard.innerHTML = `
+                    <div class="book-title">${book.title} ${isReadable ? '📖' : '📜'}</div>
+                    <div class="book-date">${book.date}</div>
+                    <div class="book-info">${book.info}</div>
+                    ${isReadable ? '<div style="color: var(--accent-cyan); font-size: 0.8em; margin-top: 8px;">Click to read →</div>' : ''}
+                `;
+
+                if (isReadable) {
+                    bookCard.onclick = () => {
+                        openBookModal(book.title, book.date, book.info, book.type);
+                    };
+                } else {
+                    bookCard.style.cursor = 'default';
+                    bookCard.style.opacity = '0.7';
+                }
+
+                booksGrid.appendChild(bookCard);
+            });
+        });
+
+        // Book text sources mapping
+        const bookTextSources = {
+            // Dead Sea Scrolls
+            'Community Rule': 'dead-sea-scrolls/community-rule.html',
+            'War Scroll': 'dead-sea-scrolls/war-scroll.html',
+            'Temple Scroll': 'dead-sea-scrolls/temple-scroll.html',
+            'Damascus Document': 'dead-sea-scrolls/damascus-document.html',
+            'Thanksgiving Hymns': 'dead-sea-scrolls/thanksgiving-hymns.html',
+            'Pesher Habakkuk': 'dead-sea-scrolls/pesher-habakkuk.html',
+            'Book of Giants': 'dead-sea-scrolls/book-of-giants.html',
+            'Copper Scroll': 'dead-sea-scrolls/copper-scroll.html',
+            'Genesis Apocryphon': 'dead-sea-scrolls/genesis-apocryphon.html',
+            'Songs of Sabbath Sacrifice': 'dead-sea-scrolls/songs-sabbath-sacrifice.html',
+            // Gnostic Gospels
+            'Gospel of Judas': 'gnostic/gospel-of-judas.html',
+            'Gospel of Thomas': 'gnostic/gospel-of-thomas.html',
+            'Gospel of Mary': 'gnostic/gospel-of-mary.html',
+            'Gospel of Peter': 'gnostic/gospel-of-peter.html',
+            'Gospel of Philip': 'gnostic/gospel-of-philip.html',
+            'Gospel of the Hebrews': 'gnostic/gospel-of-hebrews.html',
+            'Gospel of the Egyptians': 'gnostic/gospel-of-egyptians.html',
+            'Gospel of Truth': 'gnostic/gospel-of-truth.html',
+            'Gospel of Nicodemus': 'gnostic/gospel-of-nicodemus.html',
+            'Infancy Gospel of Thomas': 'gnostic/infancy-gospel-thomas.html',
+            'Protoevangelium of James': 'gnostic/protoevangelium-james.html',
+            'Apocryphon of John': 'gnostic/apocryphon-of-john.html',
+            'Sophia of Jesus Christ': 'gnostic/sophia-jesus-christ.html',
+            'Pistis Sophia': 'gnostic/pistis-sophia.html',
+            'Dialogue of the Savior': 'gnostic/dialogue-savior.html',
+            'Book of Thomas the Contender': 'gnostic/book-thomas-contender.html',
+            'Didache': 'gnostic/didache.html',
+            'Shepherd of Hermas': 'gnostic/shepherd-of-hermas.html',
+            'Epistle of Barnabas': 'gnostic/epistle-barnabas.html',
+            'Acts of Paul and Thecla': 'gnostic/acts-paul-thecla.html',
+            'Apocalypse of Peter': 'gnostic/apocalypse-of-peter.html',
+            // Ethiopian/Pseudepigrapha
+            '3 Maccabees': 'gnostic/3-maccabees.html',
+            '4 Maccabees': 'gnostic/4-maccabees.html',
+            'Psalms of Solomon': 'gnostic/psalms-solomon.html',
+            '4 Ezra': 'gnostic/4-ezra.html',
+            'Testament of Job': 'gnostic/testament-job.html',
+            'Testament of Abraham': 'gnostic/testament-abraham.html',
+            'Apocalypse of Abraham': 'gnostic/apocalypse-abraham.html',
+            'Assumption of Moses': 'gnostic/assumption-moses.html'
+        };
+
+        // Modal functions
+        function openBookModal(title, date, info, type) {
+            const modal = document.getElementById('book-modal');
+            const titleEl = document.getElementById('modal-book-title');
+            const metaEl = document.getElementById('modal-book-meta');
+            const contentEl = document.getElementById('modal-book-content');
+
+            titleEl.textContent = title;
+
+            const typeColors = {
+                'canon-ot': '#00CED1',
+                'canon-nt': '#4169E1',
+                'deutero': '#9370DB',
+                'ethiopian': '#ff6b9d',
+                'gnostic': '#ff4444',
+                'dss': '#00BFFF'
+            };
+
+            const typeNames = {
+                'canon-ot': 'Old Testament',
+                'canon-nt': 'New Testament',
+                'deutero': 'Deuterocanonical',
+                'ethiopian': 'Ethiopian/Pseudepigrapha',
+                'gnostic': 'Gnostic/Early Christian',
+                'dss': 'Dead Sea Scrolls'
+            };
+
+            metaEl.innerHTML = `
+                <p><strong style="color: ${typeColors[type] || '#FFD700'};">${typeNames[type] || type}</strong></p>
+                <p><strong>Date:</strong> ${date}</p>
+                <p><strong>Description:</strong> ${info}</p>
+            `;
+
+            contentEl.innerHTML = '<p style="text-align: center; color: #aaa;">Loading content...</p>';
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            // Load the book content
+            loadBookContent(title, type, contentEl);
+        }
+
+        async function loadBookContent(title, type, contentEl) {
+            // Check if we have a local HTML file for this book
+            if (bookTextSources[title]) {
+                try {
+                    const response = await fetch('../data/' + bookTextSources[title]);
+                    if (response.ok) {
+                        const html = await response.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        let content = doc.body ? doc.body.innerHTML : html;
+
+                        // Clean up
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = content;
+                        tempDiv.querySelectorAll('script, style, nav, header, footer').forEach(el => el.remove());
+
+                        contentEl.innerHTML = tempDiv.innerHTML;
+                        return;
+                    }
+                } catch (err) {
+                    console.log('Error loading local file:', err);
+                }
+            }
+
+            // For canonical books, try to load from Bible text loader
+            if (type === 'canon-ot' || type === 'canon-nt') {
+                try {
+                    if (typeof BibleTextLoader !== 'undefined') {
+                        const loader = new BibleTextLoader();
+                        await loader.load();
+                        const verses = await loader.getChapter(title, 1);
+                        if (verses && verses.length > 0) {
+                            let html = '<h3>Chapter 1</h3>';
+                            verses.forEach(v => {
+                                html += `<div class="verse"><span class="verse-num">${v.verse}</span>${v.text}</div>`;
+                            });
+                            html += '<p style="text-align: center; color: #aaa; margin-top: 20px;">View more chapters in the <a href="library.html" style="color: var(--accent-cyan);">Library</a></p>';
+                            contentEl.innerHTML = html;
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.log('Error loading Bible text:', err);
+                }
+            }
+
+            // For deuterocanonical books
+            if (type === 'deutero') {
+                try {
+                    if (typeof DeuterocanonicalLoader !== 'undefined') {
+                        const loader = new DeuterocanonicalLoader();
+                        await loader.load();
+                        const verses = loader.getChapterVerses(title, 1);
+                        if (verses && verses.length > 0) {
+                            let html = '<h3>Chapter 1</h3>';
+                            verses.forEach(v => {
+                                html += `<div class="verse"><span class="verse-num">${v.verse}</span>${v.text}</div>`;
+                            });
+                            html += '<p style="text-align: center; color: #aaa; margin-top: 20px;">View more chapters in the <a href="library.html" style="color: var(--accent-cyan);">Library</a></p>';
+                            contentEl.innerHTML = html;
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.log('Error loading deuterocanonical text:', err);
+                }
+            }
+
+            // Fallback message
+            contentEl.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h3 style="color: var(--accent-gold);">Text Preview Not Available</h3>
+                    <p>The full text for "${title}" is available in the Library.</p>
+                    <a href="library.html?book=${encodeURIComponent(title)}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: var(--accent-cyan); color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">Open in Library</a>
+                </div>
+            `;
+        }
+
+        function closeModal() {
+            document.getElementById('book-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('book-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Close on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+    <script src="js/bible-text-loader.js"></script>
+    <script src="js/deuterocanonical-loader.js"></script>
+</body>
+</html>

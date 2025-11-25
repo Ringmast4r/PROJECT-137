@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <title>Biblical Cross-References with Source Text - Canonical, Deuterocanonical & Ethiopian</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .header-custom {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c94b4b 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        .header-custom h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid rgba(255, 107, 157, 0.5);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            margin-bottom: 15px;
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid rgba(255, 107, 157, 0.5);
+            border-radius: 6px;
+            background: rgba(255, 107, 157, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(255, 107, 157, 0.3);
+            border-color: var(--accent-gold);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(255, 107, 157, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+        .stat-label {
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+        .table-container {
+            overflow-x: auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        thead {
+            background: rgba(255, 107, 157, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th {
+            padding: 15px;
+            text-align: left;
+            color: var(--accent-gold);
+            border-bottom: 2px solid var(--accent-gold);
+            cursor: pointer;
+            user-select: none;
+        }
+        th:hover {
+            background: rgba(255, 107, 157, 0.3);
+        }
+        th .sort-arrow {
+            margin-left: 5px;
+            opacity: 0.5;
+        }
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s;
+        }
+        tbody tr:hover {
+            background: rgba(255, 107, 157, 0.1);
+        }
+        td {
+            padding: 12px 15px;
+        }
+        .verse-ref {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+        .ethiopian-ref {
+            color: #ff6b9d;
+            font-weight: bold;
+        }
+        .gnostic-ref {
+            color: #ff4444;
+            font-weight: bold;
+        }
+        .vote-high {
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+        .vote-medium {
+            color: #ffa500;
+        }
+        .vote-low {
+            color: #ff6b6b;
+        }
+        .book-type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .badge-ethiopian {
+            background: rgba(255, 107, 157, 0.3);
+            border: 1px solid #ff6b9d;
+        }
+        .badge-gnostic {
+            background: rgba(255, 68, 68, 0.3);
+            border: 1px solid #ff4444;
+        }
+        .badge-canonical {
+            background: rgba(0, 206, 209, 0.3);
+            border: 1px solid #00CED1;
+        }
+        .badge-deuterocanonical {
+            background: rgba(147, 112, 219, 0.3);
+            border: 1px solid #9370DB;
+        }
+        .badge-lost {
+            background: rgba(255, 165, 0, 0.3);
+            border: 1px solid #ffa500;
+        }
+        .book-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transform: scale(1.02);
+            transition: all 0.2s;
+        }
+        .text-viewer-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow-y: auto;
+        }
+        .text-viewer-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 2% auto;
+            padding: 30px;
+            border: 2px solid rgba(255, 107, 157, 0.5);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.3);
+            position: relative;
+        }
+        .text-viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+        }
+        .text-viewer-title {
+            color: var(--accent-gold);
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        .text-viewer-close {
+            color: #aaa;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+        .text-viewer-close:hover {
+            color: var(--accent-gold);
+        }
+        .text-viewer-body {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.1em;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        .text-viewer-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .text-nav-btn {
+            padding: 12px 24px;
+            background: rgba(255, 107, 157, 0.3);
+            border: 2px solid var(--accent-gold);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .text-nav-btn:hover {
+            background: rgba(255, 107, 157, 0.5);
+            transform: translateY(-2px);
+        }
+        .text-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .chapter-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .chapter-select {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 107, 157, 0.5);
+            border-radius: 6px;
+            color: white;
+            font-size: 1em;
+        }
+        .external-link-box {
+            background: rgba(255, 107, 157, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            margin: 20px 0;
+        }
+        .external-link-box a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .external-link-box a:hover {
+            color: var(--accent-gold);
+            text-decoration: underline;
+        }
+        .verse-number {
+            color: var(--accent-gold);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .export-btn {
+            padding: 10px 20px;
+            background: rgba(255, 107, 157, 0.3);
+            border: 2px solid var(--accent-gold);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .export-btn:hover {
+            background: rgba(255, 107, 157, 0.5);
+        }
+        .info-panel {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-gold);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid rgba(255, 107, 157, 0.5);
+            border-radius: 12px;
+            width: 80%;
+            max-width: 900px;
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.3);
+        }
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+        .modal-close:hover {
+            color: var(--accent-gold);
+        }
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .book-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid;
+            font-size: 0.9em;
+        }
+        .book-item.protestant {
+            border-left-color: #00CED1;
+        }
+        .book-item.deuterocanonical {
+            border-left-color: #9370DB;
+        }
+        .book-item.ethiopian {
+            border-left-color: #ff6b9d;
+        }
+        .canon-section {
+            margin-bottom: 30px;
+        }
+        .canon-section h3 {
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-custom">
+            <h1>📖 Biblical Cross-References with Source Text</h1>
+            <p>Canonical, Deuterocanonical, Ethiopian & Pseudepigraphal Texts with Full Source Content</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>🔍 Analysis Goal: Cross-Reference Full Bible for Arc Diagram</h3>
+            <p>Comprehensive cross-reference analysis containing all 147 books across biblical traditions:</p>
+            <ul>
+                <li><strong style="color: #00CED1;">Protestant Canon (66 Books)</strong>
+                    <br><em>Old Testament (39):</em> Genesis, Exodus, Leviticus, Numbers, Deuteronomy, Joshua, Judges, Ruth, 1-2 Samuel, 1-2 Kings, 1-2 Chronicles, Ezra, Nehemiah, Esther, Job, Psalms, Proverbs, Ecclesiastes, Song of Solomon, Isaiah, Jeremiah, Lamentations, Ezekiel, Daniel, Hosea, Joel, Amos, Obadiah, Jonah, Micah, Nahum, Habakkuk, Zephaniah, Haggai, Zechariah, Malachi
+                    <br><em>New Testament (27):</em> Matthew, Mark, Luke, John, Acts, Romans, 1-2 Corinthians, Galatians, Ephesians, Philippians, Colossians, 1-2 Thessalonians, 1-2 Timothy, Titus, Philemon, Hebrews, James, 1-2 Peter, 1-3 John, Jude, Revelation</li>
+                <li><strong style="color: #9370DB;">Deuterocanonical Books (14)</strong> - Tobit, Judith, Wisdom of Solomon, Sirach, Baruch, 1-2 Maccabees, Susanna, Bel and the Dragon, Prayer of Azariah, Greek Esther, 1-2 Esdras, Prayer of Manasseh</li>
+                <li><strong style="color: #ff6b9d;">Ethiopian Canon & Pseudepigrapha (21)</strong> - 1-3 Enoch, Jubilees, 2-4 Baruch, 3-4 Maccabees, Psalms of Solomon, 4 Ezra, Life of Adam and Eve, Book of Jasher, Testament of the Twelve Patriarchs, Testament of Solomon, Martyrdom and Ascension of Isaiah, Assumption of Moses, Testament of Abraham, Testament of Job, Apocalypse of Abraham, Apocalypse of Sedrach</li>
+                <li><strong style="color: #ffa500;">Lost/Referenced Texts (14)</strong> - Book of the Wars of the Lord, Book of the Annals of Solomon, Book of the Annals of the Kings of Israel/Judah, Books of Samuel/Nathan/Gad the Seers, Prophecy of Ahijah, Visions of Iddo, Book of Shemaiah, Book of Jehu, Sayings of the Seers, Epistle to the Laodiceans, Earlier Epistle to Corinthians</li>
+                <li><strong style="color: #ff4444;">Gnostic & Early Christian (22)</strong> - Gospels of Judas, Thomas, Mary, Peter, Philip, Hebrews, Egyptians, Truth, Nicodemus; Infancy Gospel of Thomas, Protoevangelium of James, Secret Gospel of Mark, Apocryphon of John, Sophia of Jesus Christ, Pistis Sophia, Dialogue of the Savior, Book of Thomas, Didache, Shepherd of Hermas, Epistle of Barnabas, Acts of Paul and Thecla, Apocalypse of Peter</li>
+                <li><strong style="color: #00BFFF;">Dead Sea Scrolls (10)</strong> - Community Rule (1QS), War Scroll (1QM), Temple Scroll (11QT), Damascus Document, Thanksgiving Hymns (1QH), Pesher Habakkuk, Genesis Apocryphon, Book of Giants, Copper Scroll, Songs of Sabbath Sacrifice</li>
+            </ul>
+            <p><strong>Higher vote counts</strong> indicate stronger parallels or direct quotations. This comprehensive analysis reveals textual connections across all biblical traditions.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card clickable" onclick="showBooksModal()" style="cursor: pointer;">
+                <div class="stat-number" id="stat-total-books">147</div>
+                <div class="stat-label">Total Books (Click to view)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-refs">...</div>
+                <div class="stat-label">Total References</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="canonical-refs">...</div>
+                <div class="stat-label">Canonical References</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="deutero-refs">...</div>
+                <div class="stat-label">Deuterocanonical References</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="ethiopian-refs">...</div>
+                <div class="stat-label">Ethiopian References</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="gnostic-refs">...</div>
+                <div class="stat-label">Gnostic References</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="lost-refs">...</div>
+                <div class="stat-label">Lost Text References</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="high-confidence">...</div>
+                <div class="stat-label">High Confidence (≥100)</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" id="search-box" class="search-box" placeholder="Search by verse, book, or text content...">
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All References</button>
+                <button class="filter-btn" data-filter="canonical">Canonical</button>
+                <button class="filter-btn" data-filter="deuterocanonical">Deuterocanonical</button>
+                <button class="filter-btn" data-filter="ethiopian">Ethiopian</button>
+                <button class="filter-btn" data-filter="gnostic">Gnostic</button>
+                <button class="filter-btn" data-filter="lost">Lost Text</button>
+                <button class="export-btn" onclick="exportToCSV()">💾 Export CSV</button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table id="refs-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">NT Source <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(1)">NT Text <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(2)">Non-Canonical Target <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(3)">Non-Canonical Text <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(4)">Book Type <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(5)">Votes <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(6)">Type <span class="sort-arrow">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody id="refs-tbody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <div id="pagination" style="margin-top: 20px; text-align: center; padding: 20px;">
+                <button onclick="goToPage(1)" class="filter-btn">First</button>
+                <button onclick="goToPage(currentPage - 1)" class="filter-btn">Previous</button>
+                <span style="margin: 0 20px; color: var(--accent-gold); font-weight: bold;" id="page-info">Page 1</span>
+                <button onclick="goToPage(currentPage + 1)" class="filter-btn">Next</button>
+                <button onclick="goToPage(totalPages)" class="filter-btn">Last</button>
+            </div>
+        </div>
+
+        <div class="info-panel" style="margin-top: 30px;">
+            <h3>📊 How to Interpret This Data</h3>
+            <ul>
+                <li><strong>100 votes</strong> = Direct quotation or extremely strong parallel (e.g., Jude quotes 1 Enoch)</li>
+                <li><strong>50 votes</strong> = Clear thematic or conceptual connection</li>
+                <li><strong>25 votes</strong> = Possible allusion or shared imagery</li>
+            </ul>
+            <p><strong style="color: #ff4444;">Gospel of Judas Analysis:</strong> When we add Gospel of Judas references, low vote counts and contradictory themes will help prove it contradicts canonical gospels.</p>
+        </div>
+    </div>
+
+    <!-- Text Viewer Modal -->
+    <div id="text-viewer-modal" class="text-viewer-modal">
+        <div class="text-viewer-content">
+            <div class="text-viewer-header">
+                <h2 class="text-viewer-title" id="text-viewer-title">Book Title</h2>
+                <span class="text-viewer-close" onclick="closeTextViewer()">&times;</span>
+            </div>
+            <div class="text-viewer-body" id="text-viewer-body">
+                Loading...
+            </div>
+            <div class="text-viewer-nav">
+                <button class="text-nav-btn" id="prev-chapter-btn" onclick="prevChapter()">◀ Previous</button>
+                <div class="chapter-selector">
+                    <label style="color: var(--accent-gold);">Chapter:</label>
+                    <select class="chapter-select" id="chapter-select" onchange="loadChapter(this.value)">
+                        <option value="1">1</option>
+                    </select>
+                </div>
+                <button class="text-nav-btn" id="next-chapter-btn" onclick="nextChapter()">Next ▶</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Books Modal -->
+    <div id="books-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeBooksModal()">&times;</span>
+            <h2 style="color: var(--accent-gold); margin-top: 0;">📚 Complete Biblical Library (137 Books)</h2>
+            <p style="color: #aaa; text-align: center; margin-top: 10px;">66 Protestant + 14 Deuterocanonical + 21 Ethiopian + 22 Gnostic + 14 Lost</p>
+
+            <div class="canon-section">
+                <h3>🔵 Protestant Canon (66 Books)</h3>
+                <p style="color: #aaa; margin-bottom: 10px;">Standard Christian Bible - Old Testament (39) + New Testament (27)</p>
+                <div class="books-grid" id="protestant-books"></div>
+            </div>
+
+            <div class="canon-section">
+                <h3>🟣 Deuterocanonical Books (14 Books)</h3>
+                <p style="color: #aaa; margin-bottom: 10px;">Catholic/Orthodox additions - included in Septuagint</p>
+                <div class="books-grid" id="deutero-books"></div>
+            </div>
+
+            <div class="canon-section">
+                <h3>🔴 Ethiopian/Pseudepigrapha Books (21 Books)</h3>
+                <p style="color: #aaa; margin-bottom: 10px;">Unique to Ethiopian Orthodox Tewahedo Church + Jewish Pseudepigrapha</p>
+                <div class="books-grid" id="ethiopian-books">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="canon-section">
+                <h3>⛔ Non-Canonical Texts (Exist but Rejected)</h3>
+                <p style="color: #aaa; margin-bottom: 10px;">Gnostic gospels and other texts that exist today but were rejected from all major Christian canons - click to read</p>
+                <div class="books-grid" id="gnostic-books">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                <p style="margin-top: 15px; color: #ff6b9d; font-style: italic;">
+                    ⚠️ These texts exist today but were rejected by early church councils. Most are Gnostic texts (2nd-4th century AD) presenting alternative theologies.
+                    The <strong>Gospel of Judas</strong> portrays Judas as following Jesus' secret instructions, contradicting all canonical gospels.
+                </p>
+            </div>
+
+            <div class="canon-section">
+                <h3>📜 Lost/Referenced Books (Mentioned but Lost)</h3>
+                <p style="color: #aaa; margin-bottom: 10px;">Books mentioned in the Bible but lost to history - click to see biblical references</p>
+                <div class="books-grid" id="lost-books">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                <p style="margin-top: 15px; color: #ff6b9d; font-style: italic;">
+                    ⚠️ These books are referenced in canonical scripture but have been lost to history or were never widely circulated.
+                    Some may have been administrative records rather than sacred texts.
+                </p>
+            </div>
+
+            <!-- Dead Sea Scrolls -->
+            <div style="border-left: 4px solid #00BFFF; padding-left: 15px; margin-top: 20px;">
+                <h3>📜 Dead Sea Scrolls (Qumran Texts)</h3>
+                <p style="color: #aaa; margin-bottom: 10px;">Ancient Jewish manuscripts discovered 1947-1956 near the Dead Sea</p>
+                <div class="books-grid" id="dss-books">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%); border-top: 1px solid rgba(255, 107, 157, 0.2); padding: 20px 0; margin-top: 60px; text-align: center;">
+        <div class="container">
+            <p style="color: #888; margin: 10px 0; font-size: 0.9em;">
+                PROJECT 137 | Truth Seeking Division
+            </p>
+            <div style="margin: 15px 0;">
+                <a href="library.html" style="color: var(--accent-gold); text-decoration: none; margin: 0 15px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--accent-gold)'">
+                    📚 Library (147 Books)
+                </a>
+                <span style="color: #444;">|</span>
+                <a href="timeline.html" style="color: var(--accent-gold); text-decoration: none; margin: 0 15px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--accent-gold)'">
+                    📅 Timeline
+                </a>
+                <span style="color: #444;">|</span>
+                <a href="arc-diagram.html" style="color: var(--accent-gold); text-decoration: none; margin: 0 15px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--accent-gold)'">
+                    🔙 Arc Diagram
+                </a>
+                <span style="color: #444;">|</span>
+                <a href="history.html" style="color: var(--accent-gold); text-decoration: none; margin: 0 15px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-cyan)'" onmouseout="this.style.color='var(--accent-gold)'">
+                    📜 History
+                </a>
+            </div>
+            <p style="color: #666; margin: 10px 0; font-size: 0.8em;">
+                147 Books Cross-Reference Analysis | Built for biblical research and study
+            </p>
+        </div>
+    </footer>
+
+    <!-- Cross-reference loader -->
+    <script src="js/cross-ref-loader.js"></script>
+    <script src="js/bible-text-loader.js"></script>
+    <script src="js/deuterocanonical-loader.js"></script>
+
+    <script>
+        // Will be loaded from file
+        let crossReferences = [];
+        const loader = new CrossRefLoader();
+        const bibleLoader = new BibleTextLoader();
+        const deuteroLoader = new DeuterocanonicalLoader();
+        let isLoading = true;
+
+        // Temporary Ethiopian data with full text (will be merged with loaded data)
+        const ethiopianTextData = [
+            // 1 Enoch References
+            {nt: "Jude 1:14-15", ntText: "Enoch, the seventh from Adam, prophesied about them: 'See, the Lord is coming with thousands upon thousands of his holy ones to judge everyone...'", target: "1 Enoch 1:9", targetText: "And behold! He cometh with ten thousands of His holy ones to execute judgment upon all, and to destroy all the ungodly...", type: "Ethiopian", votes: 100, desc: "Direct Quote ⭐"},
+            {nt: "Jude 1:6", ntText: "And the angels who did not keep their positions of authority but abandoned their proper dwelling—these he has kept in darkness, bound with everlasting chains for judgment on the great Day.", target: "1 Enoch 10:4-6", targetText: "Bind Azazel hand and foot, and cast him into the darkness...bind them fast for seventy generations in the valleys of the earth, till the day of their judgment.", type: "Ethiopian", votes: 100, desc: "Angels in Chains"},
+            {nt: "2 Peter 2:4", ntText: "For if God did not spare angels when they sinned, but sent them to hell, putting them in chains of darkness to be held for judgment...", target: "1 Enoch 10:4-6", targetText: "Bind Azazel hand and foot, and cast him into the darkness...bind them fast for seventy generations in the valleys of the earth, till the day of their judgment.", type: "Ethiopian", votes: 100, desc: "Angels in Tartarus"},
+            {nt: "Matthew 22:29-30", ntText: "At the resurrection people will neither marry nor be given in marriage; they will be like the angels in heaven.", target: "1 Enoch 15:6-7", targetText: "You were holy, spiritual, living the eternal life, but you became unclean with women...angels in heaven have no wives.", type: "Ethiopian", votes: 50, desc: "Angels Don't Marry"},
+            {nt: "Matthew 25:31", ntText: "When the Son of Man comes in his glory, and all the angels with him, he will sit on his glorious throne.", target: "1 Enoch 62:5", targetText: "When they see that Son of Man sitting on the throne of his glory...the righteous and elect shall be saved on that day.", type: "Ethiopian", votes: 50, desc: "Son of Man with Angels"},
+            {nt: "Luke 16:19-31", ntText: "The rich man also died and was buried. In Hades, where he was in torment...between us and you a great chasm has been set in place.", target: "1 Enoch 22:1-14", targetText: "The spirits of the souls of the dead...are divided. Here their spirits shall be set apart...This has been separated for the spirits of those who make their suit.", type: "Ethiopian", votes: 50, desc: "Afterlife Compartments"},
+            {nt: "Revelation 4:1-8", ntText: "At once I was in the Spirit, and there before me was a throne in heaven...In the center, around the throne, were four living creatures.", target: "1 Enoch 14:8-23", targetText: "I beheld a lofty throne...and under the throne came forth rivers of flaming fire...and round about were Seraphim, Cherubim, and Ophanim.", type: "Ethiopian", votes: 50, desc: "Heavenly Throne Vision"},
+            {nt: "John 5:22", target: "1 Enoch 69:27", type: "Ethiopian", votes: 25, desc: "Judgment to Son of Man"},
+            {nt: "Matthew 24:29-31", target: "1 Enoch 62:5", type: "Ethiopian", votes: 50, desc: "Son of Man coming"},
+            {nt: "Luke 1:52", target: "1 Enoch 46:4-5", type: "Ethiopian", votes: 50, desc: "Mighty brought down"},
+            {nt: "John 1:51", target: "1 Enoch 14:8-9", type: "Ethiopian", votes: 50, desc: "Heaven opened"},
+            {nt: "Acts 10:34", target: "1 Enoch 63:8", type: "Ethiopian", votes: 25, desc: "No partiality"},
+            {nt: "1 Corinthians 6:3", target: "1 Enoch 91:12", type: "Ethiopian", votes: 25, desc: "Judging angels"},
+            {nt: "Ephesians 1:18", target: "1 Enoch 48:1", type: "Ethiopian", votes: 25, desc: "Glorious inheritance"},
+            {nt: "Philippians 2:10", target: "1 Enoch 48:5", type: "Ethiopian", votes: 50, desc: "Every knee shall bow"},
+            {nt: "1 Thessalonians 3:13", target: "1 Enoch 1:9", type: "Ethiopian", votes: 50, desc: "Coming with holy ones"},
+            {nt: "2 Thessalonians 1:7-8", target: "1 Enoch 1:9", type: "Ethiopian", votes: 50, desc: "Revelation with angels"},
+            {nt: "Hebrews 11:5", target: "1 Enoch 70:1-4", type: "Ethiopian", votes: 100, desc: "Enoch taken up"},
+            {nt: "James 5:4", target: "1 Enoch 97:8-9", type: "Ethiopian", votes: 50, desc: "Cries of laborers"},
+            {nt: "1 Peter 3:19-20", target: "1 Enoch 6:1-8:3", type: "Ethiopian", votes: 100, desc: "Spirits in prison"},
+            {nt: "Revelation 20:1-3", target: "1 Enoch 10:4-6", type: "Ethiopian", votes: 50, desc: "Binding of Satan"},
+            {nt: "Revelation 21:1", target: "1 Enoch 91:16", type: "Ethiopian", votes: 50, desc: "New heaven and earth"},
+
+            // Jubilees References
+            {nt: "Luke 1:26", target: "Jubilees 32:1", type: "Ethiopian", votes: 50, desc: "Angel Gabriel"},
+            {nt: "Galatians 3:19", target: "Jubilees 1:27-29", type: "Ethiopian", votes: 100, desc: "Law given by angels"},
+            {nt: "Hebrews 2:2", target: "Jubilees 1:27", type: "Ethiopian", votes: 50, desc: "Message by angels"},
+            {nt: "Revelation 14:20", target: "Jubilees 6:7", type: "Ethiopian", votes: 25, desc: "Blood to bridles"},
+
+            // 4 Ezra References
+            {nt: "Matthew 24:22", target: "4 Ezra 9:15-16", type: "Ethiopian", votes: 50, desc: "Days shortened for elect"},
+            {nt: "Luke 21:25-26", target: "4 Ezra 15:21-27", type: "Ethiopian", votes: 50, desc: "Signs in heavens"},
+            {nt: "Romans 9:19-21", target: "4 Ezra 8:20", type: "Ethiopian", votes: 50, desc: "Potter and clay"},
+            {nt: "2 Corinthians 12:2-4", target: "4 Ezra 7:36", type: "Ethiopian", votes: 50, desc: "Paradise vision"},
+            {nt: "Revelation 14:1", target: "4 Ezra 2:42-47", type: "Ethiopian", votes: 50, desc: "144,000 on Mount Zion"},
+            {nt: "Revelation 20:12-13", target: "4 Ezra 7:33-38", type: "Ethiopian", votes: 50, desc: "Books opened for judgment"},
+
+            // Psalms of Solomon References
+            {nt: "Matthew 6:7-13", target: "Psalms of Solomon 18:1-12", type: "Ethiopian", votes: 50, desc: "Prayer structure"},
+            {nt: "Luke 1:68-79", target: "Psalms of Solomon 17:21-46", type: "Ethiopian", votes: 100, desc: "Benedictus parallel"},
+            {nt: "Romans 2:5-8", target: "Psalms of Solomon 2:15-18", type: "Ethiopian", votes: 50, desc: "Day of wrath"},
+            {nt: "Ephesians 1:4-5", target: "Psalms of Solomon 9:7", type: "Ethiopian", votes: 25, desc: "Chosen before foundation"},
+
+            // 4 Maccabees References
+            {nt: "Hebrews 11:35", ntText: "Women received back their dead, raised to life again. There were others who were tortured, refusing to be released so that they might gain an even better resurrection.", target: "4 Maccabees 6:27-29", targetText: "The tyrant Antiochus...tortured them to make them eat defiling food and to renounce Judaism. But they chose to die rather than defile themselves and dishonor the holy covenant.", type: "Ethiopian", votes: 100, desc: "Refusing Deliverance"},
+            {nt: "Romans 3:25", target: "4 Maccabees 17:21-22", type: "Ethiopian", votes: 100, desc: "Propitiation by Blood"},
+            {nt: "2 Corinthians 5:15", target: "4 Maccabees 6:28-29", type: "Ethiopian", votes: 50, desc: "Dying for Others"},
+            {nt: "Philippians 3:20-21", target: "4 Maccabees 7:19", type: "Ethiopian", votes: 50, desc: "Immortal Life"},
+            {nt: "Hebrews 12:1-2", target: "4 Maccabees 17:11-16", type: "Ethiopian", votes: 100, desc: "Cloud of Witnesses"},
+            {nt: "James 1:12", target: "4 Maccabees 17:12", type: "Ethiopian", votes: 50, desc: "Crown of Life"},
+
+            // Testament of Twelve Patriarchs References
+            {nt: "Matthew 19:28", ntText: "Jesus said to them, 'Truly I tell you, at the renewal of all things...you who have followed me will also sit on twelve thrones, judging the twelve tribes of Israel.'", target: "Testament of 12 Patriarchs 1:1", targetText: "Each of the twelve patriarchs represents a tribe of Israel and will judge their people...the sons of Jacob will be princes in the age to come.", type: "Ethiopian", votes: 25, desc: "Twelve Thrones"},
+            {nt: "Romans 8:38-39", ntText: "For I am convinced that neither death nor life, neither angels nor demons, neither the present nor the future, nor any powers...will be able to separate us from the love of God.", target: "Testament of 12 Patriarchs 2:1", targetText: "Love the Lord through all your life...neither angels nor rulers shall be able to hinder the love of the Lord for his children.", type: "Ethiopian", votes: 25, desc: "Powers & Principalities"},
+            {nt: "Matthew 5:43-44", target: "Testament of 12 Patriarchs 6:3", type: "Ethiopian", votes: 50, desc: "Love your enemies"},
+            {nt: "Matthew 6:22-23", target: "Testament of 12 Patriarchs 3:2", type: "Ethiopian", votes: 50, desc: "Eye is the lamp"},
+            {nt: "Matthew 18:23-35", target: "Testament of 12 Patriarchs 4:8", type: "Ethiopian", votes: 50, desc: "Forgiving debtors"},
+            {nt: "Luke 6:36", target: "Testament of 12 Patriarchs 7:2", type: "Ethiopian", votes: 50, desc: "Be merciful"},
+            {nt: "John 13:34", target: "Testament of 12 Patriarchs 7:6", type: "Ethiopian", votes: 50, desc: "Love one another"},
+            {nt: "Romans 12:20-21", target: "Testament of 12 Patriarchs 4:8", type: "Ethiopian", votes: 50, desc: "Overcome evil with good"},
+            {nt: "1 Corinthians 13:4-7", target: "Testament of 12 Patriarchs 7:3-8", type: "Ethiopian", votes: 50, desc: "Love is patient"},
+            {nt: "Galatians 5:22-23", target: "Testament of 12 Patriarchs 7:2-8", type: "Ethiopian", votes: 50, desc: "Fruit of the Spirit"},
+            {nt: "Ephesians 6:12", target: "Testament of 12 Patriarchs 6:1-2", type: "Ethiopian", votes: 100, desc: "Spiritual warfare"},
+            {nt: "1 John 4:18", target: "Testament of 12 Patriarchs 7:6", type: "Ethiopian", votes: 50, desc: "Perfect love casts out fear"},
+
+            // 3 Maccabees References
+            {nt: "Acts 26:24-29", target: "3 Maccabees 4:1-21", type: "Ethiopian", votes: 25, desc: "Defense before king"},
+            {nt: "Hebrews 11:34", target: "3 Maccabees 6:1-41", type: "Ethiopian", votes: 50, desc: "Escaped edge of sword"},
+
+            // Wisdom References
+            {nt: "Matthew 27:43", ntText: "He trusts in God. Let God rescue him now if he wants him, for he said, 'I am the Son of God.'", target: "Wisdom 2:18", targetText: "Let us see if his words are true, and let us test what will happen at the end of his life; for if the righteous man is God's child, he will help him.", type: "Deuterocanonical", votes: 100, desc: "Let God Deliver Him"},
+
+            // GNOSTIC GOSPEL REFERENCES - Contradictions Highlighted
+            // Gospel of Judas - Shows Contradictions
+            {nt: "Matthew 26:14-16", ntText: "Then one of the Twelve—the one called Judas Iscariot—went to the chief priests and asked, 'What are you willing to give me if I deliver him over to you?' So they counted out for him thirty pieces of silver.", target: "Gospel of Judas", targetText: "Jesus said to Judas: 'You will exceed all of them. For you will sacrifice the man that clothes me.' Judas is portrayed as Jesus's closest disciple performing a necessary sacrifice.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Judas as Hero vs Traitor"},
+            {nt: "Matthew 26:24", ntText: "The Son of Man will go just as it is written about him. But woe to that man who betrays the Son of Man! It would be better for him if he had not been born.", target: "Gospel of Judas", targetText: "Jesus tells Judas he will be cursed by other generations but praised by the 'great generation' - portraying betrayal as redemptive rather than condemnable.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Betrayal Blessed vs Cursed"},
+            {nt: "John 13:27", ntText: "As soon as Judas took the bread, Satan entered into him. 'What you are about to do, do quickly,' Jesus told him.", target: "Gospel of Judas", targetText: "Jesus privately instructs Judas to betray him as part of a divine plan, not satanic influence. Judas acts on Jesus's direct orders.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Divine Plan vs Satan"},
+            {nt: "Luke 22:3-4", ntText: "Then Satan entered Judas, called Iscariot, one of the Twelve. And Judas went to the chief priests and the officers of the temple guard and discussed with them how he might betray Jesus.", target: "Gospel of Judas", targetText: "Judas is guided by his star and follows Jesus's secret teachings to perform the betrayal. No mention of Satan - instead elevated as spiritually superior.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Spiritual Superior vs Satan-Possessed"},
+
+            // Gospel of Thomas - Some Parallels, Some Contradictions
+            {nt: "Matthew 5:14", ntText: "You are the light of the world. A town built on a hill cannot be hidden.", target: "Gospel of Thomas", targetText: "Saying 32: 'Jesus said, A city being built on a high mountain and fortified cannot fall, nor can it be hidden.'", type: "Gnostic", votes: 75, desc: "✓ Similar - City on Hill"},
+            {nt: "Matthew 13:44-46", ntText: "The kingdom of heaven is like treasure hidden in a field... like a merchant looking for fine pearls.", target: "Gospel of Thomas", targetText: "Saying 76: Jesus describes the kingdom as a merchant finding a pearl. Saying 109: Kingdom like a treasure in a field.", type: "Gnostic", votes: 80, desc: "✓ Similar - Pearl/Treasure Parable"},
+            {nt: "Luke 17:20-21", ntText: "The kingdom of God does not come with observation... the kingdom of God is within you.", target: "Gospel of Thomas", targetText: "Saying 3: 'The kingdom is inside of you, and it is outside of you.' Emphasizes inner spiritual knowledge over external signs.", type: "Gnostic", votes: 85, desc: "✓ Similar - Kingdom Within"},
+            {nt: "Matthew 10:34", ntText: "Do not suppose that I have come to bring peace to the earth. I did not come to bring peace, but a sword.", target: "Gospel of Thomas", targetText: "Saying 16: 'Men think, perhaps, that it is peace which I have come to cast upon the world. They do not know that it is dissension which I have come to cast.'", type: "Gnostic", votes: 70, desc: "✓ Similar - Not Peace but Division"},
+            {nt: "Matthew 19:12", ntText: "For there are eunuchs who were born that way... and there are those who choose to live like eunuchs for the sake of the kingdom of heaven.", target: "Gospel of Thomas", targetText: "Saying 114: 'Simon Peter said to them, Let Mary leave us, for women are not worthy of life. Jesus said, I myself shall lead her... For every woman who will make herself male will enter the kingdom of heaven.'", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Misogyny Not in Canon"},
+            {nt: "John 3:3", ntText: "Jesus replied, 'Very truly I tell you, no one can see the kingdom of God unless they are born again.'", target: "Gospel of Thomas", targetText: "Saying 22: Disciples ask when they will enter kingdom. Jesus responds about making 'the two one' and male/female becoming single - gnostic reinterpretation of rebirth.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - Gnostic Unity vs Spiritual Rebirth"},
+
+            // Gospel of Mary (Magdalene) - Gnostic Authority Disputes
+            {nt: "John 20:1-18", ntText: "Mary Magdalene went to the tomb early...Jesus said to her, 'Mary.' She turned toward him and cried out in Aramaic, 'Rabboni!' (which means Teacher).", target: "Gospel of Mary", targetText: "Mary Magdalene receives secret visions and teachings from Jesus. Peter asks, 'Did he really speak with a woman in private without our knowledge? Should we all turn and listen to her? Did he prefer her to us?'", type: "Gnostic", votes: 30, desc: "✓ Similar - Mary's Special Relationship"},
+            {nt: "Luke 8:2-3", ntText: "Mary (called Magdalene) from whom seven demons had come out...and many others. These women were helping to support them out of their own means.", target: "Gospel of Mary", targetText: "Mary Magdalene portrayed as chief disciple who understood Jesus's teachings better than Peter and the male disciples. No mention of demon possession.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - Chief Disciple vs Demon-Possessed"},
+            {nt: "Matthew 16:18-19", ntText: "And I tell you that you are Peter, and on this rock I will build my church, and the gates of Hades will not overcome it. I will give you the keys of the kingdom.", target: "Gospel of Mary", targetText: "Peter becomes jealous of Mary's authority. Andrew and Peter reject her teaching. Levi rebukes Peter: 'If the Savior made her worthy, who are you to reject her? Surely the Savior knows her very well.'", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Peter's Authority Challenged"},
+            {nt: "1 Corinthians 14:34-35", ntText: "Women should remain silent in the churches. They are not allowed to speak, but must be in submission, as the law says.", target: "Gospel of Mary", targetText: "Mary teaches the male disciples about Jesus's secret revelations. She is portrayed as the one who comforts and leads them after Jesus's departure.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Women Teaching vs Silence"},
+
+            // Gospel of Peter - Docetic Christology & Embellishments
+            {nt: "Matthew 27:45-50", ntText: "From noon until three in the afternoon darkness came over all the land...And when Jesus had cried out again in a loud voice, he gave up his spirit.", target: "Gospel of Peter", targetText: "Jesus on cross says 'My power, O power, you have forsaken me!' When he said this, he was taken up. No cry of anguish - suggests Jesus's divine nature left before death (Docetism).", type: "Gnostic", votes: 20, desc: "⚠️ CONTRADICTS - Docetic vs Real Suffering"},
+            {nt: "Matthew 28:2-4", ntText: "There was a violent earthquake, for an angel of the Lord came down from heaven...His appearance was like lightning, and his clothes were white as snow.", target: "Gospel of Peter", targetText: "Two men descend from heaven in great brightness. A third man emerges from the tomb with them. The heads of the two men reach to heaven, but the head of the one being led reaches beyond the heavens. A cross follows them out.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - Fantastical vs Simple Account"},
+            {nt: "Mark 16:5", ntText: "As they entered the tomb, they saw a young man dressed in a white robe sitting on the right side, and they were alarmed.", target: "Gospel of Peter", targetText: "The stone rolls away by itself. Two angelic figures whose heads reach to heaven support a third whose head reaches beyond the heavens. A talking cross emerges from tomb proclaiming victory.", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Talking Cross & Giants"},
+            {nt: "John 19:38-42", ntText: "Joseph of Arimathea asked Pilate for the body of Jesus...the two of them wrapped it, with the spices, in strips of linen.", target: "Gospel of Peter", targetText: "Jewish leaders acknowledge they acted wickedly and fear destruction. Much more elaborate guilt and supernatural signs during burial. Pilate washes hands saying 'I am clean from the blood of the Son of God.'", type: "Gnostic", votes: 25, desc: "✓ Similar - But More Dramatic"},
+
+            // Gospel of Philip - Sacramental Gnosticism
+            {nt: "Matthew 1:18", ntText: "This is how the birth of Jesus the Messiah came about: His mother Mary was pledged to be married to Joseph, but before they came together, she was found to be pregnant through the Holy Spirit.", target: "Gospel of Philip", targetText: "Those who say Mary conceived by the Holy Spirit are in error. They do not know what they say. When did a woman ever conceive by a woman? (Referring to Holy Spirit as female Sophia)", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Virgin Birth Denied"},
+            {nt: "John 13:23", ntText: "One of them, the disciple whom Jesus loved, was reclining next to him.", target: "Gospel of Philip", targetText: "The companion of the Savior is Mary Magdalene. Christ loved her more than all the disciples, and used to kiss her often on her mouth. The rest of the disciples were offended.", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Mary as Beloved Disciple"},
+            {nt: "Matthew 28:9", ntText: "Suddenly Jesus met them. 'Greetings,' he said. They came to him, clasped his feet and worshiped him.", target: "Gospel of Philip", targetText: "Text emphasizes mystical union and sacred marriage (hieros gamos) between Christ and Mary Magdalene as spiritual archetype.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - Sacred Marriage vs Worship"},
+            {nt: "1 Corinthians 15:50", ntText: "I declare to you, brothers and sisters, that flesh and blood cannot inherit the kingdom of God, nor does the perishable inherit the imperishable.", target: "Gospel of Philip", targetText: "Salvation requires receiving the five sacraments: baptism, chrism, eucharist, redemption, and bridal chamber. Emphasizes Gnostic gnosis over faith.", type: "Gnostic", votes: 20, desc: "⚠️ CONTRADICTS - Sacraments vs Grace by Faith"},
+
+            // Infancy Gospel of Thomas - Bizarre Childhood Miracles
+            {nt: "Luke 2:40", ntText: "And the child grew and became strong; he was filled with wisdom, and the grace of God was on him.", target: "Infancy Gospel of Thomas", targetText: "When Jesus was five years old, he made clay birds on the Sabbath. When rebuked, he clapped his hands and the birds came to life and flew away.", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Magical Child vs Normal Growth"},
+            {nt: "Luke 2:51-52", ntText: "Then he went down to Nazareth with them and was obedient to them...And Jesus grew in wisdom and stature, and in favor with God and man.", target: "Infancy Gospel of Thomas", targetText: "A child bumps into Jesus. Jesus says 'You shall not finish your course!' and the child falls down dead. Jesus strikes another child dead for bumping his shoulder. Parents complain he kills whoever angers him.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Vengeful vs Obedient Child"},
+            {nt: "Mark 6:3", ntText: "Isn't this the carpenter? Isn't this Mary's son and the brother of James, Joseph, Judas and Simon?", target: "Infancy Gospel of Thomas", targetText: "Jesus helps Joseph the carpenter. When Joseph cuts wood too short, Jesus stretches it to the right length by pulling on it. Jesus shows miraculous powers from early childhood.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - Magic Tricks vs Normal Work"},
+
+            // Shepherd of Hermas - Nearly Made Canon
+            {nt: "Matthew 19:9", ntText: "I tell you that anyone who divorces his wife, except for sexual immorality, and marries another woman commits adultery.", target: "Shepherd of Hermas", targetText: "If a man discovers his wife in adultery and she does not repent, the man sins if he continues to live with her. If he divorces her and she later repents, he must take her back.", type: "Gnostic", votes: 50, desc: "✓ Similar - Divorce Teaching"},
+            {nt: "Hebrews 6:4-6", ntText: "It is impossible for those who have once been enlightened...if they fall away, to be brought back to repentance.", target: "Shepherd of Hermas", targetText: "Post-baptismal sins can be forgiven once through repentance. There is a second chance for repentance after baptism, but only one.", type: "Gnostic", votes: 25, desc: "⚠️ CONTRADICTS - Second Chance vs Impossible"},
+            {nt: "James 1:27", ntText: "Religion that God our Father accepts as pure and faultless is this: to look after orphans and widows in their distress and to keep oneself from being polluted by the world.", target: "Shepherd of Hermas", targetText: "Contains extensive allegories about virtues (virginity, faith, continence) and vices. Emphasizes care for widows and orphans, and purity of heart.", type: "Gnostic", votes: 60, desc: "✓ Similar - Care for Widows/Orphans"},
+
+            // Epistle of Barnabas - Allegorical OT Rejection
+            {nt: "Matthew 5:17", ntText: "Do not think that I have come to abolish the Law or the Prophets; I have not come to abolish them but to fulfill them.", target: "Epistle of Barnabas", targetText: "The Jews misunderstood the Old Covenant from the beginning. Dietary laws and circumcision were always meant to be spiritual, not literal. Physical circumcision is a deception from an evil angel.", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - OT Completely Allegorized"},
+            {nt: "Romans 2:28-29", ntText: "A person is not a Jew who is one only outwardly, nor is circumcision merely outward and physical. No, a person is a Jew who is one inwardly; and circumcision is circumcision of the heart.", target: "Epistle of Barnabas", targetText: "Circumcision of the ears and heart is what God wanted, not physical circumcision. The temple sacrifices were never what God wanted - they were misunderstood from the start.", type: "Gnostic", votes: 40, desc: "✓ Similar - Spiritual Circumcision"},
+            {nt: "Hebrews 10:1", ntText: "The law is only a shadow of the good things that are coming—not the realities themselves.", target: "Epistle of Barnabas", targetText: "The Old Testament law was a foreshadowing, but Jews never understood the spiritual meaning. Contains elaborate typology connecting OT to Christ.", type: "Gnostic", votes: 55, desc: "✓ Similar - OT as Shadow"},
+
+            // Protoevangelium of James - Mary's Perpetual Virginity
+            {nt: "Matthew 1:25", ntText: "But he did not consummate their marriage until she gave birth to a son. And he gave him the name Jesus.", target: "Protoevangelium of James", targetText: "Mary remained a perpetual virgin. Joseph was an old widower with children from previous marriage. The 'brothers of Jesus' were Joseph's sons from first wife, not Mary's children.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - Perpetual Virgin vs Until"},
+            {nt: "Luke 2:7", ntText: "She gave birth to her firstborn, a son. She wrapped him in cloths and placed him in a manger, because there was no guest room available for them.", target: "Protoevangelium of James", targetText: "During birth, a bright cloud overshadows the cave. When the cloud withdraws, a bright light appears. A midwife examines Mary and confirms her virginity was not broken even after birth.", type: "Gnostic", votes: 20, desc: "⚠️ CONTRADICTS - Post-Birth Virginity Test"},
+
+            // Gospel of Nicodemus (Acts of Pilate) - Expanded Passion & Harrowing of Hades
+            {nt: "Matthew 27:19", ntText: "While Pilate was sitting on the judge's seat, his wife sent him this message: 'Don't have anything to do with that innocent man, for I have suffered a great deal today in a dream because of him.'", target: "Gospel of Nicodemus", targetText: "Pilate's wife is named Claudia Procula. The dream is elaborated with details of angels and demons fighting. Pilate is portrayed more sympathetically, trying harder to save Jesus.", type: "Gnostic", votes: 30, desc: "✓ Similar - But More Elaborate"},
+            {nt: "John 19:38-40", ntText: "Later, Joseph of Arimathea asked Pilate for the body of Jesus...Taking Jesus' body, the two of them wrapped it.", target: "Gospel of Nicodemus", targetText: "Provides extensive details about Joseph and Nicodemus's actions. Jewish leaders attempt to arrest them but are thwarted. Much more dramatic narrative of burial.", type: "Gnostic", votes: 35, desc: "✓ Similar - Expanded Account"},
+            {nt: "1 Peter 3:18-19", ntText: "For Christ also suffered once for sins...being put to death in the body but made alive in the Spirit. After being made alive, he went and made proclamation to the imprisoned spirits.", target: "Gospel of Nicodemus", targetText: "Extensive narrative of Christ's descent into Hades. Christ breaks down the gates of hell, binds Satan, and leads righteous souls (Adam, prophets, patriarchs) out of Hades into paradise.", type: "Gnostic", votes: 50, desc: "✓ Similar - Harrowing of Hell"},
+            {nt: "Ephesians 4:8-9", ntText: "When he ascended on high, he took many captives...What does 'he ascended' mean except that he also descended to the lower, earthly regions?", target: "Gospel of Nicodemus", targetText: "Detailed account of descent: Christ enters Hades in glory, defeats Satan, releases captives. Adam, Abraham, prophets all testify. Gates of brass broken, chains shattered.", type: "Gnostic", votes: 45, desc: "✓ Similar - Led Captives Free"},
+
+            // Didache (Teaching of the Twelve Apostles) - Early Church Manual
+            {nt: "Matthew 6:9-13", ntText: "This, then, is how you should pray: 'Our Father in heaven, hallowed be your name...'", target: "Didache", targetText: "Contains the Lord's Prayer with slight variations. Instructs to pray it three times daily. Early evidence of liturgical use of the prayer.", type: "Gnostic", votes: 90, desc: "✓ Similar - Lord's Prayer"},
+            {nt: "Matthew 7:6", ntText: "Do not give dogs what is sacred; do not throw your pearls to pigs. If you do, they may trample them under their feet, and turn and tear you to pieces.", target: "Didache", targetText: "Quotes this verse regarding the Eucharist: 'Give not that which is holy to the dogs' - applied to baptismal requirement before communion.", type: "Gnostic", votes: 85, desc: "✓ Similar - Holy to Dogs"},
+            {nt: "Matthew 28:19", ntText: "Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.", target: "Didache", targetText: "Baptism instructions: 'Baptize in the name of the Father, and of the Son, and of the Holy Spirit, in living water.' If no living water, use other water; if cold water unavailable, use warm.", type: "Gnostic", votes: 80, desc: "✓ Similar - Baptismal Formula"},
+            {nt: "Acts 2:42", ntText: "They devoted themselves to the apostles' teaching and to fellowship, to the breaking of bread and to prayer.", target: "Didache", targetText: "Earliest description of Christian worship: teaching, baptism, fasting, prayer, eucharist. Instructions on how to identify true vs false prophets. Very early church manual (50-120 AD).", type: "Gnostic", votes: 75, desc: "✓ Similar - Church Order"},
+            {nt: "1 Thessalonians 5:22", ntText: "Reject every kind of evil.", target: "Didache", targetText: "Describes 'Two Ways' - Way of Life vs Way of Death. Lists virtues to pursue and vices to avoid, similar to NT ethical teaching.", type: "Gnostic", votes: 70, desc: "✓ Similar - Two Ways Teaching"},
+
+            // Acts of Paul and Thecla - Women's Ministry
+            {nt: "1 Corinthians 14:34-35", ntText: "Women should remain silent in the churches. They are not allowed to speak, but must be in submission.", target: "Acts of Paul and Thecla", targetText: "Thecla, a female disciple, preaches, teaches, and baptizes. Paul commissions her: 'Go and teach the word of God.' She performs apostolic ministry throughout her life.", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Women Preaching"},
+            {nt: "1 Timothy 2:12", ntText: "I do not permit a woman to teach or to assume authority over a man; she must be quiet.", target: "Acts of Paul and Thecla", targetText: "Thecla becomes a prominent teacher and evangelist. She cuts her hair, dresses as a man, and travels independently teaching the gospel. Crowds gather to hear her.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Female Teacher"},
+            {nt: "Acts 16:1-3", ntText: "Paul came to Derbe and then to Lystra, where a disciple named Timothy lived...Paul wanted to take him along on the journey.", target: "Acts of Paul and Thecla", targetText: "Paul gains a female disciple Thecla in Iconium. She follows Paul, faces persecution (thrown to beasts), miraculously survives, and becomes his ministry partner.", type: "Gnostic", votes: 25, desc: "✓ Similar - Paul's Companion"},
+
+            // Apocalypse of Peter - Vision of Heaven and Hell
+            {nt: "Matthew 13:41-42", ntText: "The Son of Man will send out his angels, and they will weed out of his kingdom everything that causes sin...They will throw them into the blazing furnace.", target: "Apocalypse of Peter", targetText: "Graphic descriptions of hell's torments: blasphemers hung by tongues over eternal fire, murderers cast into pit of venomous reptiles, adulterers hung by eyelids over fire.", type: "Gnostic", votes: 30, desc: "✓ Similar - But Extremely Graphic"},
+            {nt: "Luke 16:23-24", ntText: "In Hades, where he was in torment, he looked up and saw Abraham far away, with Lazarus by his side. So he called to him, 'Father Abraham, have pity on me...'", target: "Apocalypse of Peter", targetText: "Elaborate tour of hell showing specific punishments for specific sins. Each category of sinner receives customized eternal torture matching their crimes.", type: "Gnostic", votes: 35, desc: "✓ Similar - Detailed Hell Tour"},
+            {nt: "Revelation 21:1-4", ntText: "Then I saw a new heaven and a new earth...He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain.", target: "Apocalypse of Peter", targetText: "Vision of paradise: beautiful garden, righteous dressed in light, fragrant flowers. The blessed shine like the sun. Much more elaborate and detailed than Revelation.", type: "Gnostic", votes: 40, desc: "✓ Similar - Paradise Vision"},
+
+            // Secret Gospel of Mark - Disputed Authenticity
+            {nt: "Mark 10:46", ntText: "Then they came to Jericho. As Jesus and his disciples, together with a large crowd, were leaving the city...", target: "Secret Gospel of Mark", targetText: "Contains a story between Mark 10:34 and 10:46 about Jesus raising a young man from the dead in Bethany. The youth comes to Jesus wearing linen cloth. Teaches him 'mystery of the kingdom.'", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Secret Teaching"},
+            {nt: "Mark 14:51-52", ntText: "A young man, wearing nothing but a linen garment, was following Jesus. When they seized him, he fled naked, leaving his garment behind.", target: "Secret Gospel of Mark", targetText: "Alleged longer version connects this young man to the earlier resurrection story. Scholars debate whether this is an ancient text or modern forgery by Morton Smith (1958).", type: "Gnostic", votes: 5, desc: "⚠️ DISPUTED - Likely Forgery"},
+
+            // LOST/REFERENCED BOOKS - Mentioned in Bible but Lost to History
+
+            // Books Referenced in Joshua/Judges
+            {nt: "Joshua 10:13", ntText: "The sun stopped in the middle of the sky and delayed going down about a full day. Are they not written in the Book of Jasher?", target: "Book of Jasher", targetText: "[LOST TEXT] Ancient Israelite poetic/historical work cited in Joshua and 2 Samuel. Various texts claim to be this book but are medieval compositions.", type: "Lost", votes: 100, desc: "Biblical Citation - Lost to History"},
+            {nt: "2 Samuel 1:18", ntText: "David took up this lament concerning Saul and his son Jonathan...and he ordered that the people of Judah be taught this lament of the bow. It is written in the Book of Jasher.", target: "Book of Jasher", targetText: "[LOST TEXT] Contained David's lamentation for Saul and Jonathan. Name means 'Book of the Upright.' May have been a collection of ancient Hebrew poetry.", type: "Lost", votes: 100, desc: "David's Lament Source"},
+            {nt: "Numbers 21:14", ntText: "That is why the Book of the Wars of the LORD says: '...Zahab in Suphah and the ravines, the Arnon...'", target: "Book of the Wars of the Lord", targetText: "[LOST TEXT] Ancient Hebrew collection of poems/songs about Israel's military victories. Quoted to establish boundaries. Lost before the time of Christ.", type: "Lost", votes: 100, desc: "Ancient War Chronicles"},
+
+            // Books of Royal Chronicles
+            {nt: "1 Kings 11:41", ntText: "As for the other events of Solomon's reign—all he did and the wisdom he displayed—are they not written in the book of the annals of Solomon?", target: "Book of the Annals of Solomon", targetText: "[LOST TEXT] Historical record of Solomon's reign, achievements, and wisdom. Administrative record kept by royal scribes. Lost during Babylonian exile or earlier.", type: "Lost", votes: 100, desc: "Solomon's Official Records"},
+            {nt: "1 Kings 14:19", ntText: "The other events of Jeroboam's reign, his wars and how he ruled, are written in the book of the annals of the kings of Israel.", target: "Book of the Annals of the Kings of Israel", targetText: "[LOST TEXT] Official court records of northern kingdom. Referenced 17 times in Kings/Chronicles. Likely destroyed when Assyria conquered Israel (722 BC).", type: "Lost", votes: 100, desc: "Northern Kingdom Chronicles"},
+            {nt: "1 Kings 14:29", ntText: "As for the other events of Rehoboam's reign, and all he did, are they not written in the book of the annals of the kings of Judah?", target: "Book of the Annals of the Kings of Judah", targetText: "[LOST TEXT] Official court records of southern kingdom. Referenced 15 times in Kings. Likely destroyed during Babylonian conquest (586 BC).", type: "Lost", votes: 100, desc: "Southern Kingdom Chronicles"},
+
+            // Books of the Seers/Prophets
+            {nt: "1 Chronicles 29:29", ntText: "As for the events of King David's reign, from beginning to end, they are written in the records of Samuel the seer, the records of Nathan the prophet and the records of Gad the seer.", target: "Book of Samuel the Seer", targetText: "[LOST TEXT] Prophetic records about David's reign written by Samuel. May have been source material for canonical Samuel books, or separate historical work.", type: "Lost", votes: 100, desc: "Samuel's Prophetic Records"},
+            {nt: "2 Chronicles 9:29", ntText: "As for the other events of Solomon's reign, from beginning to end, are they not written in the records of Nathan the prophet, in the prophecy of Ahijah the Shilonite and in the visions of Iddo the seer?", target: "Book of Nathan the Prophet", targetText: "[LOST TEXT] Nathan's prophetic writings about David and Solomon. Nathan confronted David about Bathsheba (2 Sam 12). His records about Solomon's reign are lost.", type: "Lost", votes: 100, desc: "Nathan's Historical Account"},
+            {nt: "1 Chronicles 29:29", ntText: "As for the events of King David's reign, from beginning to end, they are written in the records of Samuel the seer, the records of Nathan the prophet and the records of Gad the seer.", target: "Book of Gad the Seer", targetText: "[LOST TEXT] Prophetic records by Gad, David's seer. Gad advised David during Saul's pursuit and during the plague (1 Sam 22, 2 Sam 24). His written records are lost.", type: "Lost", votes: 100, desc: "Gad's Prophetic Chronicles"},
+            {nt: "2 Chronicles 9:29", ntText: "As for the other events of Solomon's reign, from beginning to end, are they not written in the records of Nathan the prophet, in the prophecy of Ahijah the Shilonite and in the visions of Iddo the seer?", target: "Prophecy of Ahijah", targetText: "[LOST TEXT] Prophetic writings by Ahijah the Shilonite about Solomon and Jeroboam. Ahijah prophesied kingdom division (1 Kings 11:29-39). His written prophecies are lost.", type: "Lost", votes: 100, desc: "Ahijah's Prophecies"},
+            {nt: "2 Chronicles 12:15", ntText: "As for the events of Rehoboam's reign, from beginning to end, are they not written in the records of Shemaiah the prophet and of Iddo the seer?", target: "Visions of Iddo the Seer", targetText: "[LOST TEXT] Prophetic visions by Iddo about Solomon, Rehoboam, and Abijah. Referenced 3 times in Chronicles. Chronicler used it as source material.", type: "Lost", votes: 100, desc: "Iddo's Prophetic Visions"},
+            {nt: "2 Chronicles 12:15", ntText: "As for the events of Rehoboam's reign, from beginning to end, are they not written in the records of Shemaiah the prophet and of Iddo the seer?", target: "Book of Shemaiah", targetText: "[LOST TEXT] Prophetic records by Shemaiah about Rehoboam's reign. Shemaiah prevented civil war between Judah and Israel (1 Kings 12:22-24). His writings are lost.", type: "Lost", votes: 100, desc: "Shemaiah's Prophetic Records"},
+            {nt: "2 Chronicles 20:34", ntText: "The other events of Jehoshaphat's reign, from beginning to end, are written in the annals of Jehu son of Hanani, which are recorded in the book of the kings of Israel.", target: "Book of Jehu", targetText: "[LOST TEXT] Historical work by Jehu son of Hanani about Jehoshaphat's reign. Jehu was a prophet who rebuked Jehoshaphat (2 Chr 19:2). His book was incorporated into the annals.", type: "Lost", votes: 100, desc: "Jehu's Historical Account"},
+            {nt: "2 Chronicles 33:19", ntText: "His prayer and how God was moved by his entreaty, as well as all his sins and unfaithfulness...are written in the records of the seers.", target: "Sayings of the Seers", targetText: "[LOST TEXT] Collection of prophetic sayings including Manasseh's prayer. Manasseh was Judah's most wicked king who later repented. Records of various seers compiled together.", type: "Lost", votes: 100, desc: "Collected Prophetic Sayings"},
+
+            // Lost Pauline Epistles
+            {nt: "Colossians 4:16", ntText: "After this letter has been read to you, see that it is also read in the church of the Laodiceans and that you in turn read the letter from Laodicea.", target: "Epistle to the Laodiceans", targetText: "[LOST TEXT] Paul's letter to Laodicean church, now lost. Some scholars think this refers to Ephesians (circular letter). Various forgeries claim to be this letter.", type: "Lost", votes: 100, desc: "Paul's Lost Letter"},
+            {nt: "1 Corinthians 5:9", ntText: "I wrote to you in my letter not to associate with sexually immoral people.", target: "Earlier Epistle to the Corinthians", targetText: "[LOST TEXT] Paul's first letter to Corinth (before canonical 1 Corinthians). Dealt with church discipline regarding immorality. Some scholars think fragments survive in 2 Cor 6:14-7:1.", type: "Lost", votes: 100, desc: "Paul's First Corinthian Letter"},
+
+            // MORE GNOSTIC GOSPELS - Jewish Christian & Egyptian Variants
+
+            // Gospel of the Hebrews - Jewish Christian Gospel
+            {nt: "Matthew 3:16-17", ntText: "As soon as Jesus was baptized, he went up out of the water. At that moment heaven was opened, and he saw the Spirit of God descending like a dove and alighting on him.", target: "Gospel of the Hebrews", targetText: "The Holy Spirit descends on Jesus and says: 'My son, in all the prophets I was waiting for you to come, so that I might rest in you. For you are my rest; you are my firstborn son who reigns forever.'", type: "Gnostic", votes: 40, desc: "✓ Similar - But Spirit Speaks More"},
+            {nt: "John 7:53-8:11", ntText: "Then each went to his own home. But Jesus went to the Mount of Olives. At dawn he appeared again in the temple courts...the woman caught in adultery.", target: "Gospel of the Hebrews", targetText: "Contains a similar story of a woman accused of sin. Jesus writes in the ground and says 'Let him who is without sin cast the first stone.' Possibly the source for this disputed passage.", type: "Gnostic", votes: 55, desc: "✓ Similar - Woman Accused of Sin"},
+            {nt: "1 Corinthians 15:7", ntText: "Then he appeared to James, then to all the apostles.", target: "Gospel of the Hebrews", targetText: "After resurrection, Jesus appears to James the Just: 'My brother, eat your bread, for the Son of Man has risen from those who sleep.' James had sworn not to eat until he saw Jesus risen.", type: "Gnostic", votes: 60, desc: "✓ Similar - James Appearance"},
+
+            // Gospel of the Egyptians - Encratite Gospel
+            {nt: "Matthew 22:30", ntText: "At the resurrection people will neither marry nor be given in marriage; they will be like the angels in heaven.", target: "Gospel of the Egyptians", targetText: "Salome asks Jesus: 'How long will death prevail?' Jesus responds: 'As long as you women bear children...I came to destroy the works of the female.' Extreme anti-marriage, anti-procreation stance.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - Extreme Anti-Marriage"},
+            {nt: "1 Corinthians 7:1-2", ntText: "Now for the matters you wrote about: 'It is good for a man not to have sexual relations with a woman.' But since sexual immorality is occurring, each man should have sexual relations with his own wife.", target: "Gospel of the Egyptians", targetText: "Jesus tells Salome that when she 'tramples on the garment of shame' and when 'the two become one and male with female is neither male nor female' death will end. Promotes celibacy as salvation.", type: "Gnostic", votes: 20, desc: "⚠️ CONTRADICTS - Celibacy as Salvation"},
+
+            // Gospel of Truth - Valentinian Gnostic Text
+            {nt: "John 1:14", ntText: "The Word became flesh and made his dwelling among us. We have seen his glory, the glory of the one and only Son, who came from the Father, full of grace and truth.", target: "Gospel of Truth", targetText: "Jesus is the manifestation of the Father's name. Through gnosis (knowledge) of the true name, believers escape ignorance and matter. More philosophical meditation than narrative gospel.", type: "Gnostic", votes: 25, desc: "⚠️ CONTRADICTS - Gnostic Philosophy vs Incarnation"},
+            {nt: "2 Corinthians 5:17", ntText: "Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!", target: "Gospel of Truth", targetText: "Through gnosis of the Father's name, believers awaken from the nightmare of material existence. Salvation is enlightenment about one's divine origin, not moral transformation.", type: "Gnostic", votes: 20, desc: "⚠️ CONTRADICTS - Enlightenment vs New Creation"},
+
+            // Apocryphon (Secret Book) of John - Sethian Gnosticism
+            {nt: "Genesis 1:26", ntText: "Then God said, 'Let us make mankind in our image, in our likeness...'", target: "Apocryphon of John", targetText: "The supreme God is unknowable. Sophia (Wisdom) created the demiurge Yaldabaoth (evil creator god) who made the material world. When Yaldabaoth said 'I am God and there is no other,' he revealed his ignorance.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - Evil Creator God"},
+            {nt: "John 8:44", ntText: "You belong to your father, the devil, and you want to carry out your father's desires. He was a murderer from the beginning, not holding to the truth, for there is no truth in him.", target: "Apocryphon of John", targetText: "Yaldabaoth (the demiurge) is the evil god of the Old Testament. The serpent in Eden was actually the liberator bringing gnosis. Material creation is a prison created by an ignorant, jealous god.", type: "Gnostic", votes: 5, desc: "⚠️ CONTRADICTS - OT God as Evil Demiurge"},
+
+            // Sophia of Jesus Christ - Post-Resurrection Dialogue
+            {nt: "John 20:19", ntText: "On the evening of that first day of the week, when the disciples were together, with the doors locked for fear of the Jewish leaders, Jesus came and stood among them.", target: "Sophia of Jesus Christ", targetText: "Risen Jesus appears on a mountain in Galilee. He teaches the twelve disciples and seven women about the heavenly realm, aeons, and emanations. Extended Gnostic cosmology discourse.", type: "Gnostic", votes: 25, desc: "✓ Similar - Post-Resurrection Teaching"},
+            {nt: "1 Corinthians 2:6-7", ntText: "We do, however, speak a message of wisdom among the mature, but not the wisdom of this age...No, we declare God's wisdom, a mystery that has been hidden.", target: "Sophia of Jesus Christ", targetText: "Jesus reveals secret knowledge about the pleroma (fullness), Sophia (wisdom), and the divine emanations. Knowledge of the heavenly hierarchy leads to salvation from material bondage.", type: "Gnostic", votes: 30, desc: "⚠️ CONTRADICTS - Complex Gnostic Hierarchy"},
+
+            // Pistis Sophia - Advanced Gnostic Mythology
+            {nt: "Luke 24:44-45", ntText: "He said to them, 'This is what I told you while I was still with you: Everything must be fulfilled that is written about me in the Law of Moses, the Prophets and the Psalms.' Then he opened their minds so they could understand the Scriptures.", target: "Pistis Sophia", targetText: "Risen Jesus spends 11 years teaching disciples advanced mysteries. Mary Magdalene asks most questions and receives most revelations. Explains 32 emanations, aeons, and mystical ascent through heavenly spheres.", type: "Gnostic", votes: 15, desc: "⚠️ CONTRADICTS - 11 Years of Secret Teaching"},
+            {nt: "Ephesians 1:21", ntText: "Far above all rule and authority, power and dominion, and every name that is invoked, not only in the present age but also in the one to come.", target: "Pistis Sophia", targetText: "Describes complex hierarchy of archons, aeons, and powers. Believers must know secret names and formulas to pass through each heavenly sphere. Salvation is escape from material realm through gnosis.", type: "Gnostic", votes: 20, desc: "⚠️ CONTRADICTS - Complex Magical System"},
+
+            // Dialogue of the Savior - Gnostic Wisdom Dialogue
+            {nt: "John 16:29-30", ntText: "Then Jesus' disciples said, 'Now you are speaking clearly and without figures of speech. Now we can see that you know all things and that you do not even need to have anyone ask you questions.'", target: "Dialogue of the Savior", targetText: "Jesus engages in cryptic dialogue with Judas, Matthew, and Mary. Discusses the nature of salvation, the cosmos, and escaping the body. Mary Magdalene praised: 'You make clear the greatness of the revealer.'", type: "Gnostic", votes: 35, desc: "✓ Similar - Wisdom Dialogue"},
+            {nt: "Matthew 13:11", ntText: "He replied, 'Because the knowledge of the secrets of the kingdom of heaven has been given to you, but not to them.'", target: "Dialogue of the Savior", targetText: "Jesus reveals hidden mysteries to select disciples. Emphasizes knowledge (gnosis) over faith. Those who receive revelation understand the truth about the material world as prison.", type: "Gnostic", votes: 30, desc: "⚠️ CONTRADICTS - Gnostic Dualism"},
+
+            // Book of Thomas the Contender - Ascetic Gnosticism
+            {nt: "John 20:24", ntText: "Now Thomas (also known as Didymus), one of the Twelve, was not with the disciples when Jesus came.", target: "Book of Thomas the Contender", targetText: "Jesus has secret conversation with Judas Thomas (his twin brother in some traditions). Teaches that the body is corrupt, fire awaits those who follow bodily passions. Extreme asceticism required.", type: "Gnostic", votes: 20, desc: "⚠️ CONTRADICTS - Jesus's Twin Brother"},
+            {nt: "1 Timothy 4:3-4", ntText: "They forbid people to marry and order them to abstain from certain foods, which God created to be received with thanksgiving by those who believe and who know the truth. For everything God created is good.", target: "Book of Thomas the Contender", targetText: "Condemns marriage and sexual relations as enslavement to the body. Those who engage in sexual activity will burn in fire. The body is a tomb imprisoning the soul.", type: "Gnostic", votes: 10, desc: "⚠️ CONTRADICTS - Forbidding Marriage"},
+
+            // JEWISH PSEUDEPIGRAPHA - More Testament Literature
+
+            // 2 Enoch (Slavonic Enoch) - Heavenly Journey
+            {nt: "2 Corinthians 12:2", ntText: "I know a man in Christ who fourteen years ago was caught up to the third heaven. Whether it was in the body or out of the body I do not know—God knows.", target: "2 Enoch", targetText: "Enoch tours ten heavens (not seven). Sees paradise in third heaven, hell in second heaven. Angels write down all human deeds. God shows Enoch creation, gives him 360 books of secrets.", type: "Gnostic", votes: 50, desc: "✓ Similar - Multiple Heavens Journey"},
+            {nt: "Revelation 20:12", ntText: "And I saw the dead, great and small, standing before the throne, and books were opened. Another book was opened, which is the book of life. The dead were judged according to what they had done as recorded in the books.", target: "2 Enoch", targetText: "Enoch sees the books where angels record every human deed. These books will be opened at the judgment. Every word, thought, and action is written down by recording angels.", type: "Gnostic", votes: 60, desc: "✓ Similar - Books of Deeds"},
+            {nt: "Genesis 5:24", ntText: "Enoch walked faithfully with God; then he was no more, because God took him away.", target: "2 Enoch", targetText: "Detailed account of Enoch's ascension through the heavens. God transforms Enoch into an angel, gives him wings, anoints him. He becomes the celestial scribe Metatron in some traditions.", type: "Gnostic", votes: 70, desc: "✓ Similar - Enoch's Translation"},
+
+            // 3 Enoch (Hebrew Enoch) - Metatron Tradition
+            {nt: "Hebrews 11:5", ntText: "By faith Enoch was taken from this life, so that he did not experience death: 'He could not be found, because God had taken him away.' For before he was taken, he was commended as one who pleased God.", target: "3 Enoch", targetText: "Enoch transformed into Metatron, the 'lesser YHWH,' greatest of angels. Sits on throne next to God, has 72 names, body spans the cosmos. Rabbi Ishmael tours heaven with Metatron as guide.", type: "Gnostic", votes: 40, desc: "⚠️ CONTRADICTS - Enoch Becomes God-like"},
+            {nt: "Exodus 23:20-21", ntText: "See, I am sending an angel ahead of you to guard you along the way...Pay attention to him and listen to what he says...since my Name is in him.", target: "3 Enoch", targetText: "Metatron bears the divine name. He is called 'the lesser YHWH' because God's name dwells in him. He judges, rules, and sits enthroned in heaven. Controversy in Judaism over his quasi-divine status.", type: "Gnostic", votes: 35, desc: "⚠️ CONTRADICTS - Two Powers in Heaven"},
+
+            // Assumption of Moses (Testament of Moses)
+            {nt: "Jude 1:9", ntText: "But even the archangel Michael, when he was disputing with the devil about the body of Moses, did not himself dare to condemn him for slander but said, 'The Lord rebuke you!'", target: "Assumption of Moses", targetText: "Satan claims Moses' body because Moses murdered the Egyptian (Exod 2:12). Michael argues Moses acted under divine authority. They dispute over Moses' burial. The devil is rebuked.", type: "Gnostic", votes: 100, desc: "Direct Quote ⭐"},
+            {nt: "Matthew 17:3", ntText: "Just then there appeared before them Moses and Elijah, talking with Jesus.", target: "Assumption of Moses", targetText: "Explains how Moses could appear at Transfiguration despite being dead. God took Moses' body and hid it, or transformed him. No human knows Moses' burial place (Deut 34:6).", type: "Gnostic", votes: 50, desc: "✓ Similar - Moses' Body Mystery"},
+
+            // Martyrdom and Ascension of Isaiah - Christian Pseudepigrapha
+            {nt: "Hebrews 11:37", ntText: "They were put to death by stoning; they were sawed in two; they were killed by the sword. They went about in sheepskins and goatskins, destitute, persecuted and mistreated.", target: "Martyrdom and Ascension of Isaiah", targetText: "Isaiah sawed in two by King Manasseh with a wood saw. Isaiah remains silent during execution, maintaining prophetic composure. Jewish tradition of Isaiah's martyrdom.", type: "Gnostic", votes: 90, desc: "✓ Similar - Sawed in Two"},
+            {nt: "2 Corinthians 12:2-4", ntText: "I know a man in Christ who fourteen years ago was caught up to the third heaven...was caught up to paradise and heard inexpressible things, things that no one is permitted to tell.", target: "Martyrdom and Ascension of Isaiah", targetText: "Isaiah ascends through seven heavens, sees worship of God, witnesses Christ's descent through heavens (disguising himself at each level), crucifixion, and resurrection. Detailed heavenly journey.", type: "Gnostic", votes: 55, desc: "✓ Similar - Seven Heavens Vision"},
+            {nt: "Philippians 2:7-8", ntText: "Rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. And being found in appearance as a man, he humbled himself by becoming obedient to death.", target: "Martyrdom and Ascension of Isaiah", targetText: "Christ descends through seven heavens, transforming his appearance at each level to match the angels there so they won't recognize him. Descends to earth undetected. Docetic tendencies.", type: "Gnostic", votes: 30, desc: "⚠️ CONTRADICTS - Disguised Descent"},
+
+            // Life of Adam and Eve (Apocalypse of Moses) - Expanded Eden Story
+            {nt: "Genesis 3:23-24", ntText: "So the LORD God banished him from the Garden of Eden to work the ground from which he had been taken. After he drove the man out, he placed on the east side of the Garden of Eden cherubim and a flaming sword.", target: "Life of Adam and Eve", targetText: "After expulsion, Adam and Eve stand in Jordan River and Tigris River for 40 and 37 days doing penance. Satan appears disguised as an angel of light. Adam learns agriculture, animal husbandry.", type: "Gnostic", votes: 40, desc: "✓ Similar - Expanded Exile Story"},
+            {nt: "2 Corinthians 11:14", ntText: "And no wonder, for Satan himself masquerades as an angel of light.", target: "Life of Adam and Eve", targetText: "Satan appears to Eve in the Jordan River disguised as an angel of light. He tricks her into leaving the water before completing penance. Satan's ability to appear as good angel is demonstrated.", type: "Gnostic", votes: 75, desc: "✓ Similar - Satan as Angel of Light"},
+            {nt: "Romans 5:12", ntText: "Therefore, just as sin entered the world through one man, and death through sin, and in this way death came to all people, because all sinned.", target: "Life of Adam and Eve", targetText: "Eve's detailed account of the fall and its consequences. Seth hears the story from Eve on her deathbed. Death entered through Adam, all humanity bears consequences. Lament over lost immortality.", type: "Gnostic", votes: 65, desc: "✓ Similar - Sin Through Adam"},
+
+            // Testament of Abraham - Heavenly Journey of Patriarch
+            {nt: "Hebrews 11:8", ntText: "By faith Abraham, when called to go to a place he would later receive as his inheritance, obeyed and went, even though he did not know where he was going.", target: "Testament of Abraham", targetText: "Before death, Abraham is taken on heavenly journey by Archangel Michael. Abraham sees judgment of souls, the narrow and wide gates, Abel judging at the judgment seat. Reluctant to die despite seeing heaven.", type: "Gnostic", votes: 45, desc: "✓ Similar - Abraham's Faith Tested"},
+            {nt: "Matthew 7:13-14", ntText: "Enter through the narrow gate. For wide is the gate and broad is the road that leads to destruction, and many enter through it. But small is the gate and narrow the road that leads to life, and only a few find it.", target: "Testament of Abraham", targetText: "Abraham sees two gates: narrow gate (few enter, leads to life) and wide gate (many enter, leads to destruction). Visual representation of Jesus' teaching. Souls judged and sent through appropriate gate.", type: "Gnostic", votes: 80, desc: "✓ Similar - Two Gates Vision"},
+            {nt: "Revelation 20:11-12", ntText: "Then I saw a great white throne and him who was seated on it...And I saw the dead, great and small, standing before the throne.", target: "Testament of Abraham", targetText: "Abraham sees the judgment throne with Abel sitting as judge. A terrifying angel holds balance scales, weighing each soul's deeds. Books are opened. Souls are sorted to paradise or punishment.", type: "Gnostic", votes: 70, desc: "✓ Similar - Judgment Throne Scene"},
+
+            // Testament of Solomon - Magical Demon Control
+            {nt: "1 Kings 6:7", ntText: "In building the temple, only blocks dressed at the quarry were used, and no hammer, chisel or any other iron tool was heard at the temple site while it was being built.", target: "Testament of Solomon", targetText: "Solomon built temple using demons he enslaved with magical ring from Archangel Michael. Demons reveal their names, powers, and how to bind them. Solomon forces them to work on temple construction.", type: "Gnostic", votes: 25, desc: "⚠️ CONTRADICTS - Magical Demon Labor"},
+            {nt: "Matthew 12:27", ntText: "And if I drive out demons by Beelzebul, by whom do your people drive them out? So then, they will be your judges.", target: "Testament of Solomon", targetText: "Solomon masters demon exorcism using the magical ring. He interrogates demons, learns their weaknesses, and binds them. Beelzebul and other demons forced to reveal secrets. Foundation of Jewish magical texts.", type: "Gnostic", votes: 30, desc: "⚠️ CONTRADICTS - Solomon's Magic Ring"},
+            {nt: "1 Kings 11:4", ntText: "As Solomon grew old, his wives turned his heart after other gods, and his heart was not fully devoted to the LORD his God, as the heart of David his father had been.", target: "Testament of Solomon", targetText: "Solomon's fall explained through demon Ornias seducing him through beautiful Shunammite woman. Demons cause Solomon to worship Moloch and build idolatrous temples. Pride in magical power leads to downfall.", type: "Gnostic", votes: 60, desc: "✓ Similar - Solomon's Idolatry"},
+
+            // Apocalypse of Abraham - Patriarch's Heavenly Vision
+            {nt: "Genesis 15:1", ntText: "After this, the word of the LORD came to Abram in a vision: 'Do not be afraid, Abram. I am your shield, your very great reward.'", target: "Apocalypse of Abraham", targetText: "Abraham taken on heavenly journey by angel Yahoel (Name-of-God angel). Tours celestial realm, sees throne of God, hears heavenly worship. Vision of human history from creation to end times.", type: "Gnostic", votes: 60, desc: "✓ Similar - Abraham's Vision"},
+            {nt: "Genesis 15:17", ntText: "When the sun had set and darkness had fallen, a smoking firepot with a blazing torch appeared and passed between the pieces.", target: "Apocalypse of Abraham", targetText: "Expanded version of covenant ceremony. Abraham ascends to heaven on sacrificial fire. Sees God's throne carried by four living creatures. Tours heavenly temple. Satan (Azazel) appears as unclean bird.", type: "Gnostic", votes: 50, desc: "✓ Similar - Covenant Vision Expanded"},
+            {nt: "Revelation 4:6-8", ntText: "In the center, around the throne, were four living creatures...Day and night they never stop saying: 'Holy, holy, holy is the Lord God Almighty, who was, and is, and is to come.'", target: "Apocalypse of Abraham", targetText: "Abraham sees four living creatures carrying God's throne: lion, ox, man, eagle. They sing 'Holy, holy, holy' without ceasing. Detailed description of heavenly temple worship matching Revelation imagery.", type: "Gnostic", votes: 75, desc: "✓ Similar - Four Living Creatures"},
+
+            // Testament of Job - Patience Under Trial
+            {nt: "James 5:11", ntText: "As you know, we count as blessed those who have persevered. You have heard of Job's perseverance and have seen what the Lord finally brought about. The Lord is full of compassion and mercy.", target: "Testament of Job", targetText: "Expanded Job narrative: Job endures for 48 years (not shorter period). Satan appears as bread seller, Persian king, beggar. Job's wife Sitis sells her hair for bread. Job receives mystical vision, hymn-singing daughters.", type: "Gnostic", votes: 55, desc: "✓ Similar - Job's Perseverance"},
+            {nt: "Job 1:8", ntText: "Then the LORD said to Satan, 'Have you considered my servant Job? There is no one on earth like him; he is blameless and upright, a man who fears God and shuns evil.'", target: "Testament of Job", targetText: "Job destroys Satan's temple (idol worship), which provokes Satan's attack. Job's suffering is spiritual warfare. Job receives angelic visions during trial. His daughters receive mystical sashes allowing them to speak angelic languages.", type: "Gnostic", votes: 45, desc: "⚠️ CONTRADICTS - Mystical Additions"}
+        ];
+
+        let filteredData = [];
+        let currentSort = {column: 5, ascending: false}; // Default sort by votes descending
+        let currentPage = 1;
+        const itemsPerPage = 100; // Show 100 references per page
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Show loading message
+                document.getElementById('refs-tbody').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; font-size: 1.2em;">📥 Loading 344,000+ cross-references...</td></tr>';
+
+                // Load cross-references from file
+                await loader.load();
+                crossReferences = loader.allReferences;
+
+                // Load Bible text
+                document.getElementById('refs-tbody').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; font-size: 1.2em;">📖 Loading Bible verse text...</td></tr>';
+                await bibleLoader.load();
+
+                // Load deuterocanonical texts
+                document.getElementById('refs-tbody').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; font-size: 1.2em;">📜 Loading deuterocanonical verse text...</td></tr>';
+                await deuteroLoader.load();
+
+                // Populate verse text for all references
+                console.log('📝 Populating verse text...');
+                populateVerseText();
+
+                // Merge Ethiopian text data (for non-canonical targets)
+                mergeTextData();
+
+                filteredData = [...crossReferences];
+
+                console.log(`✅ Loaded ${crossReferences.length} cross-references with verse text`);
+
+                // Update UI
+                isLoading = false;
+                renderTable();
+                updateStats();
+                setupEventListeners();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('refs-tbody').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #ff4444;">❌ Error loading data. Please check console for details.</td></tr>';
+            }
+        });
+
+        function populateVerseText() {
+            // Add NT verse text to all references
+            crossReferences.forEach(ref => {
+                ref.ntText = bibleLoader.getVerseText(ref.nt);
+
+                // For canonical targets, get that text too
+                if (ref.type === 'Canonical') {
+                    ref.targetText = bibleLoader.getVerseText(ref.target);
+                }
+                // For deuterocanonical targets, use the deuterocanonical loader
+                else if (ref.type === 'Deuterocanonical' || ref.type === 'Ethiopian') {
+                    // Target is already in format "Wis.2.18" - pass directly
+                    const text = deuteroLoader.getVerseText(ref.target);
+                    if (text) {
+                        ref.targetText = text;
+                    }
+                }
+            });
+        }
+
+        function mergeTextData() {
+            // Add text data to matching Ethiopian references, and add new ones that don't exist
+            ethiopianTextData.forEach(textRef => {
+                const match = crossReferences.find(r =>
+                    r.nt === textRef.nt && r.target === textRef.target
+                );
+                if (match) {
+                    // Update existing reference with full text
+                    match.ntText = textRef.ntText;
+                    match.targetText = textRef.targetText;
+                    match.desc = textRef.desc;
+                } else {
+                    // Add new reference (Gnostic gospels, etc.)
+                    crossReferences.push(textRef);
+                }
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('refs-tbody');
+            tbody.innerHTML = '';
+
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            // Render only current page
+            pageData.forEach(ref => {
+                const row = document.createElement('tr');
+
+                // Vote class
+                let voteClass = 'vote-low';
+                if (ref.votes >= 100) voteClass = 'vote-high';
+                else if (ref.votes >= 50) voteClass = 'vote-medium';
+
+                // Book type badge
+                let badgeClass = 'badge-ethiopian';
+                if (ref.type === 'Gnostic') badgeClass = 'badge-gnostic';
+                if (ref.type === 'Canonical') badgeClass = 'badge-canonical';
+                if (ref.type === 'Deuterocanonical') badgeClass = 'badge-deuterocanonical';
+                if (ref.type === 'Lost') badgeClass = 'badge-lost';
+
+                row.innerHTML = `
+                    <td class="verse-ref">${ref.nt}</td>
+                    <td style="font-style: italic; color: #aaa;">${ref.ntText || ''}</td>
+                    <td class="${ref.type === 'Gnostic' ? 'gnostic-ref' : 'ethiopian-ref'}">${ref.target}</td>
+                    <td style="font-style: italic; color: #aaa;">${ref.targetText || ''}</td>
+                    <td><span class="book-type-badge ${badgeClass}">${ref.type}</span></td>
+                    <td class="${voteClass}">${ref.votes}</td>
+                    <td>${ref.desc}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            // Update pagination info
+            updatePaginationInfo();
+        }
+
+        function updatePaginationInfo() {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, filteredData.length);
+
+            document.getElementById('page-info').textContent =
+                `Page ${currentPage} of ${totalPages.toLocaleString()} (Showing ${startItem.toLocaleString()}-${endItem.toLocaleString()} of ${filteredData.length.toLocaleString()})`;
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+            if (page < 1 || page > totalPages) return;
+
+            currentPage = page;
+            renderTable();
+
+            // Scroll to top of table
+            document.getElementById('refs-table').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateStats() {
+            if (isLoading || filteredData.length === 0) return;
+
+            const canonicalRefs = filteredData.filter(r => r.type === 'Canonical').length;
+            const deuteroRefs = filteredData.filter(r => r.type === 'Deuterocanonical').length;
+            const ethiopianRefs = filteredData.filter(r => r.type === 'Ethiopian').length;
+            const gnosticRefs = filteredData.filter(r => r.type === 'Gnostic').length;
+            const lostRefs = filteredData.filter(r => r.type === 'Lost').length;
+            const highConf = filteredData.filter(r => r.votes >= 100).length;
+
+            // Format large numbers with commas
+            const formatNumber = (num) => num.toLocaleString();
+
+            // Update dynamic stats
+            document.getElementById('total-refs').textContent = formatNumber(filteredData.length);
+            document.getElementById('canonical-refs').textContent = formatNumber(canonicalRefs);
+            document.getElementById('deutero-refs').textContent = formatNumber(deuteroRefs);
+            document.getElementById('ethiopian-refs').textContent = formatNumber(ethiopianRefs);
+            document.getElementById('gnostic-refs').textContent = formatNumber(gnosticRefs);
+            document.getElementById('lost-refs').textContent = formatNumber(lostRefs);
+            document.getElementById('high-confidence').textContent = formatNumber(highConf);
+        }
+
+        function setupEventListeners() {
+            // Search box
+            document.getElementById('search-box').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                filteredData = crossReferences.filter(ref =>
+                    ref.nt.toLowerCase().includes(query) ||
+                    ref.target.toLowerCase().includes(query) ||
+                    ref.desc.toLowerCase().includes(query) ||
+                    (ref.ntText && ref.ntText.toLowerCase().includes(query)) ||
+                    (ref.targetText && ref.targetText.toLowerCase().includes(query))
+                );
+                currentPage = 1; // Reset to first page
+                renderTable();
+                updateStats();
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    const filter = e.target.dataset.filter;
+
+                    if (filter === 'all') {
+                        filteredData = [...crossReferences];
+                    } else if (filter === 'canonical') {
+                        filteredData = crossReferences.filter(r => r.type === 'Canonical');
+                    } else if (filter === 'deuterocanonical') {
+                        filteredData = crossReferences.filter(r => r.type === 'Deuterocanonical');
+                    } else if (filter === 'ethiopian') {
+                        filteredData = crossReferences.filter(r => r.type === 'Ethiopian');
+                    } else if (filter === 'gnostic') {
+                        filteredData = crossReferences.filter(r => r.type === 'Gnostic');
+                    } else if (filter === 'lost') {
+                        filteredData = crossReferences.filter(r => r.type === 'Lost');
+                    }
+
+                    currentPage = 1; // Reset to first page
+                    renderTable();
+                    updateStats();
+                });
+            });
+        }
+
+        function sortTable(column) {
+            if (currentSort.column === column) {
+                currentSort.ascending = !currentSort.ascending;
+            } else {
+                currentSort.column = column;
+                currentSort.ascending = false;
+            }
+
+            filteredData.sort((a, b) => {
+                let aVal, bVal;
+
+                switch(column) {
+                    case 0: aVal = a.nt; bVal = b.nt; break;
+                    case 1: aVal = a.ntText || ''; bVal = b.ntText || ''; break;
+                    case 2: aVal = a.target; bVal = b.target; break;
+                    case 3: aVal = a.targetText || ''; bVal = b.targetText || ''; break;
+                    case 4: aVal = a.type; bVal = b.type; break;
+                    case 5: aVal = a.votes; bVal = b.votes; break;
+                    case 6: aVal = a.desc; bVal = b.desc; break;
+                }
+
+                if (typeof aVal === 'number') {
+                    return currentSort.ascending ? aVal - bVal : bVal - aVal;
+                } else {
+                    if (currentSort.ascending) {
+                        return aVal.localeCompare(bVal);
+                    } else {
+                        return bVal.localeCompare(aVal);
+                    }
+                }
+            });
+
+            renderTable();
+        }
+
+        function exportToCSV() {
+            let csv = 'NT Source,NT Text,Non-Canonical Target,Non-Canonical Text,Book Type,Votes,Type\n';
+
+            filteredData.forEach(ref => {
+                csv += `"${ref.nt}","${(ref.ntText || '').replace(/"/g, '""')}","${ref.target}","${(ref.targetText || '').replace(/"/g, '""')}","${ref.type}",${ref.votes},"${ref.desc}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'non-canonical-cross-references.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Books Modal Functions
+        const booksData = {
+            protestant: [
+                // Old Testament (39 books)
+                {name: 'Genesis', chapters: 50}, {name: 'Exodus', chapters: 40}, {name: 'Leviticus', chapters: 27}, {name: 'Numbers', chapters: 36}, {name: 'Deuteronomy', chapters: 34},
+                {name: 'Joshua', chapters: 24}, {name: 'Judges', chapters: 21}, {name: 'Ruth', chapters: 4}, {name: '1 Samuel', chapters: 31}, {name: '2 Samuel', chapters: 24},
+                {name: '1 Kings', chapters: 22}, {name: '2 Kings', chapters: 25}, {name: '1 Chronicles', chapters: 29}, {name: '2 Chronicles', chapters: 36}, {name: 'Ezra', chapters: 10},
+                {name: 'Nehemiah', chapters: 13}, {name: 'Esther', chapters: 10}, {name: 'Job', chapters: 42}, {name: 'Psalms', chapters: 150}, {name: 'Proverbs', chapters: 31},
+                {name: 'Ecclesiastes', chapters: 12}, {name: 'Song of Solomon', chapters: 8}, {name: 'Isaiah', chapters: 66}, {name: 'Jeremiah', chapters: 52}, {name: 'Lamentations', chapters: 5},
+                {name: 'Ezekiel', chapters: 48}, {name: 'Daniel', chapters: 12}, {name: 'Hosea', chapters: 14}, {name: 'Joel', chapters: 3}, {name: 'Amos', chapters: 9},
+                {name: 'Obadiah', chapters: 1}, {name: 'Jonah', chapters: 4}, {name: 'Micah', chapters: 7}, {name: 'Nahum', chapters: 3}, {name: 'Habakkuk', chapters: 3},
+                {name: 'Zephaniah', chapters: 3}, {name: 'Haggai', chapters: 2}, {name: 'Zechariah', chapters: 14}, {name: 'Malachi', chapters: 4},
+                // New Testament (27 books)
+                {name: 'Matthew', chapters: 28}, {name: 'Mark', chapters: 16}, {name: 'Luke', chapters: 24}, {name: 'John', chapters: 21}, {name: 'Acts', chapters: 28},
+                {name: 'Romans', chapters: 16}, {name: '1 Corinthians', chapters: 16}, {name: '2 Corinthians', chapters: 13}, {name: 'Galatians', chapters: 6}, {name: 'Ephesians', chapters: 6},
+                {name: 'Philippians', chapters: 4}, {name: 'Colossians', chapters: 4}, {name: '1 Thessalonians', chapters: 5}, {name: '2 Thessalonians', chapters: 3}, {name: '1 Timothy', chapters: 6},
+                {name: '2 Timothy', chapters: 4}, {name: 'Titus', chapters: 3}, {name: 'Philemon', chapters: 1}, {name: 'Hebrews', chapters: 13}, {name: 'James', chapters: 5},
+                {name: '1 Peter', chapters: 5}, {name: '2 Peter', chapters: 3}, {name: '1 John', chapters: 5}, {name: '2 John', chapters: 1}, {name: '3 John', chapters: 1},
+                {name: 'Jude', chapters: 1}, {name: 'Revelation', chapters: 22}
+            ],
+            deuterocanonical: [
+                {name: 'Tobit', chapters: 14}, {name: 'Judith', chapters: 16}, {name: 'Wisdom', chapters: 19}, {name: 'Sirach', chapters: 51},
+                {name: 'Baruch', chapters: 6}, {name: '1 Maccabees', chapters: 16}, {name: '2 Maccabees', chapters: 15},
+                {name: 'Susanna', chapters: 1}, {name: 'Bel and the Dragon', chapters: 1}, {name: 'Prayer of Azariah', chapters: 1},
+                {name: 'Greek Esther', chapters: 6}, {name: '1 Esdras', chapters: 9}, {name: '2 Esdras', chapters: 16},
+                {name: 'Prayer of Manasseh', chapters: 1}
+            ],
+            ethiopian: [
+                {name: '1 Enoch', chapters: 108}, {name: '2 Enoch', chapters: 68}, {name: '3 Enoch', chapters: 48},
+                {name: 'Jubilees', chapters: 50}, {name: '2 Baruch', chapters: 87}, {name: '3 Baruch', chapters: 17}, {name: '4 Baruch', chapters: 9},
+                {name: '3 Maccabees', chapters: 7}, {name: '4 Maccabees', chapters: 18}, {name: 'Psalms of Solomon', chapters: 18},
+                {name: '4 Ezra', chapters: 16}, {name: 'Life of Adam and Eve', chapters: 51}, {name: 'Book of Jasher', chapters: 91},
+                {name: 'Testament of the Twelve Patriarchs', chapters: 12}, {name: 'Testament of Solomon', chapters: 26},
+                {name: 'Martyrdom and Ascension of Isaiah', chapters: 11}, {name: 'Assumption of Moses', chapters: 12},
+                {name: 'Testament of Abraham', chapters: 20}, {name: 'Testament of Job', chapters: 53},
+                {name: 'Apocalypse of Abraham', chapters: 32}, {name: 'Apocalypse of Sedrach', chapters: 1}
+            ]
+        };
+
+        function showBooksModal() {
+            const modal = document.getElementById('books-modal');
+
+            // Populate Protestant books
+            const protestantDiv = document.getElementById('protestant-books');
+            protestantDiv.innerHTML = '';
+            booksData.protestant.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book-item protestant';
+                bookDiv.innerHTML = `<strong>${book.name}</strong><br/><small>${book.chapters} chapters</small>`;
+                makeBookItemClickable(bookDiv, book.name, book.chapters);
+                protestantDiv.appendChild(bookDiv);
+            });
+
+            // Populate Deuterocanonical books
+            const deuteroDiv = document.getElementById('deutero-books');
+            deuteroDiv.innerHTML = '';
+            booksData.deuterocanonical.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book-item deuterocanonical';
+                bookDiv.innerHTML = `<strong>${book.name}</strong><br/><small>${book.chapters} chapters</small>`;
+                makeBookItemClickable(bookDiv, book.name, book.chapters);
+                deuteroDiv.appendChild(bookDiv);
+            });
+
+            // Populate Ethiopian books
+            const ethiopianDiv = document.getElementById('ethiopian-books');
+            ethiopianDiv.innerHTML = '';
+            booksData.ethiopian.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book-item ethiopian';
+                bookDiv.innerHTML = `<strong>${book.name}</strong><br/><small>${book.chapters} chapters</small>`;
+                makeBookItemClickable(bookDiv, book.name, book.chapters);
+                ethiopianDiv.appendChild(bookDiv);
+            });
+
+            // Populate Gnostic/Rejected books
+            const gnosticDiv = document.getElementById('gnostic-books');
+            gnosticDiv.innerHTML = '';
+            const gnosticBooks = [
+                {name: 'Gospel of Judas', desc: 'Gnostic - Judas as hero'},
+                {name: 'Gospel of Thomas', desc: '114 sayings of Jesus'},
+                {name: 'Gospel of Mary', desc: 'Mary Magdalene dialogue'},
+                {name: 'Gospel of Peter', desc: 'Passion narrative'},
+                {name: 'Gospel of Philip', desc: 'Gnostic sayings'},
+                {name: 'Gospel of the Hebrews', desc: 'Jewish Christian'},
+                {name: 'Gospel of the Egyptians', desc: 'Anti-marriage stance'},
+                {name: 'Gospel of Truth', desc: 'Valentinian philosophy'},
+                {name: 'Gospel of Nicodemus', desc: 'Harrowing of Hell'},
+                {name: 'Infancy Gospel of Thomas', desc: 'Childhood miracles'},
+                {name: 'Protoevangelium of James', desc: 'Mary\'s infancy'},
+                {name: 'Secret Gospel of Mark', desc: 'Disputed longer Mark'},
+                {name: 'Apocryphon of John', desc: 'Sethian Gnosticism'},
+                {name: 'Sophia of Jesus Christ', desc: 'Post-resurrection'},
+                {name: 'Pistis Sophia', desc: '11 years teaching'},
+                {name: 'Dialogue of the Savior', desc: 'Gnostic wisdom'},
+                {name: 'Book of Thomas the Contender', desc: 'Ascetic teaching'},
+                {name: 'Didache', desc: 'Church manual 50-120 AD'},
+                {name: 'Shepherd of Hermas', desc: 'Nearly canonical'},
+                {name: 'Epistle of Barnabas', desc: 'Allegorical OT'},
+                {name: 'Acts of Paul and Thecla', desc: 'Female apostle'},
+                {name: 'Apocalypse of Peter', desc: 'Heaven and hell'}
+            ];
+            gnosticBooks.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book-item';
+                bookDiv.style.borderLeftColor = '#ff4444';
+                bookDiv.innerHTML = `<strong>${book.name}</strong><br/><small>${book.desc}</small>`;
+                makeBookItemClickable(bookDiv, book.name, 1);
+                gnosticDiv.appendChild(bookDiv);
+            });
+
+            // Populate Lost books
+            const lostDiv = document.getElementById('lost-books');
+            lostDiv.innerHTML = '';
+            const lostBooks = [
+                {name: 'Book of the Wars of the Lord', desc: 'Num 21:14'},
+                {name: 'Book of the Annals of Solomon', desc: '1 Kings 11:41'},
+                {name: 'Book of the Annals of the Kings of Israel', desc: '17 references'},
+                {name: 'Book of the Annals of the Kings of Judah', desc: '15 references'},
+                {name: 'Book of Samuel the Seer', desc: '1 Chr 29:29'},
+                {name: 'Book of Nathan the Prophet', desc: '1 Chr 29:29'},
+                {name: 'Book of Gad the Seer', desc: '1 Chr 29:29'},
+                {name: 'Prophecy of Ahijah', desc: '2 Chr 9:29'},
+                {name: 'Visions of Iddo the Seer', desc: '3 references'},
+                {name: 'Book of Shemaiah', desc: '2 Chr 12:15'},
+                {name: 'Book of Jehu', desc: '2 Chr 20:34'},
+                {name: 'Sayings of the Seers', desc: '2 Chr 33:19'},
+                {name: 'Epistle to the Laodiceans', desc: 'Col 4:16'},
+                {name: 'Earlier Epistle to the Corinthians', desc: '1 Cor 5:9'}
+            ];
+            lostBooks.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book-item';
+                bookDiv.style.borderLeftColor = '#ffa500';
+                bookDiv.innerHTML = `<strong>${book.name}</strong><br/><small>${book.desc}</small>`;
+                makeBookItemClickable(bookDiv, book.name, 0);
+                lostDiv.appendChild(bookDiv);
+            });
+
+            // Populate Dead Sea Scrolls
+            const dssDiv = document.getElementById('dss-books');
+            dssDiv.innerHTML = '';
+            const dssBooks = [
+                {name: 'Community Rule', desc: '1QS - Manual of Discipline'},
+                {name: 'War Scroll', desc: '1QM - Sons of Light vs Darkness'},
+                {name: 'Temple Scroll', desc: '11QT - Longest scroll (28 feet)'},
+                {name: 'Damascus Document', desc: 'CD - Zadokite Fragments'},
+                {name: 'Thanksgiving Hymns', desc: '1QH - Hodayot prayers'},
+                {name: 'Pesher Habakkuk', desc: '1QpHab - Commentary'},
+                {name: 'Genesis Apocryphon', desc: '1QapGen - Aramaic retelling'},
+                {name: 'Book of Giants', desc: 'Enochic Nephilim text'},
+                {name: 'Copper Scroll', desc: '3Q15 - Treasure locations'},
+                {name: 'Songs of Sabbath Sacrifice', desc: 'Angelic Liturgy'}
+            ];
+            dssBooks.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book-item';
+                bookDiv.style.borderLeftColor = '#00BFFF';
+                bookDiv.innerHTML = `<strong>${book.name}</strong><br/><small>${book.desc}</small>`;
+                makeBookItemClickable(bookDiv, book.name, 0);
+                dssDiv.appendChild(bookDiv);
+            });
+
+            modal.style.display = 'block';
+        }
+
+        function closeBooksModal() {
+            document.getElementById('books-modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('books-modal');
+            if (event.target == modal) {
+                closeBooksModal();
+            }
+            const textModal = document.getElementById('text-viewer-modal');
+            if (event.target == textModal) {
+                closeTextViewer();
+            }
+        }
+
+        // TEXT VIEWER SYSTEM
+        let currentBook = null;
+        let currentChapter = 1;
+        let currentBookTotalChapters = 1;
+
+        // Chapter counts for canonical books (for navigation)
+        const canonicalChapterCounts = {
+            // Old Testament
+            'Genesis': 50, 'Exodus': 40, 'Leviticus': 27, 'Numbers': 36, 'Deuteronomy': 34,
+            'Joshua': 24, 'Judges': 21, 'Ruth': 4, '1 Samuel': 31, '2 Samuel': 24,
+            '1 Kings': 22, '2 Kings': 25, '1 Chronicles': 29, '2 Chronicles': 36, 'Ezra': 10,
+            'Nehemiah': 13, 'Esther': 10, 'Job': 42, 'Psalms': 150, 'Proverbs': 31,
+            'Ecclesiastes': 12, 'Song of Solomon': 8, 'Isaiah': 66, 'Jeremiah': 52, 'Lamentations': 5,
+            'Ezekiel': 48, 'Daniel': 12, 'Hosea': 14, 'Joel': 3, 'Amos': 9,
+            'Obadiah': 1, 'Jonah': 4, 'Micah': 7, 'Nahum': 3, 'Habakkuk': 3,
+            'Zephaniah': 3, 'Haggai': 2, 'Zechariah': 14, 'Malachi': 4,
+            // New Testament
+            'Matthew': 28, 'Mark': 16, 'Luke': 24, 'John': 21, 'Acts': 28,
+            'Romans': 16, '1 Corinthians': 16, '2 Corinthians': 13, 'Galatians': 6, 'Ephesians': 6,
+            'Philippians': 4, 'Colossians': 4, '1 Thessalonians': 5, '2 Thessalonians': 3, '1 Timothy': 6,
+            '2 Timothy': 4, 'Titus': 3, 'Philemon': 1, 'Hebrews': 13, 'James': 5,
+            '1 Peter': 5, '2 Peter': 3, '1 John': 5, '2 John': 1, '3 John': 1,
+            'Jude': 1, 'Revelation': 22
+        };
+
+        // Book text database - Local files and JSON data
+        const bookTextSources = {
+            // Gnostic Gospels - Local HTML Files
+            'Gospel of Judas': {
+                type: 'localHtml',
+                file: 'gospel-of-judas.html',
+                description: 'Gnostic gospel discovered in 1970s, published 2006',
+                chapters: 1
+            },
+            'Gospel of Thomas': {
+                type: 'localHtml',
+                file: 'gospel-of-thomas.html',
+                description: 'Collection of 114 sayings of Jesus (Nag Hammadi)',
+                chapters: 1
+            },
+            'Gospel of Mary': {
+                type: 'localHtml',
+                file: 'gospel-of-mary.html',
+                description: 'Gnostic dialogue featuring Mary Magdalene',
+                chapters: 1
+            },
+            'Gospel of Peter': {
+                type: 'localHtml',
+                file: 'gospel-of-peter.html',
+                description: 'Early passion narrative with embellishments',
+                chapters: 1
+            },
+            'Gospel of Philip': {
+                type: 'localHtml',
+                file: 'gospel-of-philip.html',
+                description: 'Gnostic sayings including sacred marriage theology',
+                chapters: 1
+            },
+            'Gospel of the Hebrews': {
+                type: 'localHtml',
+                file: 'gospel-of-hebrews.html',
+                description: 'Jewish Christian gospel (fragments only)',
+                chapters: 1
+            },
+            'Gospel of the Egyptians': {
+                type: 'localHtml',
+                file: 'gospel-of-egyptians.html',
+                description: 'Encratite gospel promoting celibacy',
+                chapters: 1
+            },
+            'Gospel of Truth': {
+                type: 'localHtml',
+                file: 'gospel-of-truth.html',
+                description: 'Valentinian Gnostic meditation',
+                chapters: 1
+            },
+            'Gospel of Nicodemus': {
+                type: 'localHtml',
+                file: 'gospel-of-nicodemus.html',
+                description: 'Acts of Pilate + Harrowing of Hell',
+                chapters: 1
+            },
+            'Infancy Gospel of Thomas': {
+                type: 'localHtml',
+                file: 'infancy-gospel-thomas.html',
+                description: 'Childhood miracles of Jesus',
+                chapters: 1
+            },
+            'Protoevangelium of James': {
+                type: 'localHtml',
+                file: 'protoevangelium-james.html',
+                description: 'Infancy narrative focusing on Mary',
+                chapters: 1
+            },
+            'Secret Gospel of Mark': {
+                type: 'localHtml',
+                file: 'secret-gospel-mark.html',
+                description: 'Disputed longer version of Mark (likely forgery)',
+                chapters: 1
+            },
+            'Apocryphon of John': {
+                type: 'localHtml',
+                file: 'apocryphon-of-john.html',
+                description: 'Sethian Gnostic cosmology',
+                chapters: 1
+            },
+            'Sophia of Jesus Christ': {
+                type: 'localHtml',
+                file: 'sophia-jesus-christ.html',
+                description: 'Post-resurrection Gnostic dialogue',
+                chapters: 1
+            },
+            'Pistis Sophia': {
+                type: 'localHtml',
+                file: 'pistis-sophia.html',
+                description: 'Advanced Gnostic mythology - 11 years teaching',
+                chapters: 4
+            },
+            'Dialogue of the Savior': {
+                type: 'localHtml',
+                file: 'dialogue-savior.html',
+                description: 'Gnostic wisdom dialogue',
+                chapters: 1
+            },
+            'Book of Thomas the Contender': {
+                type: 'localHtml',
+                file: 'book-thomas-contender.html',
+                description: 'Ascetic Gnostic teaching',
+                chapters: 1
+            },
+            'Didache': {
+                type: 'localHtml',
+                file: 'didache.html',
+                description: 'Teaching of the Twelve Apostles (50-120 AD)',
+                chapters: 16
+            },
+            'Shepherd of Hermas': {
+                type: 'local',
+                abbrev: 'Hermas',
+                description: 'Early Christian allegory (nearly canonical)',
+                chapters: 114
+            },
+            'Epistle of Barnabas': {
+                type: 'localHtml',
+                file: 'epistle-barnabas.html',
+                description: 'Allegorical OT interpretation',
+                chapters: 21
+            },
+            'Acts of Paul and Thecla': {
+                type: 'localHtml',
+                file: 'acts-paul-thecla.html',
+                description: 'Female apostle Thecla',
+                chapters: 1
+            },
+            'Apocalypse of Peter': {
+                type: 'local',
+                abbrev: 'ApocPet',
+                description: 'Vision of heaven and hell',
+                chapters: 1
+            },
+
+            // Ethiopian/Pseudepigrapha - Local JSON database
+            '1 Enoch': {
+                type: 'local',
+                abbrev: '1En',
+                description: 'Book of Enoch - Watchers, heavenly journeys, Messianic prophecies',
+                chapters: 108
+            },
+            '2 Enoch': {
+                type: 'local',
+                abbrev: '2En',
+                description: 'Slavonic Enoch - Ten heavens journey',
+                chapters: 68
+            },
+            '3 Enoch': {
+                type: 'local',
+                abbrev: '3En',
+                description: 'Hebrew Enoch - Metatron transformation',
+                chapters: 48
+            },
+            'Jubilees': {
+                type: 'local',
+                abbrev: 'Jub',
+                description: 'Little Genesis - Retelling of Genesis/Exodus with angels',
+                chapters: 50
+            },
+            '2 Baruch': {
+                type: 'local',
+                abbrev: '2Bar',
+                description: 'Syriac Apocalypse of Baruch - post-Temple destruction',
+                chapters: 87
+            },
+            '3 Baruch': {
+                type: 'local',
+                abbrev: '3Bar',
+                description: 'Greek Apocalypse of Baruch - heavenly journey',
+                chapters: 17
+            },
+            '4 Baruch': {
+                type: 'local',
+                abbrev: '4Bar',
+                description: 'Paraleipomena of Jeremiah - Rest of Words of Baruch',
+                chapters: 9
+            },
+            'Assumption of Moses': {
+                type: 'localHtml',
+                file: 'assumption-moses.html',
+                description: 'Testament of Moses - Jude quotes this',
+                chapters: 12
+            },
+            'Martyrdom and Ascension of Isaiah': {
+                type: 'local',
+                abbrev: 'AscIsa',
+                description: 'Isaiah sawed in two + seven heavens vision',
+                chapters: 11
+            },
+            'Life of Adam and Eve': {
+                type: 'local',
+                abbrev: 'LAE',
+                description: 'Expanded Eden story - Apocalypse of Moses',
+                chapters: 51
+            },
+            'Testament of Abraham': {
+                type: 'localHtml',
+                file: 'testament-abraham.html',
+                description: 'Abraham\'s heavenly journey before death',
+                chapters: 20
+            },
+            'Testament of Solomon': {
+                type: 'local',
+                abbrev: 'TSol',
+                description: 'Magical demon control - building temple',
+                chapters: 26
+            },
+            'Testament of Job': {
+                type: 'localHtml',
+                file: 'testament-job.html',
+                description: 'Expanded Job narrative - 48 years suffering',
+                chapters: 53
+            },
+            'Apocalypse of Abraham': {
+                type: 'localHtml',
+                file: 'apocalypse-abraham.html',
+                description: 'Abraham\'s heavenly vision - four living creatures',
+                chapters: 32
+            },
+            'Testament of the Twelve Patriarchs': {
+                type: 'local',
+                abbrev: 'T12Pat',
+                description: 'Testaments of Jacob\'s 12 sons - ethical teachings',
+                chapters: 12
+            },
+            '4 Ezra': {
+                type: 'localHtml',
+                file: '4-ezra.html',
+                description: '2 Esdras - Apocalyptic visions',
+                chapters: 16
+            },
+            'Psalms of Solomon': {
+                type: 'localHtml',
+                file: 'psalms-solomon.html',
+                description: 'Pharisaic psalms (1st century BC)',
+                chapters: 18
+            },
+            '4 Maccabees': {
+                type: 'localHtml',
+                file: '4-maccabees.html',
+                description: 'Martyrdom philosophy',
+                chapters: 18
+            },
+            '3 Maccabees': {
+                type: 'localHtml',
+                file: '3-maccabees.html',
+                description: 'Egyptian Jews persecuted',
+                chapters: 7
+            },
+
+            // Deuterocanonical - Local JSON database
+            'Wisdom': {
+                type: 'local',
+                abbrev: 'Wis',
+                description: 'Wisdom of Solomon - Hellenistic Jewish wisdom literature',
+                chapters: 19
+            },
+            'Sirach': {
+                type: 'local',
+                abbrev: 'Sir',
+                description: 'Ecclesiasticus - wisdom literature by Jesus ben Sirach',
+                chapters: 51
+            },
+            'Tobit': {
+                type: 'local',
+                abbrev: 'Tob',
+                description: 'Story of Tobit and angel Raphael',
+                chapters: 14
+            },
+            'Judith': {
+                type: 'local',
+                abbrev: 'Jdt',
+                description: 'Judith beheads Holofernes',
+                chapters: 16
+            },
+            'Baruch': {
+                type: 'local',
+                abbrev: 'Bar',
+                description: 'Baruch\'s prophecy - attributed to Jeremiah\'s scribe',
+                chapters: 6
+            },
+            '1 Maccabees': {
+                type: 'local',
+                abbrev: '1Macc',
+                description: 'Maccabean revolt history (175-134 BC)',
+                chapters: 16
+            },
+            '2 Maccabees': {
+                type: 'local',
+                abbrev: '2Macc',
+                description: 'Theological account of revolt - resurrection doctrine',
+                chapters: 15
+            },
+            // Additional Deuterocanonical Additions
+            'Susanna': {
+                type: 'local',
+                abbrev: 'Sus',
+                description: 'Addition to Daniel - Susanna and the Elders',
+                chapters: 1
+            },
+            'Bel and the Dragon': {
+                type: 'local',
+                abbrev: 'Bel',
+                description: 'Addition to Daniel - exposing idol worship',
+                chapters: 1
+            },
+            'Prayer of Azariah': {
+                type: 'local',
+                abbrev: 'PrAzar',
+                description: 'Addition to Daniel - Song of the Three Young Men',
+                chapters: 1
+            },
+            'Greek Esther': {
+                type: 'local',
+                abbrev: 'GkEsth',
+                description: 'Greek additions to Esther with religious content',
+                chapters: 6
+            },
+            '1 Esdras': {
+                type: 'local',
+                abbrev: '1Esd',
+                description: 'Greek Ezra - parallel to Chronicles/Ezra/Nehemiah',
+                chapters: 9
+            },
+            '2 Esdras': {
+                type: 'local',
+                abbrev: '2Esd',
+                description: '4 Ezra - apocalyptic visions of Ezra',
+                chapters: 16
+            },
+
+            // Additional Local Books
+            'Book of Jasher': {
+                type: 'local',
+                abbrev: 'Jasher',
+                description: 'Sefer haYashar - medieval text (not the lost biblical book but valuable pseudepigraphon)',
+                chapters: 91
+            },
+            'Prayer of Manasseh': {
+                type: 'local',
+                abbrev: 'PrMan',
+                description: 'Penitential prayer attributed to King Manasseh',
+                chapters: 1
+            },
+            'Apocalypse of Sedrach': {
+                type: 'local',
+                abbrev: 'Sedrach',
+                description: 'Christian apocalypse featuring Sedrach (Shadrach)',
+                chapters: 1
+            },
+
+            // Lost Texts (no surviving text)
+            'Book of the Wars of the Lord': {
+                type: 'lost',
+                description: 'Ancient Hebrew war chronicles cited in Numbers 21:14. Lost before the time of Christ.',
+                references: ['Numbers 21:14']
+            },
+            'Book of the Annals of Solomon': {
+                type: 'lost',
+                description: 'Official court records of Solomon\'s reign cited in 1 Kings 11:41. Lost during Babylonian exile.',
+                references: ['1 Kings 11:41']
+            },
+            'Book of the Annals of the Kings of Israel': {
+                type: 'lost',
+                description: 'Official court records of northern kingdom. Referenced 17 times in Kings/Chronicles. Destroyed when Assyria conquered Israel (722 BC).',
+                references: ['1 Kings 14:19', '1 Kings 15:31', '1 Kings 16:5', '1 Kings 16:14', '1 Kings 16:20', '1 Kings 16:27', '1 Kings 22:39', '2 Kings 1:18', '2 Kings 10:34', '2 Kings 13:8', '2 Kings 13:12', '2 Kings 14:15', '2 Kings 14:28', '2 Kings 15:11', '2 Kings 15:15', '2 Kings 15:21', '2 Kings 15:26', '2 Kings 15:31']
+            },
+            'Book of the Annals of the Kings of Judah': {
+                type: 'lost',
+                description: 'Official court records of southern kingdom. Referenced 15 times in Kings. Destroyed during Babylonian conquest (586 BC).',
+                references: ['1 Kings 14:29', '1 Kings 15:7', '1 Kings 15:23', '1 Kings 22:45', '2 Kings 8:23', '2 Kings 12:19', '2 Kings 14:18', '2 Kings 15:6', '2 Kings 15:36', '2 Kings 16:19', '2 Kings 20:20', '2 Kings 21:17', '2 Kings 21:25', '2 Kings 23:28', '2 Kings 24:5']
+            },
+            'Book of Samuel the Seer': {
+                type: 'lost',
+                description: 'Prophetic records about David\'s reign written by Samuel. Cited in 1 Chronicles 29:29. May have been source material for canonical Samuel books.',
+                references: ['1 Chronicles 29:29']
+            },
+            'Book of Nathan the Prophet': {
+                type: 'lost',
+                description: 'Nathan\'s prophetic writings about David and Solomon. Nathan confronted David about Bathsheba. Cited in 1 Chronicles 29:29 and 2 Chronicles 9:29.',
+                references: ['1 Chronicles 29:29', '2 Chronicles 9:29']
+            },
+            'Book of Gad the Seer': {
+                type: 'lost',
+                description: 'Prophetic records by Gad, David\'s seer. Gad advised David during Saul\'s pursuit and the plague. Cited in 1 Chronicles 29:29.',
+                references: ['1 Chronicles 29:29']
+            },
+            'Prophecy of Ahijah': {
+                type: 'lost',
+                description: 'Prophetic writings by Ahijah the Shilonite about Solomon and Jeroboam. Ahijah prophesied kingdom division. Cited in 2 Chronicles 9:29.',
+                references: ['2 Chronicles 9:29']
+            },
+            'Visions of Iddo the Seer': {
+                type: 'lost',
+                description: 'Prophetic visions by Iddo about Solomon, Rehoboam, and Abijah. Referenced 3 times in Chronicles as source material.',
+                references: ['2 Chronicles 9:29', '2 Chronicles 12:15', '2 Chronicles 13:22']
+            },
+            'Book of Shemaiah': {
+                type: 'lost',
+                description: 'Prophetic records by Shemaiah about Rehoboam. Shemaiah prevented civil war between Judah and Israel. Cited in 2 Chronicles 12:15.',
+                references: ['2 Chronicles 12:15']
+            },
+            'Book of Jehu': {
+                type: 'lost',
+                description: 'Historical work by Jehu son of Hanani about Jehoshaphat. Jehu was a prophet who rebuked Jehoshaphat. Cited in 2 Chronicles 20:34.',
+                references: ['2 Chronicles 20:34']
+            },
+            'Sayings of the Seers': {
+                type: 'lost',
+                description: 'Collection of prophetic sayings including Manasseh\'s prayer. Cited in 2 Chronicles 33:19.',
+                references: ['2 Chronicles 33:19']
+            },
+            'Epistle to the Laodiceans': {
+                type: 'lost',
+                description: 'Paul\'s letter to Laodicean church. Mentioned in Colossians 4:16. Some scholars think this refers to Ephesians as a circular letter.',
+                references: ['Colossians 4:16']
+            },
+            'Earlier Epistle to the Corinthians': {
+                type: 'lost',
+                description: 'Paul\'s first letter to Corinth (before canonical 1 Corinthians). Dealt with church discipline regarding immorality. Mentioned in 1 Corinthians 5:9.',
+                references: ['1 Corinthians 5:9']
+            }
+        };
+
+        function openTextViewer(bookName, chapters) {
+            currentBook = bookName;
+            currentChapter = 1;
+
+            // Set total chapters - check if it's canonical first
+            if (canonicalChapterCounts[bookName]) {
+                currentBookTotalChapters = canonicalChapterCounts[bookName];
+            } else {
+                currentBookTotalChapters = chapters || 1;
+            }
+
+            document.getElementById('text-viewer-title').textContent = bookName;
+            document.getElementById('text-viewer-modal').style.display = 'block';
+
+            // Populate chapter selector
+            populateChapterSelector();
+
+            // Close books modal
+            closeBooksModal();
+
+            // Load book content
+            loadBookContent();
+        }
+
+        function populateChapterSelector() {
+            const select = document.getElementById('chapter-select');
+            select.innerHTML = '';
+
+            for (let i = 1; i <= currentBookTotalChapters; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                if (i === currentChapter) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            }
+        }
+
+        async function loadBookContent() {
+            const bookInfo = bookTextSources[currentBook];
+            const bodyDiv = document.getElementById('text-viewer-body');
+
+            if (!bookInfo) {
+                // Try to load from KJV data for canonical books
+                loadCanonicalBook();
+                return;
+            }
+
+            if (bookInfo.type === 'lost') {
+                // Display lost text information
+                bodyDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h3 style="color: #ffa500; font-size: 2em;">📜 LOST TO HISTORY</h3>
+                        <p style="font-size: 1.2em; margin: 20px 0;">${bookInfo.description}</p>
+                        <div style="background: rgba(255, 165, 0, 0.1); padding: 20px; border-radius: 8px; margin-top: 30px;">
+                            <h4 style="color: var(--accent-gold);">Biblical References:</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                ${bookInfo.references.map(ref => `<li style="margin: 10px 0;">• ${ref}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                // Hide all navigation for lost texts
+                document.getElementById('prev-chapter-btn').style.display = 'none';
+                document.getElementById('next-chapter-btn').style.display = 'none';
+                document.querySelector('.chapter-selector').style.display = 'none';
+            } else if (bookInfo.type === 'local') {
+                // Load from local deuterocanonical JSON database
+                if (!deuteroLoader.loaded) {
+                    bodyDiv.innerHTML = '<p style="text-align: center; padding: 40px;">Loading book data...</p>';
+                    return;
+                }
+
+                const bookData = deuteroLoader.bookData[bookInfo.abbrev];
+                if (!bookData) {
+                    bodyDiv.innerHTML = `<p style="text-align: center; padding: 40px; color: #ff4444;">Book data not found for ${currentBook}</p>`;
+                    return;
+                }
+
+                // Get all verses for the current chapter
+                const chapterVerses = [];
+                for (const [ref, text] of Object.entries(bookData.verses)) {
+                    const [ch, vs] = ref.split(':');
+                    if (parseInt(ch) === currentChapter) {
+                        chapterVerses.push({ verse: parseInt(vs), text: text });
+                    }
+                }
+
+                // Sort by verse number
+                chapterVerses.sort((a, b) => a.verse - b.verse);
+
+                if (chapterVerses.length === 0) {
+                    bodyDiv.innerHTML = `<p style="text-align: center; padding: 40px;">No verses found for ${currentBook} chapter ${currentChapter}</p>`;
+                    return;
+                }
+
+                // Display the verses
+                bodyDiv.innerHTML = `
+                    <div style="background: rgba(147, 112, 219, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <h4 style="color: var(--accent-gold); margin-top: 0;">📜 ${bookData.name} - Chapter ${currentChapter}</h4>
+                        <p style="color: #aaa;">${bookInfo.description}</p>
+                    </div>
+                    <div style="font-family: 'Georgia', serif; line-height: 2;">
+                        ${chapterVerses.map(v => `
+                            <p style="margin: 10px 0;">
+                                <sup style="color: var(--accent-gold); font-weight: bold; margin-right: 5px;">${v.verse}</sup>
+                                ${v.text}
+                            </p>
+                        `).join('')}
+                    </div>
+                `;
+
+                // Show navigation for local books with chapters
+                document.getElementById('prev-chapter-btn').style.display = currentChapter > 1 ? 'inline-block' : 'none';
+                document.getElementById('next-chapter-btn').style.display = currentChapter < bookInfo.chapters ? 'inline-block' : 'none';
+                document.querySelector('.chapter-selector').style.display = bookInfo.chapters > 1 ? 'flex' : 'none';
+
+            } else if (bookInfo.type === 'localHtml') {
+                // Load from local HTML file in data folder
+                bodyDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h3 style="color: var(--accent-gold);">📥 Loading ${currentBook}...</h3>
+                    </div>
+                `;
+
+                try {
+                    const response = await fetch('../data/gnostic/' + bookInfo.file);
+                    if (!response.ok) throw new Error('File not found');
+
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    // Extract main content
+                    let content = doc.body ? doc.body.innerHTML : html;
+
+                    // Clean up - remove scripts, styles, navigation
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = content;
+                    tempDiv.querySelectorAll('script, style, nav, header, footer, .navigation, .menu, a[href*=".."]').forEach(el => el.remove());
+
+                    bodyDiv.innerHTML = `
+                        <div style="background: rgba(255, 68, 68, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <h4 style="color: var(--accent-gold); margin-top: 0;">📜 ${currentBook}</h4>
+                            <p style="color: #aaa;">${bookInfo.description}</p>
+                        </div>
+                        <div style="font-family: 'Georgia', serif; line-height: 1.8;">
+                            ${tempDiv.innerHTML}
+                        </div>
+                    `;
+
+                    document.getElementById('prev-chapter-btn').style.display = 'none';
+                    document.getElementById('next-chapter-btn').style.display = 'none';
+                    document.querySelector('.chapter-selector').style.display = 'none';
+                } catch (error) {
+                    console.error('Error loading local file:', error);
+                    bodyDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #ff4444;">
+                            <h3>⚠️ File Not Found</h3>
+                            <p>Could not load ${currentBook}. The file may need to be downloaded.</p>
+                        </div>
+                    `;
+                }
+
+            } else if (bookInfo.type === 'external') {
+                // Fetch and display the content directly
+                bodyDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h3 style="color: var(--accent-gold);">📥 Loading ${currentBook}...</h3>
+                        <p>Fetching text from archive...</p>
+                    </div>
+                `;
+
+                try {
+                    // Use a CORS proxy to fetch the content
+                    const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                    const response = await fetch(proxyUrl + encodeURIComponent(bookInfo.url));
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch');
+                    }
+
+                    const html = await response.text();
+
+                    // Parse and clean the HTML content
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    // Try to extract the main content (different sites have different structures)
+                    let content = '';
+
+                    // Try common content selectors
+                    const contentSelectors = [
+                        'article',
+                        '.main-content',
+                        '#content',
+                        'main',
+                        '.text-content',
+                        'pre', // Many of these sites use <pre> tags
+                        'body'
+                    ];
+
+                    for (const selector of contentSelectors) {
+                        const element = doc.querySelector(selector);
+                        if (element && element.textContent.length > 100) {
+                            content = element.innerHTML;
+                            break;
+                        }
+                    }
+
+                    if (!content) {
+                        content = doc.body.innerHTML;
+                    }
+
+                    // Clean up the content - remove scripts, styles, navigation
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = content;
+
+                    // Remove unwanted elements
+                    tempDiv.querySelectorAll('script, style, nav, header, footer, .navigation, .menu').forEach(el => el.remove());
+
+                    // Display the cleaned content
+                    bodyDiv.innerHTML = `
+                        <div style="background: rgba(255, 107, 157, 0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <h4 style="color: var(--accent-gold); margin-top: 0;">About This Text:</h4>
+                            <p>${bookInfo.description}</p>
+                        </div>
+                        <div style="white-space: pre-wrap; font-family: 'Georgia', serif; line-height: 1.8;">
+                            ${tempDiv.innerHTML}
+                        </div>
+                    `;
+
+                    // Hide navigation for external books (they're fetched as single documents)
+                    document.getElementById('prev-chapter-btn').style.display = 'none';
+                    document.getElementById('next-chapter-btn').style.display = 'none';
+                    document.querySelector('.chapter-selector').style.display = 'none';
+
+                } catch (error) {
+                    console.error('Error fetching book content:', error);
+                    bodyDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px;">
+                            <h3 style="color: #ff4444;">⚠️ Unable to Load Text</h3>
+                            <p style="margin: 20px 0;">Could not fetch the text content. The source may be temporarily unavailable.</p>
+                            <p style="margin: 20px 0;">
+                                <a href="${bookInfo.url}" target="_blank" style="color: var(--accent-cyan); font-size: 1.2em;">
+                                    🔗 Click here to read on external site
+                                </a>
+                            </p>
+                            <div style="background: rgba(255, 107, 157, 0.05); padding: 20px; border-radius: 8px; margin-top: 20px;">
+                                <h4 style="color: var(--accent-gold);">About This Text:</h4>
+                                <p>${bookInfo.description}</p>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('prev-chapter-btn').style.display = 'none';
+                    document.getElementById('next-chapter-btn').style.display = 'none';
+                    document.querySelector('.chapter-selector').style.display = 'none';
+                }
+            }
+        }
+
+        function loadCanonicalBook() {
+            const bodyDiv = document.getElementById('text-viewer-body');
+
+            // Get all verses for this book from bibleLoader
+            const verses = getCanonicalBookVerses(currentBook, currentChapter);
+
+            if (verses && verses.length > 0) {
+                displayCanonicalChapter(verses);
+            } else {
+                bodyDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h3 style="color: var(--accent-gold);">📖 ${currentBook}</h3>
+                        <p style="margin: 20px 0;">Loading text from KJV Bible data...</p>
+                        <p style="color: #aaa;">This book is available in the bible-kjv-converted.json file.</p>
+                    </div>
+                `;
+
+                // Show navigation for canonical books
+                document.getElementById('prev-chapter-btn').style.display = 'inline-block';
+                document.getElementById('next-chapter-btn').style.display = 'inline-block';
+                document.getElementById('chapter-select').style.display = 'inline-block';
+            }
+        }
+
+        function getCanonicalBookVerses(bookName, chapter) {
+            // Use the loaded bibleLoader.verseData
+            if (!bibleLoader || !bibleLoader.verseData) {
+                return null;
+            }
+
+            const verses = [];
+            // Try to find all verses for this book and chapter
+            // Format in verseData is like "Genesis 1:1", "Genesis 1:2", etc.
+
+            // Get all keys that match this book and chapter
+            for (const key in bibleLoader.verseData) {
+                if (key.startsWith(`${bookName} ${chapter}:`)) {
+                    const verseNum = key.split(':')[1];
+                    verses.push({
+                        number: verseNum,
+                        text: bibleLoader.verseData[key]
+                    });
+                }
+            }
+
+            return verses.length > 0 ? verses : null;
+        }
+
+        function displayCanonicalChapter(verses) {
+            const bodyDiv = document.getElementById('text-viewer-body');
+
+            const versesHTML = verses.map(v => `
+                <p style="margin: 10px 0;">
+                    <span class="verse-number">${v.number}</span>
+                    ${v.text}
+                </p>
+            `).join('');
+
+            bodyDiv.innerHTML = `
+                <div style="background: rgba(0, 206, 209, 0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <h4 style="color: var(--accent-cyan); margin-top: 0;">King James Version (KJV)</h4>
+                    <p>Chapter ${currentChapter} of ${currentBookTotalChapters}</p>
+                </div>
+                <div style="font-family: 'Georgia', serif; line-height: 1.9; font-size: 1.05em;">
+                    ${versesHTML}
+                </div>
+            `;
+
+            // Show navigation
+            document.getElementById('prev-chapter-btn').style.display = 'inline-block';
+            document.getElementById('next-chapter-btn').style.display = 'inline-block';
+            document.getElementById('chapter-select').style.display = 'inline-block';
+            document.querySelector('.chapter-selector').style.display = 'flex';
+
+            // Update navigation buttons
+            document.getElementById('prev-chapter-btn').disabled = currentChapter <= 1;
+            document.getElementById('next-chapter-btn').disabled = currentChapter >= currentBookTotalChapters;
+
+            // Update chapter selector
+            populateChapterSelector();
+        }
+
+        function closeTextViewer() {
+            document.getElementById('text-viewer-modal').style.display = 'none';
+            currentBook = null;
+            currentChapter = 1;
+        }
+
+        function prevChapter() {
+            if (currentChapter > 1) {
+                currentChapter--;
+                loadChapter(currentChapter);
+            }
+        }
+
+        function nextChapter() {
+            const bookInfo = bookTextSources[currentBook];
+            if (bookInfo && currentChapter < bookInfo.chapters) {
+                currentChapter++;
+                loadChapter(currentChapter);
+            }
+        }
+
+        function loadChapter(chapter) {
+            currentChapter = parseInt(chapter);
+
+            // Update chapter selector to match
+            populateChapterSelector();
+
+            // Reload content for new chapter
+            loadBookContent();
+        }
+
+        // Make book items clickable in the modal
+        function makeBookItemClickable(element, bookName, chapters) {
+            element.style.cursor = 'pointer';
+            element.onclick = function() {
+                openTextViewer(bookName, chapters);
+            };
+        }
+    </script>
+</body>
+</html>
