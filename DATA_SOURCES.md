@@ -9,11 +9,15 @@ This project contains 159 books across all biblical traditions with cross-refere
 
 ### OpenBible.info Cross-References + Expanded Non-Canonical
 - **File**: `data/cross-references/cross_references_88books.txt`
-- **Expansion File**: `data/cross-references/expanded_noncanonical_refs.txt`
-- **Count**: 345,635 verse-to-verse cross-references
+- **Expansion Files**:
+  - `data/cross-references/expanded_noncanonical_refs.txt`
+  - `data/cross-references/expanded_noncanonical_refs_v2.txt`
+  - `data/cross-references/expanded_noncanonical_refs_v3.txt`
+- **Count**: 346,000+ verse-to-verse cross-references
   - 344,800 from OpenBible.info
   - 400 Deuterocanonical (Wisdom, Sirach, Tobit, Judith, Baruch, 1-2 Maccabees)
   - 399 Ethiopian/Pseudepigrapha (1 Enoch, Jubilees, 4 Ezra, T12 Patriarchs, 3-4 Maccabees, Psalms of Solomon)
+  - 570+ Dead Sea Scrolls, Gnostic, Ethiopian, Lost books parallels (v3 expansion)
 - **Source**: https://www.openbible.info + scholarly additions
 - **GitHub**: https://github.com/openbibleinfo
 - **License**: CC-BY
@@ -168,6 +172,44 @@ These connect NT to non-canonical texts:
 
 ---
 
+## Scholarly Sources for V3 Cross-References
+
+### Dead Sea Scrolls Parallels
+- **4QMMT**: "Works of the Law" phrase parallels with Galatians and Romans
+  - Source: https://rsc.byu.edu/new-testament-history-culture-society/dead-sea-scrolls-new-testament
+  - Source: https://catholicproductions.com/blogs/blog/the-dead-sea-scrolls-paul-and-the-works-of-the-law
+- **1QS, 1QM, CD, 1QH**: Multiple NT parallels
+  - Source: BYU Religious Studies Center
+
+### Pseudepigrapha Parallels
+- **Testament of Solomon**: Demonic hierarchy parallels (Matthew 9:34, 12:24-27, Mark 1:27, Luke 11:15)
+  - Source: https://readingacts.com/2017/07/18/testament-of-solomon-a-catalog-of-demons/
+  - Source: https://intertextual.bible/text/matthew-9.34-testament-of-solomon-6.1
+- **Apocalypse of Abraham**: Genesis/Revelation parallels
+  - Source: https://intertextual.bible/book/apocalypse-of-abraham/chapter/all
+- **Life of Adam and Eve**: Paul's Adam-Christ typology (Romans 5, 1 Corinthians 15, 2 Corinthians 11)
+  - Source: https://en.wikipedia.org/wiki/Life_of_Adam_and_Eve
+- **Ascension of Isaiah**: Hebrews 11:37 (Isaiah sawn in half), 2 Thessalonians 2:3
+  - Source: https://intertextual.bible/text/hebrews-11.37-ascension-of-isaiah-5.11-15
+- **2 Enoch (Slavonic)**: Melchizedek parallels with Hebrews 7
+  - Source: https://www.anthonydelgado.net/blog-1/a-biblical-theology-of-2-enoch-slavonic-enoch-secrets-of-enoch
+
+### Gnostic Text Parallels
+- **Gospel of Truth**: John, Hebrews, Pauline parallels
+  - Source: https://en.wikipedia.org/wiki/Gospel_of_Truth
+  - Source: https://earlychristianwritings.com/gospeltruth.html
+- **Pistis Sophia**: Psalms parallels (Ps 68, 69, 70, 71, 85)
+  - Source: https://earlychristianwritings.com/pistis.html
+  - Source: https://academic.oup.com/jts/article/73/2/649/6815670
+
+### General Resources
+- **intertextual.bible**: Biblical intertextuality database
+  - https://intertextual.bible
+- **Early Jewish Writings**: https://www.earlyjewishwritings.com
+- **Early Christian Writings**: https://www.earlychristianwritings.com
+
+---
+
 ## License Information
 - OpenBible.info: CC-BY
 - Theographic: Check repository
@@ -177,5 +219,5 @@ These connect NT to non-canonical texts:
 ---
 
 *PROJECT 159 | Truth Seeking Division*
-*Last Updated: 2025-11-24*
+*Last Updated: 2025-11-25*
 *Creator: @Ringmast4r*

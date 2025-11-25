@@ -7,20 +7,41 @@ class CrossRefLoader {
 
     async load() {
         try {
-            console.log('📥 Loading cross-references file...');
+            console.log('📥 Loading cross-references files...');
 
+            // Load main cross-references file
             const response = await fetch('../data/cross-references/cross_references_88books.txt');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
             const text = await response.text();
-            console.log('✅ File loaded, parsing...');
-
             this.parseData(text);
-            this.loaded = true;
+            console.log(`✅ Main file: ${this.allReferences.length} refs`);
 
-            console.log(`✅ Loaded ${this.allReferences.length} cross-references`);
+            // Load expanded v2 references
+            try {
+                const v2Response = await fetch('../data/cross-references/expanded_noncanonical_refs_v2.txt');
+                if (v2Response.ok) {
+                    const v2Text = await v2Response.text();
+                    const beforeCount = this.allReferences.length;
+                    this.parseData(v2Text);
+                    console.log(`✅ V2 expansion: +${this.allReferences.length - beforeCount} refs`);
+                }
+            } catch (e) { console.warn('V2 file not found'); }
+
+            // Load expanded v3 references (DSS, Gnostic, Lost)
+            try {
+                const v3Response = await fetch('../data/cross-references/expanded_noncanonical_refs_v3.txt');
+                if (v3Response.ok) {
+                    const v3Text = await v3Response.text();
+                    const beforeCount = this.allReferences.length;
+                    this.parseData(v3Text);
+                    console.log(`✅ V3 expansion: +${this.allReferences.length - beforeCount} refs`);
+                }
+            } catch (e) { console.warn('V3 file not found'); }
+
+            this.loaded = true;
+            console.log(`✅ Total loaded: ${this.allReferences.length} cross-references`);
             return this.allReferences;
         } catch (error) {
             console.error('❌ Error loading cross-references:', error);
@@ -59,8 +80,22 @@ class CrossRefLoader {
     }
 
     getBookType(verse) {
+        // Dead Sea Scrolls
+        if (verse.includes('1QS') || verse.includes('1QM') || verse.includes('1QH')) return 'Dead Sea Scrolls';
+        if (verse.includes('11QT') || verse.includes('CD.') || verse.includes('4Q')) return 'Dead Sea Scrolls';
+        if (verse.includes('4QMMT')) return 'Dead Sea Scrolls';
+
+        // Lost Books
+        if (verse.includes('JasherL') || verse.includes('WarsLord')) return 'Lost';
+        if (verse.includes('AnnSol') || verse.includes('AnnIsr') || verse.includes('AnnJud')) return 'Lost';
+        if (verse.includes('SamSeer') || verse.includes('Nathan.') || verse.includes('GadSeer')) return 'Lost';
+        if (verse.includes('Ahijah') || verse.includes('Iddo.') || verse.includes('Shemaiah')) return 'Lost';
+        if (verse.includes('Jehu.') || verse.includes('SaySeers')) return 'Lost';
+        if (verse.includes('EpLaod') || verse.includes('EarlierCor') || verse.includes('StoryIddo')) return 'Lost';
+
         // Ethiopian/Pseudepigrapha books
         if (verse.includes('1En.') || verse.includes('Enoch')) return 'Ethiopian';
+        if (verse.includes('2Bar') || verse.includes('2 Baruch')) return 'Ethiopian';
         if (verse.includes('Jub.') || verse.includes('Jubilees')) return 'Ethiopian';
         if (verse.includes('Meq')) return 'Ethiopian';
         if (verse.includes('4Macc')) return 'Ethiopian';
@@ -72,6 +107,7 @@ class CrossRefLoader {
         if (verse.includes('Odes')) return 'Ethiopian';
         if (verse.includes('Prayer of Manasseh')) return 'Ethiopian';
         if (verse.includes('Psalm 151')) return 'Ethiopian';
+        if (verse.includes('AssMos') || verse.includes('Assumption')) return 'Ethiopian';
         // Testaments of the Twelve Patriarchs - individual books
         if (verse.includes('TLevi')) return 'Ethiopian';
         if (verse.includes('TJud')) return 'Ethiopian';
@@ -86,13 +122,20 @@ class CrossRefLoader {
         if (verse.includes('TJob')) return 'Ethiopian';
         if (verse.includes('TAsh')) return 'Ethiopian';
         if (verse.includes('TSim')) return 'Ethiopian';
+        if (verse.includes('TAbr')) return 'Ethiopian';
+        // Additional Pseudepigrapha
+        if (verse.includes('TSol') || verse.includes('Testament of Solomon')) return 'Ethiopian';
+        if (verse.includes('ApocAbr') || verse.includes('Apocalypse of Abraham')) return 'Ethiopian';
+        if (verse.includes('LAE') || verse.includes('Life of Adam')) return 'Ethiopian';
+        if (verse.includes('AscIs') || verse.includes('Ascension of Isaiah')) return 'Ethiopian';
+        if (verse.includes('2En.') || verse.includes('2 Enoch') || verse.includes('Slavonic Enoch')) return 'Ethiopian';
 
         // Deuterocanonical
         if (verse.includes('Tob.') || verse.includes('Tobit')) return 'Deuterocanonical';
         if (verse.includes('Jdt.') || verse.includes('Judith')) return 'Deuterocanonical';
         if (verse.includes('Wis.') || verse.includes('Wisdom')) return 'Deuterocanonical';
         if (verse.includes('Sir.') || verse.includes('Sirach')) return 'Deuterocanonical';
-        if (verse.includes('Bar.') || verse.includes('Baruch')) return 'Deuterocanonical';
+        if (verse.includes('Bar.') && !verse.includes('2Bar')) return 'Deuterocanonical';
         if (verse.includes('1Macc') || verse.includes('2Macc')) return 'Deuterocanonical';
 
         // Gnostic/Early Christian
@@ -102,8 +145,10 @@ class CrossRefLoader {
         if (verse.includes('GJudas') || verse.includes('Gospel of Judas')) return 'Gnostic';
         if (verse.includes('Did.') || verse.includes('Didache')) return 'Gnostic';
         if (verse.includes('Barn.') || verse.includes('Barnabas')) return 'Gnostic';
-        if (verse.includes('Herm.') || verse.includes('Hermas')) return 'Gnostic';
+        if (verse.includes('Herm') || verse.includes('Hermas')) return 'Gnostic';
         if (verse.includes('ApocPet')) return 'Gnostic';
+        if (verse.includes('GTruth') || verse.includes('Gospel of Truth')) return 'Gnostic';
+        if (verse.includes('PistSoph') || verse.includes('Pistis Sophia')) return 'Gnostic';
 
         return 'Canonical';
     }

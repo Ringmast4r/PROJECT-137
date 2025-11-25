@@ -16,11 +16,11 @@ class ArcDiagramTableauStyle {
         // Color scheme for all 159 book categories
         this.canonColors = {
             'Protestant': { OT: '#2ecc71', NT: '#00CED1' },  // Green for OT, Cyan for NT
-            'Deuterocanonical': '#9370DB',  // Purple
-            'Ethiopian': '#ff6b9d',  // Pink
-            'Dead Sea Scrolls': '#00BFFF',  // Blue
-            'Gnostic': '#888888',  // Gray (visible on dark bg, matches black arcs)
-            'Lost': '#FFD700'  // Gold
+            'Deuterocanonical': '#FF0000',  // RED (matches arc color)
+            'Ethiopian': '#ff6b9d',  // PINK (matches arc color)
+            'Dead Sea Scrolls': '#FF8C00',  // Orange
+            'Gnostic': '#000000',  // BLACK (matches arc color)
+            'Lost': '#FFD700'  // GOLD (matches arc color)
         };
 
         // Store for non-canonical cross-references from CrossRefLoader
@@ -315,6 +315,7 @@ class ArcDiagramTableauStyle {
         const typeColors = {
             'Deuterocanonical': { stroke: '#FF0000', glow: '#FF0000', label: 'RED' },
             'Ethiopian': { stroke: '#ff6b9d', glow: '#ff6b9d', label: 'PINK' },
+            'Dead Sea Scrolls': { stroke: '#FF8C00', glow: '#FF8C00', label: 'ORANGE' },
             'Gnostic': { stroke: '#000000', glow: '#333333', label: 'BLACK' },
             'Lost': { stroke: '#FFD700', glow: '#FFD700', label: 'GOLD' }
         };
@@ -481,89 +482,125 @@ class ArcDiagramTableauStyle {
         });
 
         // X scale: chapter position with edge padding
-        // Give extra space to Gnostic and Lost books at the end for readability
+        // Protestant, Deuterocanonical, Ethiopian = linear chapter spacing
+        // DSS, Gnostic, Lost = BOOK-based spacing (each book gets equal width)
         const edgePadding = 50;
 
-        // Find where Gnostic books start (they come after DSS)
-        const gnosticStartIdx = chapters.findIndex(ch => ch.canon === 'Gnostic');
-        const lostStartIdx = chapters.findIndex(ch => ch.canon === 'Lost');
+        // Build book lists for EACH canon type
+        const canonBookLists = {
+            'Protestant': [],
+            'Deuterocanonical': [],
+            'Ethiopian': [],
+            'Dead Sea Scrolls': [],
+            'Gnostic': [],
+            'Lost': []
+        };
 
-        // Count chapters in each section
-        const mainChapters = gnosticStartIdx > 0 ? gnosticStartIdx : chapters.length;
-
-        // Build book position maps for Gnostic and Lost sections
-        // Each book gets EQUAL space regardless of chapter count
-        const gnosticBookList = [];
-        const lostBookList = [];
-        const bookStartIdx = new Map(); // Maps book name to its start index
+        // Count chapters per section
+        const chapterCounts = { 'Protestant': 0, 'Deuterocanonical': 0, 'Ethiopian': 0, 'Dead Sea Scrolls': 0, 'Gnostic': 0, 'Lost': 0 };
+        const sectionStartIdx = { 'Protestant': 0 };
 
         let currentBook = null;
         chapters.forEach((ch, idx) => {
+            const canon = ch.canon || 'Protestant';
+            if (chapterCounts[canon] !== undefined) {
+                if (chapterCounts[canon] === 0 && canon !== 'Protestant') {
+                    sectionStartIdx[canon] = idx;
+                }
+                chapterCounts[canon]++;
+            }
+
             if (ch.book !== currentBook) {
                 currentBook = ch.book;
-                bookStartIdx.set(ch.book, idx);
-                if (ch.canon === 'Gnostic') {
-                    gnosticBookList.push({ name: ch.book, startIdx: idx });
-                } else if (ch.canon === 'Lost') {
-                    lostBookList.push({ name: ch.book, startIdx: idx });
+                if (canonBookLists[canon]) {
+                    canonBookLists[canon].push({ name: ch.book, startIdx: idx });
                 }
             }
         });
 
-        // Build chapter-to-book-position map for non-canonical sections
+        // Build chapter-to-book-position map for BOOK-SPACED sections only (DSS, Gnostic, Lost)
         const chapterToBookPos = new Map();
-        gnosticBookList.forEach((book, bookIdx) => {
-            // Find all chapters for this book
-            chapters.forEach((ch, chIdx) => {
-                if (ch.book === book.name) {
-                    chapterToBookPos.set(chIdx, { section: 'gnostic', bookIdx, totalBooks: gnosticBookList.length });
-                }
+
+        ['Dead Sea Scrolls', 'Gnostic', 'Lost'].forEach(canon => {
+            canonBookLists[canon].forEach((book, bookIdx) => {
+                chapters.forEach((ch, chIdx) => {
+                    if (ch.book === book.name) {
+                        chapterToBookPos.set(chIdx, {
+                            section: canon,
+                            bookIdx,
+                            totalBooks: canonBookLists[canon].length
+                        });
+                    }
+                });
             });
         });
-        lostBookList.forEach((book, bookIdx) => {
-            chapters.forEach((ch, chIdx) => {
-                if (ch.book === book.name) {
-                    chapterToBookPos.set(chIdx, { section: 'lost', bookIdx, totalBooks: lostBookList.length });
-                }
-            });
+
+        // Count books in each section
+        const bookCounts = {};
+        Object.keys(canonBookLists).forEach(canon => {
+            bookCounts[canon] = canonBookLists[canon].length;
+        });
+        console.log('Book counts by canon:', bookCounts);
+        console.log('Chapter counts by canon:', chapterCounts);
+
+        // Width allocation - give more space to Deuterocanonical and Ethiopian
+        // Protestant: 35%, Deuterocanonical: 12%, Ethiopian: 18%, DSS+Gnostic+Lost: 35% (by book count)
+        const bookSpacedBooks = bookCounts['Dead Sea Scrolls'] + bookCounts['Gnostic'] + bookCounts['Lost'];
+
+        const widthPct = {
+            'Protestant': 0.35,
+            'Deuterocanonical': 0.12,
+            'Ethiopian': 0.18,
+            'Dead Sea Scrolls': 0.35 * (bookCounts['Dead Sea Scrolls'] / bookSpacedBooks),
+            'Gnostic': 0.35 * (bookCounts['Gnostic'] / bookSpacedBooks),
+            'Lost': 0.35 * (bookCounts['Lost'] / bookSpacedBooks)
+        };
+
+        // Calculate starting X positions for each section
+        const sectionOrder = ['Protestant', 'Deuterocanonical', 'Ethiopian', 'Dead Sea Scrolls', 'Gnostic', 'Lost'];
+        const sectionStartPct = {};
+        let cumulativePct = 0;
+        sectionOrder.forEach(canon => {
+            sectionStartPct[canon] = cumulativePct;
+            cumulativePct += widthPct[canon];
         });
 
-        console.log(`Section counts - Gnostic: ${gnosticBookList.length} books, Lost: ${lostBookList.length} books`);
+        console.log('Width allocation:', Object.fromEntries(
+            Object.entries(widthPct).map(([k, v]) => [k, (v * 100).toFixed(1) + '%'])
+        ));
 
-        // Allocate width: 55% main, then split remaining 45% proportionally by BOOK count
-        const mainWidthPct = 0.55;
-        const nonCanonWidthPct = 0.45;
-        const totalNonCanonBooks = gnosticBookList.length + lostBookList.length;
-        const gnosticWidthPct = totalNonCanonBooks > 0 ? nonCanonWidthPct * (gnosticBookList.length / totalNonCanonBooks) : 0.225;
-        const lostWidthPct = totalNonCanonBooks > 0 ? nonCanonWidthPct * (lostBookList.length / totalNonCanonBooks) : 0.225;
-
-        console.log(`Width allocation - Main: ${(mainWidthPct*100).toFixed(1)}%, Gnostic: ${(gnosticWidthPct*100).toFixed(1)}%, Lost: ${(lostWidthPct*100).toFixed(1)}%`);
-
-        // Create custom scale that positions chapters by BOOK (not chapter) within non-canonical sections
+        // Create custom scale
         const xScale = (idx) => {
             const totalWidth = innerWidth - (2 * edgePadding);
-
-            // Check if this chapter is in a non-canonical section
             const bookPos = chapterToBookPos.get(idx);
 
-            if (!bookPos) {
-                // Main section: Protestant, Deuterocanonical, Ethiopian, DSS
-                const normalWidth = totalWidth * mainWidthPct;
-                return edgePadding + (idx / mainChapters) * normalWidth;
-            } else if (bookPos.section === 'lost') {
-                // Lost books - position by book index, all chapters of same book at same X
-                const lostWidth = totalWidth * lostWidthPct;
-                const lostStartX = edgePadding + totalWidth * (mainWidthPct + gnosticWidthPct);
-                // Each book gets equal width
-                const bookWidth = lostWidth / bookPos.totalBooks;
-                return lostStartX + (bookPos.bookIdx + 0.5) * bookWidth;
+            if (bookPos) {
+                // Book-spaced sections: DSS, Gnostic, Lost
+                const section = bookPos.section;
+                const sectionWidth = totalWidth * widthPct[section];
+                const sectionStartX = edgePadding + totalWidth * sectionStartPct[section];
+                const bookWidth = sectionWidth / bookPos.totalBooks;
+                return sectionStartX + (bookPos.bookIdx + 0.5) * bookWidth;
+            }
+
+            // Linear chapter-spaced sections: Protestant, Deuterocanonical, Ethiopian
+            const ch = chapters[idx];
+            const canon = ch?.canon || 'Protestant';
+
+            if (canon === 'Deuterocanonical') {
+                const sectionWidth = totalWidth * widthPct['Deuterocanonical'];
+                const sectionStartX = edgePadding + totalWidth * sectionStartPct['Deuterocanonical'];
+                const localIdx = idx - sectionStartIdx['Deuterocanonical'];
+                return sectionStartX + (localIdx / chapterCounts['Deuterocanonical']) * sectionWidth;
+            } else if (canon === 'Ethiopian') {
+                const sectionWidth = totalWidth * widthPct['Ethiopian'];
+                const sectionStartX = edgePadding + totalWidth * sectionStartPct['Ethiopian'];
+                const localIdx = idx - sectionStartIdx['Ethiopian'];
+                return sectionStartX + (localIdx / chapterCounts['Ethiopian']) * sectionWidth;
             } else {
-                // Gnostic books - position by book index, all chapters of same book at same X
-                const gnosticWidth = totalWidth * gnosticWidthPct;
-                const gnosticStartX = edgePadding + totalWidth * mainWidthPct;
-                // Each book gets equal width
-                const bookWidth = gnosticWidth / bookPos.totalBooks;
-                return gnosticStartX + (bookPos.bookIdx + 0.5) * bookWidth;
+                // Protestant
+                const sectionWidth = totalWidth * widthPct['Protestant'];
+                return edgePadding + (idx / chapterCounts['Protestant']) * sectionWidth;
             }
         };
 
@@ -973,8 +1010,7 @@ class ArcDiagramTableauStyle {
             { label: 'Ethiopian (21)', color: this.canonColors.Ethiopian },
             { label: 'Dead Sea Scrolls (10)', color: this.canonColors['Dead Sea Scrolls'] },
             { label: 'Gnostic (22)', color: this.canonColors.Gnostic },
-            { label: 'Lost (26)', color: this.canonColors.Lost },
-            { label: '🔴 Non-Canon Refs', color: '#FF0000' }
+            { label: 'Lost (26)', color: this.canonColors.Lost }
         ];
 
         const legendGroup = g.append('g')
@@ -1002,8 +1038,8 @@ class ArcDiagramTableauStyle {
                 .attr('width', 12)
                 .attr('height', 12)
                 .attr('fill', item.color)
-                .attr('stroke', '#444')
-                .attr('stroke-width', 0.5);
+                .attr('stroke', item.color === this.canonColors.Gnostic ? '#888' : '#444')
+                .attr('stroke-width', item.color === this.canonColors.Gnostic ? 1.5 : 0.5);
 
             // Label
             legendGroup.append('text')

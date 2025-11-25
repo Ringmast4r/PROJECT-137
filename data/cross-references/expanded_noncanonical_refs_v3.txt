@@ -1,0 +1,571 @@
+# Expanded Non-Canonical Cross-References v3
+# Format: From Verse	To Verse	Votes	Type
+# Added November 25, 2025 - Major Expansion
+# Sources: BYU Religious Studies, Biblical Archaeology Society, intertextual.bible
+
+# ========================================
+# DEAD SEA SCROLLS - NT PARALLELS
+# ========================================
+
+# Community Rule (1QS) Parallels
+Matt.3.3	1QS.8.14	100	Dead Sea Scrolls
+Matt.5.22	1QS.7.2	75	Dead Sea Scrolls
+Matt.5.43	1QS.1.4	100	Dead Sea Scrolls
+Matt.5.48	1QS.1.8	75	Dead Sea Scrolls
+Matt.6.22-23	1QS.3.3	50	Dead Sea Scrolls
+Matt.10.29	1QS.11.1	50	Dead Sea Scrolls
+Matt.18.15	1QS.6.1	100	Dead Sea Scrolls
+Matt.18.15-17	1QS.5.25	100	Dead Sea Scrolls
+Matt.24.12	1QS.4.17	50	Dead Sea Scrolls
+Mark.1.3	1QS.8.14	100	Dead Sea Scrolls
+Mark.1.4	1QS.3.4	75	Dead Sea Scrolls
+Luke.3.4	1QS.8.14	100	Dead Sea Scrolls
+Luke.3.3	1QS.3.4	75	Dead Sea Scrolls
+John.1.5	1QS.3.19	100	Dead Sea Scrolls
+John.1.9	1QS.3.20	75	Dead Sea Scrolls
+John.3.19-21	1QS.3.20-21	100	Dead Sea Scrolls
+John.8.12	1QS.3.1	100	Dead Sea Scrolls
+John.12.35-36	1QS.3.20-21	100	Dead Sea Scrolls
+John.12.36	1QS.1.9	100	Dead Sea Scrolls
+Rom.12.17	1QS.10.17	75	Dead Sea Scrolls
+Rom.5.16	1QS.11.1	50	Dead Sea Scrolls
+Rom.13.12	1QS.3.20	75	Dead Sea Scrolls
+2Cor.6.14-15	1QS.3.20-21	100	Dead Sea Scrolls
+Eph.5.8-11	1QS.3.20-21	100	Dead Sea Scrolls
+1Thess.5.5	1QS.3.20	100	Dead Sea Scrolls
+1John.1.5-7	1QS.3.19-21	100	Dead Sea Scrolls
+1John.2.9-11	1QS.3.20-21	100	Dead Sea Scrolls
+
+# War Scroll (1QM) Parallels
+Matt.24.6-8	1QM.1.1	75	Dead Sea Scrolls
+Matt.24.21	1QM.1.12	75	Dead Sea Scrolls
+Matt.26.53	1QM.12.1	50	Dead Sea Scrolls
+Rom.16.20	1QM.17.5	100	Dead Sea Scrolls
+1Cor.15.25	1QM.17.8	75	Dead Sea Scrolls
+Eph.6.11-17	1QM.1.1	100	Dead Sea Scrolls
+1Thess.5.8	1QM.1.1	75	Dead Sea Scrolls
+Rev.12.7-9	1QM.1.1	100	Dead Sea Scrolls
+Rev.16.16	1QM.1.1	75	Dead Sea Scrolls
+Rev.19.11-21	1QM.17.1	100	Dead Sea Scrolls
+Rev.20.7-10	1QM.18.1	100	Dead Sea Scrolls
+
+# Damascus Document (CD) Parallels
+Matt.19.8	CD.4.21	50	Dead Sea Scrolls
+Matt.22.24	CD.5.1	25	Dead Sea Scrolls
+Acts.15.20	CD.4.17	75	Dead Sea Scrolls
+2Cor.6.17	CD.6.17	75	Dead Sea Scrolls
+Heb.8.8-13	CD.6.19	100	Dead Sea Scrolls
+Heb.10.16	CD.8.21	75	Dead Sea Scrolls
+
+# Thanksgiving Hymns (1QH) Parallels
+Matt.11.25	1QH.7.26	50	Dead Sea Scrolls
+Luke.10.21	1QH.7.26	50	Dead Sea Scrolls
+Rom.9.21	1QH.11.3	75	Dead Sea Scrolls
+Eph.2.10	1QH.7.17	50	Dead Sea Scrolls
+
+# Temple Scroll (11QT) Parallels
+Matt.5.33-37	11QT.53.11	75	Dead Sea Scrolls
+Matt.23.16-22	11QT.53.14	50	Dead Sea Scrolls
+
+# ========================================
+# GNOSTIC TEXTS - NT PARALLELS
+# ========================================
+
+# Gospel of Thomas Parallels
+Matt.5.3	GThom.54.1	100	Gnostic
+Matt.5.6	GThom.69.1	75	Gnostic
+Matt.5.10	GThom.69.1	75	Gnostic
+Matt.5.14	GThom.32.1	100	Gnostic
+Matt.6.2-4	GThom.6.1	75	Gnostic
+Matt.6.3	GThom.62.1	75	Gnostic
+Matt.7.3-5	GThom.26.1	100	Gnostic
+Matt.7.6	GThom.93.1	100	Gnostic
+Matt.7.7-8	GThom.2.1	100	Gnostic
+Matt.7.16	GThom.45.1	100	Gnostic
+Matt.8.20	GThom.86.1	100	Gnostic
+Matt.10.16	GThom.39.1	75	Gnostic
+Matt.10.34-36	GThom.16.1	100	Gnostic
+Matt.11.11	GThom.46.1	100	Gnostic
+Matt.11.15	GThom.8.1	75	Gnostic
+Matt.11.28-30	GThom.90.1	100	Gnostic
+Matt.12.31-32	GThom.44.1	100	Gnostic
+Matt.12.46-50	GThom.99.1	100	Gnostic
+Matt.13.3-9	GThom.9.1	100	Gnostic
+Matt.13.24-30	GThom.57.1	100	Gnostic
+Matt.13.31-32	GThom.20.1	100	Gnostic
+Matt.13.33	GThom.96.1	100	Gnostic
+Matt.13.44	GThom.109.1	100	Gnostic
+Matt.13.45-46	GThom.76.1	100	Gnostic
+Matt.13.47-50	GThom.8.1	75	Gnostic
+Matt.15.11	GThom.14.1	100	Gnostic
+Matt.15.14	GThom.34.1	100	Gnostic
+Matt.16.3	GThom.91.1	75	Gnostic
+Matt.18.12-14	GThom.107.1	100	Gnostic
+Matt.19.30	GThom.4.1	100	Gnostic
+Matt.20.1-16	GThom.64.1	75	Gnostic
+Matt.21.21	GThom.48.1	100	Gnostic
+Matt.21.33-41	GThom.65.1	100	Gnostic
+Matt.22.1-14	GThom.64.1	100	Gnostic
+Matt.23.13	GThom.39.1	100	Gnostic
+Matt.24.43	GThom.21.1	100	Gnostic
+Matt.25.14-30	GThom.41.1	75	Gnostic
+Mark.2.21-22	GThom.47.1	100	Gnostic
+Mark.4.21	GThom.33.1	100	Gnostic
+Mark.4.22	GThom.5.1	100	Gnostic
+Mark.4.25	GThom.41.1	100	Gnostic
+Mark.6.4	GThom.31.1	100	Gnostic
+Mark.8.27-29	GThom.13.1	75	Gnostic
+Mark.9.35	GThom.4.1	75	Gnostic
+Mark.10.15	GThom.22.1	100	Gnostic
+Mark.12.1-9	GThom.65.1	100	Gnostic
+Luke.4.24	GThom.31.1	100	Gnostic
+Luke.6.20	GThom.54.1	100	Gnostic
+Luke.6.39	GThom.34.1	100	Gnostic
+Luke.6.41-42	GThom.26.1	100	Gnostic
+Luke.6.44-45	GThom.45.1	100	Gnostic
+Luke.8.16	GThom.33.1	100	Gnostic
+Luke.8.17	GThom.5.1	100	Gnostic
+Luke.9.58	GThom.86.1	100	Gnostic
+Luke.10.2	GThom.73.1	100	Gnostic
+Luke.11.9-10	GThom.2.1	100	Gnostic
+Luke.11.27-28	GThom.79.1	100	Gnostic
+Luke.11.33	GThom.33.1	100	Gnostic
+Luke.11.52	GThom.39.1	100	Gnostic
+Luke.12.2	GThom.5.1	100	Gnostic
+Luke.12.13-14	GThom.72.1	100	Gnostic
+Luke.12.16-21	GThom.63.1	100	Gnostic
+Luke.12.33	GThom.76.1	75	Gnostic
+Luke.12.39	GThom.21.1	100	Gnostic
+Luke.12.49	GThom.10.1	100	Gnostic
+Luke.12.51-53	GThom.16.1	100	Gnostic
+Luke.13.18-19	GThom.20.1	100	Gnostic
+Luke.13.20-21	GThom.96.1	100	Gnostic
+Luke.14.16-24	GThom.64.1	100	Gnostic
+Luke.15.3-7	GThom.107.1	100	Gnostic
+Luke.17.6	GThom.48.1	100	Gnostic
+Luke.17.20-21	GThom.3.1	100	Gnostic
+Luke.20.9-16	GThom.65.1	100	Gnostic
+John.1.9	GThom.24.1	75	Gnostic
+John.1.14	GThom.28.1	100	Gnostic
+John.4.14	GThom.13.1	75	Gnostic
+John.7.33-34	GThom.38.1	75	Gnostic
+John.8.12	GThom.77.1	100	Gnostic
+John.8.51-52	GThom.1.1	100	Gnostic
+John.14.2	GThom.24.1	50	Gnostic
+
+# Gospel of Philip Parallels
+Matt.13.25	GPhil.1.1	50	Gnostic
+John.3.5	GPhil.1.1	75	Gnostic
+John.8.32	GPhil.1.1	75	Gnostic
+1Cor.15.50	GPhil.1.1	75	Gnostic
+
+# Didache Parallels (Early Christian)
+Matt.5.44	Did.1.3	100	Gnostic
+Matt.6.5	Did.8.2	100	Gnostic
+Matt.6.9-13	Did.8.2	100	Gnostic
+Matt.6.16	Did.8.1	100	Gnostic
+Matt.7.6	Did.9.5	100	Gnostic
+Matt.7.12	Did.1.2	100	Gnostic
+Matt.10.10	Did.13.1	75	Gnostic
+Matt.24.30	Did.16.8	100	Gnostic
+Matt.24.42	Did.16.1	100	Gnostic
+Matt.25.13	Did.16.1	100	Gnostic
+Matt.28.19	Did.7.1	100	Gnostic
+Mark.9.50	Did.4.3	50	Gnostic
+Luke.12.35	Did.16.1	100	Gnostic
+Acts.2.42	Did.14.1	75	Gnostic
+1Cor.10.16	Did.9.1	100	Gnostic
+1Cor.11.26	Did.9.1	75	Gnostic
+1Thess.5.6	Did.16.1	100	Gnostic
+
+# Shepherd of Hermas Parallels
+Matt.12.31	Hermas.1.1	50	Gnostic
+Matt.19.23-24	Hermas.1.1	50	Gnostic
+Jas.1.8	Hermas.1.1	75	Gnostic
+Jas.4.8	Hermas.1.1	75	Gnostic
+Heb.3.12	Hermas.1.1	50	Gnostic
+
+# ========================================
+# LOST BOOKS - BIBLICAL REFERENCES
+# ========================================
+
+# Book of Jasher References
+Josh.10.13	JasherL.88.63	100	Lost
+2Sam.1.18	JasherL.56.9	100	Lost
+
+# Book of the Wars of the Lord
+Num.21.14	WarsLord.1.1	100	Lost
+
+# Annals of Solomon
+1Kgs.11.41	AnnSol.1.1	100	Lost
+
+# Annals of the Kings of Israel
+1Kgs.14.19	AnnIsr.1.1	100	Lost
+1Kgs.15.31	AnnIsr.1.1	75	Lost
+1Kgs.16.5	AnnIsr.1.1	75	Lost
+1Kgs.16.14	AnnIsr.1.1	75	Lost
+1Kgs.16.20	AnnIsr.1.1	75	Lost
+1Kgs.16.27	AnnIsr.1.1	75	Lost
+1Kgs.22.39	AnnIsr.1.1	75	Lost
+2Kgs.1.18	AnnIsr.1.1	75	Lost
+2Kgs.10.34	AnnIsr.1.1	75	Lost
+2Kgs.13.8	AnnIsr.1.1	75	Lost
+2Kgs.13.12	AnnIsr.1.1	75	Lost
+2Kgs.14.15	AnnIsr.1.1	75	Lost
+2Kgs.14.28	AnnIsr.1.1	75	Lost
+2Kgs.15.11	AnnIsr.1.1	75	Lost
+2Kgs.15.15	AnnIsr.1.1	75	Lost
+2Kgs.15.21	AnnIsr.1.1	75	Lost
+2Kgs.15.26	AnnIsr.1.1	75	Lost
+2Kgs.15.31	AnnIsr.1.1	75	Lost
+
+# Annals of the Kings of Judah
+1Kgs.14.29	AnnJud.1.1	100	Lost
+1Kgs.15.7	AnnJud.1.1	75	Lost
+1Kgs.15.23	AnnJud.1.1	75	Lost
+1Kgs.22.45	AnnJud.1.1	75	Lost
+2Kgs.8.23	AnnJud.1.1	75	Lost
+2Kgs.12.19	AnnJud.1.1	75	Lost
+2Kgs.14.18	AnnJud.1.1	75	Lost
+2Kgs.15.6	AnnJud.1.1	75	Lost
+2Kgs.15.36	AnnJud.1.1	75	Lost
+2Kgs.16.19	AnnJud.1.1	75	Lost
+2Kgs.20.20	AnnJud.1.1	75	Lost
+2Kgs.21.17	AnnJud.1.1	75	Lost
+2Kgs.21.25	AnnJud.1.1	75	Lost
+2Kgs.23.28	AnnJud.1.1	75	Lost
+2Kgs.24.5	AnnJud.1.1	75	Lost
+
+# Book of Samuel the Seer
+1Chr.29.29	SamSeer.1.1	100	Lost
+
+# Book of Nathan the Prophet
+1Chr.29.29	Nathan.1.1	100	Lost
+2Chr.9.29	Nathan.1.1	75	Lost
+
+# Book of Gad the Seer
+1Chr.29.29	GadSeer.1.1	100	Lost
+
+# Prophecy of Ahijah
+2Chr.9.29	Ahijah.1.1	100	Lost
+
+# Visions of Iddo the Seer
+2Chr.9.29	Iddo.1.1	100	Lost
+2Chr.12.15	Iddo.1.1	75	Lost
+2Chr.13.22	StoryIddo.1.1	100	Lost
+
+# Book of Shemaiah the Prophet
+2Chr.12.15	Shemaiah.1.1	100	Lost
+
+# Book of Jehu son of Hanani
+2Chr.20.34	Jehu.1.1	100	Lost
+
+# Sayings of the Seers
+2Chr.33.19	SaySeers.1.1	100	Lost
+
+# Epistle to Laodiceans
+Col.4.16	EpLaod.1.1	100	Lost
+
+# Earlier Epistle to Corinthians
+1Cor.5.9	EarlierCor.1.1	100	Lost
+
+# ========================================
+# MORE DEUTEROCANONICAL - NT PARALLELS
+# ========================================
+
+# Judith
+Judith.8.6	Matt.6.16	50	Deuterocanonical
+Judith.9.12	Luke.1.52	50	Deuterocanonical
+Judith.13.18	Luke.1.42	100	Deuterocanonical
+Judith.16.17	Mark.9.48	75	Deuterocanonical
+
+# Baruch
+Bar.3.29	John.3.13	75	Deuterocanonical
+Bar.3.37	John.1.14	100	Deuterocanonical
+Bar.3.38	John.1.14	100	Deuterocanonical
+Bar.4.1	Rom.10.6-8	50	Deuterocanonical
+Bar.4.7	1Cor.10.20	50	Deuterocanonical
+Bar.4.37	Matt.8.11	50	Deuterocanonical
+Bar.5.7	Luke.3.5	75	Deuterocanonical
+
+# 1 Maccabees
+1Macc.1.54	Matt.24.15	100	Deuterocanonical
+1Macc.2.28	Matt.24.16	75	Deuterocanonical
+1Macc.2.52	Jas.2.21	75	Deuterocanonical
+1Macc.4.59	John.10.22	100	Deuterocanonical
+
+# 2 Maccabees
+2Macc.1.4	Acts.16.14	50	Deuterocanonical
+2Macc.2.4-8	Rev.11.19	100	Deuterocanonical
+2Macc.6.18-31	Heb.11.35	100	Deuterocanonical
+2Macc.7.1-42	Heb.11.35	100	Deuterocanonical
+2Macc.7.9	John.5.29	75	Deuterocanonical
+2Macc.7.14	John.5.29	75	Deuterocanonical
+2Macc.7.23	2Cor.5.1-4	50	Deuterocanonical
+2Macc.7.28	Heb.11.3	100	Deuterocanonical
+2Macc.7.29	Rom.8.18	50	Deuterocanonical
+2Macc.12.43-45	1Cor.15.29	75	Deuterocanonical
+2Macc.15.12-16	Rev.8.3-4	50	Deuterocanonical
+
+# ========================================
+# MORE ETHIOPIAN - NT PARALLELS
+# ========================================
+
+# 2 Baruch (Syriac Apocalypse)
+Rev.13.1	2Bar.29.4	100	Ethiopian
+Rev.20.13	2Bar.50.2	100	Ethiopian
+Rev.21.1	2Bar.32.6	100	Ethiopian
+Rev.21.4	2Bar.73.1	100	Ethiopian
+Matt.24.21	2Bar.25.1	75	Ethiopian
+Matt.24.29	2Bar.70.8	75	Ethiopian
+Rom.8.18	2Bar.15.8	50	Ethiopian
+1Cor.15.35-49	2Bar.49.1-51.6	100	Ethiopian
+2Pet.3.13	2Bar.32.6	100	Ethiopian
+
+# 4 Ezra (2 Esdras)
+Rev.4.7	4Ezra.1.1	50	Ethiopian
+Rev.5.1	4Ezra.6.20	75	Ethiopian
+Rev.7.9	4Ezra.2.42	75	Ethiopian
+Rev.20.12	4Ezra.6.20	100	Ethiopian
+Rev.20.13	4Ezra.4.41	100	Ethiopian
+Matt.7.13-14	4Ezra.7.3-9	100	Ethiopian
+Matt.22.14	4Ezra.8.3	100	Ethiopian
+Matt.24.21	4Ezra.5.1	75	Ethiopian
+Mark.13.8	4Ezra.5.5	75	Ethiopian
+Luke.13.24	4Ezra.7.3-9	100	Ethiopian
+Luke.18.7	4Ezra.4.35	75	Ethiopian
+John.14.2	4Ezra.7.80	75	Ethiopian
+Rom.9.21	4Ezra.8.2	100	Ethiopian
+2Cor.12.2-4	4Ezra.3.1	50	Ethiopian
+2Pet.3.8	4Ezra.4.33	75	Ethiopian
+
+# Testaments of the Twelve Patriarchs
+Matt.5.28	TReub.4.1	75	Ethiopian
+Matt.5.44	TGad.6.3	100	Ethiopian
+Matt.6.12	TGad.6.3	75	Ethiopian
+Matt.18.15	TGad.6.3	100	Ethiopian
+Matt.19.28	TBenj.10.7	100	Ethiopian
+Matt.22.37-40	TIss.5.2	100	Ethiopian
+Matt.25.35-36	TJos.1.5	75	Ethiopian
+Rom.1.32	TAsh.6.2	75	Ethiopian
+Rom.12.19	TGad.6.7	75	Ethiopian
+Eph.4.26	TDan.4.1	100	Ethiopian
+Eph.6.14-17	TLevi.8.2	75	Ethiopian
+1Thess.5.8	TLevi.8.2	75	Ethiopian
+Heb.7.14	TJud.24.1	100	Ethiopian
+Jas.2.23	TAbr.1.1	50	Ethiopian
+Rev.7.5-8	TJud.25.2	100	Ethiopian
+
+# Psalms of Solomon
+Matt.6.26	PsSol.5.8	50	Ethiopian
+Matt.7.23	PsSol.12.5	75	Ethiopian
+Matt.17.15	PsSol.16.3	50	Ethiopian
+Matt.21.9	PsSol.17.25	100	Ethiopian
+Luke.1.32	PsSol.17.32	100	Ethiopian
+Luke.1.69	PsSol.17.21	100	Ethiopian
+Luke.2.37	PsSol.3.8	50	Ethiopian
+Luke.11.22	PsSol.5.4	50	Ethiopian
+Rom.2.6	PsSol.2.16	75	Ethiopian
+Rom.9.4	PsSol.9.4	50	Ethiopian
+2Tim.4.8	PsSol.17.32	75	Ethiopian
+Rev.2.26-27	PsSol.17.23	100	Ethiopian
+Rev.12.5	PsSol.17.23	100	Ethiopian
+Rev.19.15	PsSol.17.24	100	Ethiopian
+
+# Assumption of Moses
+Jude.1.9	AssMos.1.1	100	Ethiopian
+Acts.7.36	AssMos.3.11	50	Ethiopian
+2Tim.3.1	AssMos.7.1	50	Ethiopian
+2Pet.2.13	AssMos.7.4	50	Ethiopian
+Rev.12.14	AssMos.10.6	50	Ethiopian
+
+# ========================================
+# TESTAMENT OF SOLOMON - NT PARALLELS
+# ========================================
+# Demonic hierarchy and exorcism parallels
+Matt.9.34	TSol.6.1	100	Ethiopian
+Matt.12.24	TSol.3.1	100	Ethiopian
+Matt.12.42	TSol.1.1	100	Ethiopian
+Mark.1.27	TSol.1.1	100	Ethiopian
+Mark.3.22	TSol.3.1	100	Ethiopian
+Luke.11.15	TSol.6.1	100	Ethiopian
+Luke.11.31	TSol.1.1	100	Ethiopian
+# Beelzebul as ruler of demons
+Matt.12.26-27	TSol.6.1	100	Ethiopian
+Mark.3.23-26	TSol.6.1	75	Ethiopian
+# Jesus greater than Solomon
+Matt.12.6	TSol.1.1	75	Ethiopian
+# Connection to Tobit's exorcism method
+Tob.6.2	TSol.5.1	75	Deuterocanonical
+
+# ========================================
+# APOCALYPSE OF ABRAHAM - BIBLICAL PARALLELS
+# ========================================
+# Genesis parallels (covenant sacrifice)
+Gen.15.8-17	ApocAbr.9.1	100	Ethiopian
+Gen.15.11	ApocAbr.13.1	100	Ethiopian
+Gen.22.11	ApocAbr.9.1	100	Ethiopian
+Gen.15.12	ApocAbr.8.1	100	Ethiopian
+# Azazel as unclean bird
+Lev.16.8-10	ApocAbr.13.1	75	Ethiopian
+# Revelation parallels
+Rev.1.13	ApocAbr.11.2	100	Ethiopian
+Rev.7.9	ApocAbr.21.7	100	Ethiopian
+Rev.4.1	ApocAbr.15.1	75	Ethiopian
+# Daniel's four kingdoms
+Dan.2.31-45	ApocAbr.28.1	100	Ethiopian
+Dan.7.1-28	ApocAbr.28.1	100	Ethiopian
+# Abraham's cosmic vision
+Gal.3.8	ApocAbr.22.1	50	Ethiopian
+
+# ========================================
+# LIFE OF ADAM AND EVE - NT PARALLELS
+# ========================================
+# Paul's Adam-Christ typology
+Rom.5.12	LAE.14.1	100	Ethiopian
+Rom.5.14	LAE.1.1	100	Ethiopian
+Rom.5.15-19	LAE.14.1	100	Ethiopian
+1Cor.15.21-22	LAE.14.1	100	Ethiopian
+1Cor.15.45-49	LAE.1.1	100	Ethiopian
+# Eve as source of sin
+2Cor.11.3	LAE.18.1	100	Ethiopian
+1Tim.2.14	LAE.18.1	100	Ethiopian
+# Satan as angel of light
+2Cor.11.14	LAE.9.1	100	Ethiopian
+# Paradise in third heaven
+2Cor.12.2-4	LAE.37.1	100	Ethiopian
+# Tree of Life
+Rev.22.2	LAE.28.1	100	Ethiopian
+Rev.2.7	LAE.28.1	75	Ethiopian
+Gen.3.22-24	LAE.28.1	100	Ethiopian
+# Forty days parallel
+Matt.4.2	LAE.6.1	50	Ethiopian
+Luke.4.2	LAE.6.1	50	Ethiopian
+# Satan's rebellion (refused to worship Adam)
+Phil.2.10	LAE.14.1	50	Ethiopian
+Heb.1.6	LAE.14.1	50	Ethiopian
+# Promise of resurrection
+John.5.28-29	LAE.51.1	100	Ethiopian
+Rom.6.5	LAE.41.1	75	Ethiopian
+
+# ========================================
+# ASCENSION OF ISAIAH - NT PARALLELS
+# ========================================
+# Isaiah sawn in half (Hebrews 11:37)
+Heb.11.37	AscIs.5.11	100	Ethiopian
+# Beliar/Antichrist (man of lawlessness)
+2Thess.2.3	AscIs.4.2	100	Ethiopian
+2Thess.2.8-10	AscIs.4.6	100	Ethiopian
+# Belial reference
+2Cor.6.15	AscIs.1.8	100	Ethiopian
+# Seven heavens vision
+2Cor.12.2	AscIs.7.1	100	Ethiopian
+Eph.4.10	AscIs.10.1	75	Ethiopian
+# Christ's descent and ascent
+Eph.4.8-10	AscIs.11.1	100	Ethiopian
+Phil.2.6-11	AscIs.10.1	100	Ethiopian
+# Martyrdom traditions
+Rev.2.10	AscIs.5.1	75	Ethiopian
+Matt.23.29-37	AscIs.5.1	75	Ethiopian
+
+# ========================================
+# GOSPEL OF TRUTH - NT PARALLELS
+# ========================================
+# John's Gospel citations (most frequent)
+John.1.1	GTruth.16.31	100	Gnostic
+John.1.14	GTruth.26.4	100	Gnostic
+John.3.8	GTruth.22.13	100	Gnostic
+John.8.32	GTruth.18.21	100	Gnostic
+John.14.6	GTruth.18.19	100	Gnostic
+John.17.6	GTruth.38.7	75	Gnostic
+John.17.26	GTruth.38.7	75	Gnostic
+# Pauline parallels
+1Cor.2.9	GTruth.34.35	75	Gnostic
+Eph.1.3-14	GTruth.37.1	75	Gnostic
+Col.2.14	GTruth.20.23	75	Gnostic
+# Hebrews parallels
+Heb.4.12	GTruth.26.6	75	Gnostic
+# 1 John parallels
+1John.2.4	GTruth.32.35	75	Gnostic
+# Revelation parallels
+Rev.3.5	GTruth.21.25	75	Gnostic
+Rev.20.12	GTruth.21.25	75	Gnostic
+# Matthew parallels
+Matt.11.27	GTruth.19.17	75	Gnostic
+Matt.18.12-14	GTruth.31.35	100	Gnostic
+
+# ========================================
+# PISTIS SOPHIA - NT/PSALMS PARALLELS
+# ========================================
+# Psalms parallels (repentance songs)
+Ps.68.1	PistSoph.32.1	100	Gnostic
+Ps.85.10-11	PistSoph.62.1	100	Gnostic
+Ps.69.1-5	PistSoph.33.1	100	Gnostic
+Ps.70.1-6	PistSoph.35.1	100	Gnostic
+Ps.71.1-5	PistSoph.38.1	100	Gnostic
+# Odes of Solomon parallels
+Ps.51.1	PistSoph.55.1	75	Gnostic
+# Gospel parallels
+Matt.10.14	PistSoph.96.1	75	Gnostic
+Mark.6.11	PistSoph.96.1	75	Gnostic
+Luke.9.5	PistSoph.96.1	75	Gnostic
+Luke.10.11	PistSoph.96.1	75	Gnostic
+# Isaiah parallels
+Isa.45.5	PistSoph.136.1	75	Gnostic
+
+# ========================================
+# 4QMMT - NT PARALLELS (Works of the Law)
+# ========================================
+# The only other ancient text with "works of the law" phrase
+Rom.3.20	4QMMT.C.27	100	Dead Sea Scrolls
+Rom.3.28	4QMMT.C.27	100	Dead Sea Scrolls
+Gal.2.16	4QMMT.C.27	100	Dead Sea Scrolls
+Gal.3.2	4QMMT.C.27	100	Dead Sea Scrolls
+Gal.3.5	4QMMT.C.27	100	Dead Sea Scrolls
+Gal.3.10	4QMMT.C.27	100	Dead Sea Scrolls
+# Righteousness reckoning parallel
+Gal.3.6	4QMMT.C.31	100	Dead Sea Scrolls
+Rom.4.3	4QMMT.C.31	100	Dead Sea Scrolls
+Rom.4.5	4QMMT.C.31	75	Dead Sea Scrolls
+Gen.15.6	4QMMT.C.31	100	Dead Sea Scrolls
+Jas.2.23	4QMMT.C.31	75	Dead Sea Scrolls
+# Separation from Gentiles
+Acts.15.20	4QMMT.B.8	75	Dead Sea Scrolls
+Gal.2.12	4QMMT.B.8	50	Dead Sea Scrolls
+
+# ========================================
+# 2 ENOCH (SLAVONIC) - NT PARALLELS
+# ========================================
+# Melchizedek without father or mother
+Heb.7.3	2En.71.1	100	Ethiopian
+Heb.7.1-2	2En.71.1	100	Ethiopian
+Heb.5.6	2En.71.1	75	Ethiopian
+Heb.6.20	2En.71.1	75	Ethiopian
+# Miraculous/virgin birth of Melchizedek
+Matt.1.18-25	2En.71.1	75	Ethiopian
+Luke.1.35	2En.71.1	75	Ethiopian
+# God's approval parallel
+Matt.3.17	2En.71.32	75	Ethiopian
+Matt.17.5	2En.71.32	75	Ethiopian
+# Judgment and Paradise
+Matt.25.46	2En.10.1	100	Ethiopian
+Matt.25.34	2En.42.3	100	Ethiopian
+Matt.25.41	2En.10.1	100	Ethiopian
+# Sermon on the Mount ethical parallels
+Matt.5.7	2En.42.8	75	Ethiopian
+Matt.5.9	2En.52.11	75	Ethiopian
+Matt.5.44-48	2En.44.4	75	Ethiopian
+Matt.6.19-21	2En.50.5	75	Ethiopian
+Matt.7.1-2	2En.44.5	75	Ethiopian
+# Seven heavens
+2Cor.12.2	2En.3.1	100	Ethiopian
+Eph.4.10	2En.3.1	75	Ethiopian
+# Creation from nothing
+Heb.11.3	2En.24.2	100	Ethiopian
+Rom.4.17	2En.24.2	75	Ethiopian
+# Angels who fell
+Jude.1.6	2En.7.1	100	Ethiopian
+2Pet.2.4	2En.7.1	100	Ethiopian
+# Enoch taken without death
+Heb.11.5	2En.67.1	100	Ethiopian
+Gen.5.24	2En.67.1	100	Ethiopian

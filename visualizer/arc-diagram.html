@@ -501,8 +501,13 @@
                     <span style="color: #aaa;">= Ethiopian</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 40px; height: 4px; background: #000000; border-radius: 2px; box-shadow: 0 0 8px #333;"></div>
-                    <span style="color: #888;">BLACK</span>
+                    <div style="width: 40px; height: 4px; background: #FF8C00; border-radius: 2px; box-shadow: 0 0 8px #FF8C00;"></div>
+                    <span style="color: #FF8C00;">ORANGE</span>
+                    <span style="color: #aaa;">= Dead Sea Scrolls</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 40px; height: 4px; background: #000000; border-radius: 2px; border: 1px solid #666;"></div>
+                    <span style="color: #555;">BLACK</span>
                     <span style="color: #aaa;">= Gnostic</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -513,7 +518,7 @@
             </div>
 
             <!-- Stats Cards -->
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 20px;">
                 <div style="background: rgba(147, 112, 219, 0.2); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #9370DB;">
                     <div id="inline-deutero-count" style="font-size: 2em; font-weight: bold; color: #9370DB;">0</div>
                     <div style="color: #aaa;">Deuterocanonical</div>
@@ -522,12 +527,16 @@
                     <div id="inline-ethiopian-count" style="font-size: 2em; font-weight: bold; color: #ff6b9d;">0</div>
                     <div style="color: #aaa;">Ethiopian</div>
                 </div>
-                <div style="background: rgba(136, 136, 136, 0.2); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #888;">
-                    <div id="inline-gnostic-count" style="font-size: 2em; font-weight: bold; color: #888;">0</div>
+                <div style="background: rgba(255, 140, 0, 0.2); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #FF8C00;">
+                    <div id="inline-dss-count" style="font-size: 2em; font-weight: bold; color: #FF8C00;">0</div>
+                    <div style="color: #aaa;">Dead Sea Scrolls</div>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #555;">
+                    <div id="inline-gnostic-count" style="font-size: 2em; font-weight: bold; color: #555;">0</div>
                     <div style="color: #aaa;">Gnostic</div>
                 </div>
-                <div style="background: rgba(255, 165, 0, 0.2); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #ffa500;">
-                    <div id="inline-lost-count" style="font-size: 2em; font-weight: bold; color: #ffa500;">0</div>
+                <div style="background: rgba(255, 215, 0, 0.2); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #FFD700;">
+                    <div id="inline-lost-count" style="font-size: 2em; font-weight: bold; color: #FFD700;">0</div>
                     <div style="color: #aaa;">Lost Text</div>
                 </div>
             </div>
@@ -540,10 +549,12 @@
                     style="padding: 8px 16px; background: rgba(147, 112, 219, 0.3); color: #9370DB; border: 1px solid #9370DB; border-radius: 4px; cursor: pointer;">Deuterocanonical</button>
                 <button class="inline-tab-btn" onclick="filterInlineTable('Ethiopian')" id="inline-tab-ethiopian"
                     style="padding: 8px 16px; background: rgba(255, 107, 157, 0.3); color: #ff6b9d; border: 1px solid #ff6b9d; border-radius: 4px; cursor: pointer;">Ethiopian</button>
+                <button class="inline-tab-btn" onclick="filterInlineTable('Dead Sea Scrolls')" id="inline-tab-dss"
+                    style="padding: 8px 16px; background: rgba(255, 140, 0, 0.3); color: #FF8C00; border: 1px solid #FF8C00; border-radius: 4px; cursor: pointer;">Dead Sea Scrolls</button>
                 <button class="inline-tab-btn" onclick="filterInlineTable('Gnostic')" id="inline-tab-gnostic"
-                    style="padding: 8px 16px; background: rgba(136, 136, 136, 0.3); color: #888; border: 1px solid #888; border-radius: 4px; cursor: pointer;">Gnostic</button>
+                    style="padding: 8px 16px; background: rgba(0, 0, 0, 0.3); color: #555; border: 1px solid #555; border-radius: 4px; cursor: pointer;">Gnostic</button>
                 <button class="inline-tab-btn" onclick="filterInlineTable('Lost')" id="inline-tab-lost"
-                    style="padding: 8px 16px; background: rgba(255, 165, 0, 0.3); color: #ffa500; border: 1px solid #ffa500; border-radius: 4px; cursor: pointer;">Lost</button>
+                    style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #FFD700; border: 1px solid #FFD700; border-radius: 4px; cursor: pointer;">Lost</button>
             </div>
 
             <!-- Cross-Reference Table -->
@@ -1664,6 +1675,7 @@
                 total: nonCanonRefs.length,
                 deutero: nonCanonRefs.filter(r => r.type === 'Deuterocanonical').length,
                 ethiopian: nonCanonRefs.filter(r => r.type === 'Ethiopian').length,
+                dss: nonCanonRefs.filter(r => r.type === 'Dead Sea Scrolls').length,
                 gnostic: nonCanonRefs.filter(r => r.type === 'Gnostic').length,
                 lost: nonCanonRefs.filter(r => r.type === 'Lost').length
             };
@@ -1671,6 +1683,7 @@
             // Update inline stat cards
             document.getElementById('inline-deutero-count').textContent = stats.deutero;
             document.getElementById('inline-ethiopian-count').textContent = stats.ethiopian;
+            document.getElementById('inline-dss-count').textContent = stats.dss;
             document.getElementById('inline-gnostic-count').textContent = stats.gnostic;
             document.getElementById('inline-lost-count').textContent = stats.lost;
 
@@ -1689,12 +1702,14 @@
                 btn.style.background = btn.id.includes('all') ? 'rgba(255, 0, 0, 0.3)' :
                     btn.id.includes('deutero') ? 'rgba(147, 112, 219, 0.3)' :
                     btn.id.includes('ethiopian') ? 'rgba(255, 107, 157, 0.3)' :
-                    btn.id.includes('gnostic') ? 'rgba(136, 136, 136, 0.3)' :
-                    'rgba(255, 165, 0, 0.3)';
+                    btn.id.includes('dss') ? 'rgba(255, 140, 0, 0.3)' :
+                    btn.id.includes('gnostic') ? 'rgba(0, 0, 0, 0.3)' :
+                    'rgba(255, 215, 0, 0.3)';
                 btn.style.color = btn.id.includes('all') ? '#FF0000' :
                     btn.id.includes('deutero') ? '#9370DB' :
                     btn.id.includes('ethiopian') ? '#ff6b9d' :
-                    btn.id.includes('gnostic') ? '#888888' : '#ffa500';
+                    btn.id.includes('dss') ? '#FF8C00' :
+                    btn.id.includes('gnostic') ? '#555' : '#FFD700';
             });
 
             // Highlight selected tab
@@ -1710,14 +1725,18 @@
                 document.getElementById('inline-tab-ethiopian').classList.add('active');
                 document.getElementById('inline-tab-ethiopian').style.background = '#ff6b9d';
                 document.getElementById('inline-tab-ethiopian').style.color = 'white';
+            } else if (type === 'Dead Sea Scrolls') {
+                document.getElementById('inline-tab-dss').classList.add('active');
+                document.getElementById('inline-tab-dss').style.background = '#FF8C00';
+                document.getElementById('inline-tab-dss').style.color = 'white';
             } else if (type === 'Gnostic') {
                 document.getElementById('inline-tab-gnostic').classList.add('active');
                 document.getElementById('inline-tab-gnostic').style.background = '#333';
                 document.getElementById('inline-tab-gnostic').style.color = 'white';
             } else if (type === 'Lost') {
                 document.getElementById('inline-tab-lost').classList.add('active');
-                document.getElementById('inline-tab-lost').style.background = '#ffa500';
-                document.getElementById('inline-tab-lost').style.color = 'white';
+                document.getElementById('inline-tab-lost').style.background = '#FFD700';
+                document.getElementById('inline-tab-lost').style.color = '#000';
             }
 
             populateInlineTable(type);

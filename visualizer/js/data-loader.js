@@ -1,4 +1,5 @@
 // Data Loader for Bible Visualizer
+// Uses IndexedDB to cache the 14MB JSON for faster subsequent loads
 
 class BibleDataLoader {
     constructor() {
@@ -8,6 +9,79 @@ class BibleDataLoader {
         this.isPreviewMode = false;
         this.loadingProgress = 0;
         this.progressCallbacks = [];
+        this.dbName = 'BibleVisualizerCache';
+        this.dbVersion = 1;
+        this.cacheVersion = 'v1.0'; // Increment to invalidate cache
+    }
+
+    /**
+     * Open IndexedDB connection
+     */
+    async openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.dbVersion);
+
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve(request.result);
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('graphData')) {
+                    db.createObjectStore('graphData', { keyPath: 'id' });
+                }
+                if (!db.objectStoreNames.contains('stats')) {
+                    db.createObjectStore('stats', { keyPath: 'id' });
+                }
+            };
+        });
+    }
+
+    /**
+     * Get cached data from IndexedDB
+     */
+    async getCached(storeName, key) {
+        try {
+            const db = await this.openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(storeName, 'readonly');
+                const store = tx.objectStore(storeName);
+                const request = store.get(key);
+
+                request.onerror = () => resolve(null);
+                request.onsuccess = () => {
+                    const result = request.result;
+                    // Check cache version
+                    if (result && result.version === this.cacheVersion) {
+                        resolve(result.data);
+                    } else {
+                        resolve(null);
+                    }
+                };
+            });
+        } catch (e) {
+            console.warn('IndexedDB not available:', e);
+            return null;
+        }
+    }
+
+    /**
+     * Store data in IndexedDB cache
+     */
+    async setCache(storeName, key, data) {
+        try {
+            const db = await this.openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.put({ id: key, data: data, version: this.cacheVersion, timestamp: Date.now() });
+
+                tx.oncomplete = () => resolve(true);
+                tx.onerror = () => resolve(false);
+            });
+        } catch (e) {
+            console.warn('Failed to cache data:', e);
+            return false;
+        }
     }
 
     /**
@@ -51,12 +125,40 @@ class BibleDataLoader {
         if (this.isLoaded && !this.isPreviewMode) return;
 
         try {
-            // Use 66-book data for proper OT→NT rainbow arc order
-            // Non-canonical arcs are added separately via CrossRefLoader
+            // Try to load from IndexedDB cache first
+            this.updateProgress(5, 'Checking cache...');
+            const cachedGraph = await this.getCached('graphData', 'graph_data_66books');
+            const cachedStats = await this.getCached('stats', 'stats_66books');
+
+            if (cachedGraph) {
+                console.log('⚡ Loading from cache (instant!)');
+                this.updateProgress(50, 'Loading from cache...');
+                this.graphData = cachedGraph;
+                this.stats = cachedStats;
+                this.isLoaded = true;
+                this.isPreviewMode = false;
+                this.updateProgress(90, 'Adding additional books...');
+
+                // Augment with additional books
+                if (typeof dataAugmenter !== 'undefined') {
+                    this.graphData = dataAugmenter.augment(this.graphData);
+                }
+
+                this.updateProgress(100, 'Loaded from cache!');
+                console.log('✓ Data loaded from cache:', {
+                    books: this.graphData.metadata?.total_books || this.graphData.books?.length,
+                    chapters: this.graphData.metadata?.total_chapters || this.graphData.chapters?.length,
+                    connections: this.graphData.metadata?.total_connections || this.graphData.connections?.length
+                });
+
+                return this.graphData;
+            }
+
+            // No cache - fetch from server
             const apiUrl = '../data/processed/graph_data_66books.json';
 
-            console.log('📖 Loading 66-book Biblical data (OT→NT order for rainbow arcs)...');
-            this.updateProgress(5, 'Loading Protestant canon data...');
+            console.log('📖 Loading 66-book Biblical data (first load, will cache)...');
+            this.updateProgress(10, 'Downloading data (first load)...');
 
             const response = await fetch(apiUrl);
             if (!response.ok) {
@@ -66,12 +168,18 @@ class BibleDataLoader {
             console.log('Graph response received, parsing JSON...');
             this.updateProgress(60, 'Parsing JSON data...');
             this.graphData = await response.json();
-            this.updateProgress(80, 'Processing graph data...');
+            this.updateProgress(75, 'Caching for next time...');
+
+            // Cache the raw data for next time
+            await this.setCache('graphData', 'graph_data_66books', this.graphData);
+            console.log('✓ Data cached in IndexedDB for instant future loads');
 
             // Load stats
+            this.updateProgress(80, 'Loading stats...');
             const statsResponse = await fetch('../data/processed/stats_66books.json');
             if (statsResponse.ok) {
                 this.stats = await statsResponse.json();
+                await this.setCache('stats', 'stats_66books', this.stats);
             }
 
             this.isLoaded = true;

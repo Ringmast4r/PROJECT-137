@@ -472,6 +472,7 @@
                 <button class="filter-btn" data-filter="canonical">Canonical</button>
                 <button class="filter-btn" data-filter="deuterocanonical">Deuterocanonical</button>
                 <button class="filter-btn" data-filter="ethiopian">Ethiopian</button>
+                <button class="filter-btn" data-filter="dss">Dead Sea Scrolls</button>
                 <button class="filter-btn" data-filter="gnostic">Gnostic</button>
                 <button class="filter-btn" data-filter="lost">Lost Text</button>
                 <button class="export-btn" onclick="exportToCSV()">💾 Export CSV</button>
@@ -972,6 +973,7 @@
 
         function mergeTextData() {
             // Add text data to matching Ethiopian references, and add new ones that don't exist
+            let newGnostic = 0, newEthiopian = 0, newLost = 0, matched = 0;
             ethiopianTextData.forEach(textRef => {
                 const match = crossReferences.find(r =>
                     r.nt === textRef.nt && r.target === textRef.target
@@ -981,11 +983,17 @@
                     match.ntText = textRef.ntText;
                     match.targetText = textRef.targetText;
                     match.desc = textRef.desc;
+                    matched++;
                 } else {
                     // Add new reference (Gnostic gospels, etc.)
                     crossReferences.push(textRef);
+                    if (textRef.type === 'Gnostic') newGnostic++;
+                    else if (textRef.type === 'Ethiopian') newEthiopian++;
+                    else if (textRef.type === 'Lost') newLost++;
                 }
             });
+            console.log(`📊 mergeTextData: ${matched} matched, ${newGnostic} new Gnostic, ${newEthiopian} new Ethiopian, ${newLost} new Lost added`);
+            console.log(`Total Gnostic in crossReferences: ${crossReferences.filter(r => r.type === 'Gnostic').length}`);
         }
 
         function renderTable() {
@@ -1106,6 +1114,8 @@
                         filteredData = crossReferences.filter(r => r.type === 'Deuterocanonical');
                     } else if (filter === 'ethiopian') {
                         filteredData = crossReferences.filter(r => r.type === 'Ethiopian');
+                    } else if (filter === 'dss') {
+                        filteredData = crossReferences.filter(r => r.type === 'Dead Sea Scrolls');
                     } else if (filter === 'gnostic') {
                         filteredData = crossReferences.filter(r => r.type === 'Gnostic');
                     } else if (filter === 'lost') {
