@@ -85,7 +85,6 @@ class BibleDataLoader {
             this.updateProgress(100, 'Dataset loaded!');
 
             console.log('✓ Data loaded successfully:', {
-                mode: isLocal ? 'LOCAL' : 'R2 API',
                 books: this.graphData.metadata?.total_books || this.graphData.books?.length,
                 chapters: this.graphData.metadata?.total_chapters || this.graphData.chapters?.length,
                 connections: this.graphData.metadata?.total_connections || this.graphData.connections?.length
