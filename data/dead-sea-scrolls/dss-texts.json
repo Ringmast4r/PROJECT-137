@@ -1,0 +1,80 @@
+{
+  "name": "Dead Sea Scrolls Text Database",
+  "description": "Structured text references for Dead Sea Scrolls citations",
+  "scrolls": {
+    "1QS": {
+      "name": "Community Rule",
+      "abbreviation": "Manual of Discipline, Serekh ha-Yahad",
+      "verses": {
+        "1.4": "To love all that He has chosen and to hate all that He has rejected; to distance oneself from all evil and to cling to all good works.",
+        "1.8": "To practice truth, righteousness and justice in the land; to walk no longer in the stubbornness of a guilty heart and lustful eyes, doing all evil.",
+        "1.9": "To bring all those who have freely devoted themselves to do God's statutes into a covenant of loving-kindness; to be united in God's counsel and to walk before Him perfectly according to all that has been revealed concerning their appointed times; To love all the Sons of Light, each according to his lot in God's council, and to hate all the Sons of Darkness, each according to his guilt in the vengeance of God.",
+        "3.1": "From the God of Knowledge comes all that is and shall be. Before they existed He established all their designs, and when they exist according to their appointed times, they accomplish their task according to His glorious design, changing nothing.",
+        "3.3": "He created man to rule the world and assigned two spirits to him in which to walk until the time of His visitation: these are the spirits of truth and of perversity.",
+        "3.4": "The origin of truth is in a spring of light, and the origin of perversity is from a source of darkness. Dominion over all the Sons of Righteousness lies in the hand of the Prince of Light; they walk in the ways of light.",
+        "3.19": "The origin of truth is in a spring of light, and the origin of perversity is from a source of darkness. Dominion over all the Sons of Righteousness lies in the hand of the Prince of Light; they walk in the ways of light. All dominion over the Sons of Perversity lies in the hand of the Angel of Darkness; they walk in the ways of darkness.",
+        "3.20": "It is because of the Angel of Darkness that all the Sons of Righteousness go astray, and all their sins, iniquities, guilt and rebellious works are caused by his dominion according to God's mysteries until the time appointed by Him.",
+        "3.20-21": "It is because of the Angel of Darkness that all the Sons of Righteousness go astray, and all their sins, iniquities, guilt and rebellious works are caused by his dominion according to God's mysteries until the time appointed by Him. The spirits of truth and perversity struggle in the heart of man until the appointed time.",
+        "3.19-21": "The origin of truth is in a spring of light, and the origin of perversity is from a source of darkness. Dominion over all the Sons of Righteousness lies in the hand of the Prince of Light; they walk in the ways of light. All dominion over the Sons of Perversity lies in the hand of the Angel of Darkness; they walk in the ways of darkness. It is because of the Angel of Darkness that all the Sons of Righteousness go astray.",
+        "4.17": "These are the ways of the spirit of truth in the world: to enlighten the heart of man, to level before him all the ways of true righteousness, to instill in his heart fear of the judgments of God, a spirit of humility, patience, abundant compassion, eternal goodness, insight, understanding, mighty wisdom believing in all God's works and trusting in His abundant loving-kindness.",
+        "5.25": "They shall separate themselves from the congregation of the men of perversity and shall unite with respect to doctrine and property, and they shall be accountable to the Sons of Zadok, the Priests who keep the Covenant, and to the multitude of the men of the Community who hold fast to the Covenant.",
+        "6.1": "And this is the rule for the session of the Many. Each in his order: the Priests shall sit first, the elders second, and the rest of all the people shall sit each in his order. And in this order they shall be questioned concerning judgment and every counsel and matter which concerns the Many, each offering his knowledge to the Council of the Community.",
+        "7.2": "No one shall speak during the speech of his companion before his brother has finished speaking. Neither shall anyone speak before his proper rank. The man who is questioned shall speak in his turn.",
+        "8.14": "In the Council of the Community there shall be twelve men and three Priests, perfectly versed in all that is revealed of the whole Law, to practice truth, righteousness, justice, loving-kindness and modesty one with another. They shall preserve faith in the land with steadfastness and meekness, and shall atone for sin by practicing justice and by suffering the sorrows of affliction.",
+        "10.17": "At the onset of fear and dread, and in the place of affliction and distress, I will bless Him for His exceeding wonders and will meditate on His power. I will lean on His loving-kindness throughout the day. I know that in His hand is the judgment of all the living and that all His works are truth.",
+        "11.1": "With the coming of day and night I will enter the Covenant of God, and when evening and morning depart I will recite His statutes. I will place their boundary without turning back. I will declare His judgment according to my perversity, and my transgressions shall be before my eyes as an engraved statute."
+      }
+    },
+    "1QM": {
+      "name": "War Scroll",
+      "abbreviation": "War of the Sons of Light Against the Sons of Darkness",
+      "verses": {
+        "1.1": "For the Instructor: The Rule of War. The first engagement of the Sons of Light shall be to attack the lot of the Sons of Darkness, the army of Belial: the troop of Edom, Moab, the sons of Ammon, the Philistines, and the troops of the Kittim of Assyria. With them as helpers are those who act wickedly against the covenant.",
+        "1.12": "This shall be a time of salvation for the people of God, and a time of dominion for all the men of His forces, and eternal annihilation for all the forces of Belial. There shall be great panic among the sons of Japheth; Assyria shall fall with no one to come to his aid; the dominion of the Kittim shall come to an end.",
+        "12.1": "For the battle is Yours! Their bodies are crushed by the might of Your hand, and there is no one to bury them. You delivered Goliath of Gath, a giant warrior, into the hands of David Your servant, because he trusted in Your great Name and not in sword and spear.",
+        "17.1": "They shall all stand in their battle formations, and the seven divisions of the priests shall stand in their places in the battle array against the enemy.",
+        "17.5": "And by the hand of Your anointed, those who have received the testimonies of Your covenant, You have explained to us the times of the wars of Your hands that You may glorify Yourself among our enemies, to bring down the hordes of Belial.",
+        "17.8": "And in Your mighty wonders we shall stand firm, and in Your victorious right hand we shall prevail. For You are our King, and Yours is the power, and You have fought before for our fathers.",
+        "18.1": "When they return from the battle, having struck down the Kittim, when the great hand of God has defeated Belial and all the forces of his dominion, and none who remain scattered survive."
+      }
+    },
+    "1QH": {
+      "name": "Thanksgiving Hymns",
+      "abbreviation": "Hodayot - Songs of Praise and Thanksgiving",
+      "verses": {
+        "7.17": "I thank You, O Lord, for You have not abandoned me while I sojourned among a people burdened with guilt. You have not judged me according to my guilt, nor have You abandoned me because of the devices of my inclination.",
+        "7.26": "I thank You, O Lord, for You have enlightened my face for Your covenant. I seek You, and sure as the dawn You appear to me as perfect light. But they, the teachers of lies and seers of falsehood, have schemed against me a devilish scheme.",
+        "11.3": "These things I know by Your understanding, for You have opened my ears to marvelous mysteries, though I am a creature of clay, formed from dust, a heart of stone."
+      }
+    },
+    "11QT": {
+      "name": "Temple Scroll",
+      "abbreviation": "Longest Dead Sea Scroll - Temple and Law",
+      "verses": {
+        "53.11": "You shall not swear by My name falsely, nor shall you profane the name of your God. I am the LORD.",
+        "53.14": "If a man makes a vow to the LORD or swears an oath to bind himself by a pledge, he shall not break his word; he shall do according to all that proceeds out of his mouth."
+      }
+    },
+    "4QMMT": {
+      "name": "Miqsat Ma'ase ha-Torah",
+      "abbreviation": "Some Works of the Law",
+      "verses": {
+        "B.8": "And concerning the practices that we consider that some of them concern purity: these are the practices we require that you separate from the congregation of the people and from all their uncleanness.",
+        "C.27": "Now, we have written to you some of the works of the law which we think are good for you and your people. For we see that you have wisdom and knowledge of the Torah. Consider all these things and seek from Him that He strengthen your counsel and remove from you the plans of evil and the device of Belial.",
+        "C.31": "And it will be reckoned to you as righteousness when you do what is upright and good before Him, for your own welfare and for that of Israel."
+      }
+    },
+    "CD": {
+      "name": "Damascus Document",
+      "abbreviation": "Zadokite Fragments",
+      "verses": {
+        "4.17": "They shall keep away from fornication according to the statute. And none shall take a wife who is not yet twenty years old. And they shall not marry within the prohibited degrees of kinship as written in the Law.",
+        "4.21": "And concerning divorce, Moses said: If a man takes a wife and she finds no favor in his eyes because he has found some indecency in her, then he may write her a certificate of divorce.",
+        "5.1": "If a man dies and has no son, then his inheritance shall pass to his daughter. And if he has no daughter, you shall give his inheritance to his brothers.",
+        "6.17": "All who have been brought into the covenant shall separate from all the sons of the pit. No one shall associate with him in his work or in his goods. For all the holy ones of the Most High have cursed him.",
+        "6.19": "For thus is the word that Jeremiah spoke to Baruch son of Neriah, and Elisha to Gehazi his servant. All those who enter the covenant must not enter the sanctuary to kindle the altar fire in vain.",
+        "8.21": "And this is the exposition of the regulations by which they shall be ruled until there arises the Messiah of Aaron and Israel. This is the rule for the settlement of the camps according to the order of the time."
+      }
+    }
+  }
+}

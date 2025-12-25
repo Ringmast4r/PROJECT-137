@@ -64,8 +64,10 @@ class CrossRefLoader {
             const toVerse = parts[1].trim();
             const votes = parseInt(parts[2]) || 0;
 
-            // Determine book type
-            const type = this.getBookType(toVerse);
+            // Determine book type - use 4th column if present, otherwise detect from verse
+            const type = parts.length >= 4 && parts[3].trim()
+                ? parts[3].trim()
+                : this.getBookType(toVerse);
 
             this.allReferences.push({
                 nt: fromVerse,
@@ -154,8 +156,20 @@ class CrossRefLoader {
     }
 
     generateDescription(from, to, type) {
-        if (type === 'Ethiopian' || type === 'Deuterocanonical') {
-            return `Cross-reference to ${type} book`;
+        if (type === 'Ethiopian') {
+            return 'Parallel in Ethiopian/Pseudepigrapha text';
+        }
+        if (type === 'Deuterocanonical') {
+            return 'Reference to Deuterocanonical book';
+        }
+        if (type === 'Gnostic') {
+            return 'Parallel in Gnostic/Early Christian text';
+        }
+        if (type === 'Dead Sea Scrolls') {
+            return 'Parallel in Dead Sea Scrolls';
+        }
+        if (type === 'Lost') {
+            return 'Reference to lost/missing text';
         }
         return 'Cross-reference';
     }

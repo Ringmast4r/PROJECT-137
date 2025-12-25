@@ -170,6 +170,10 @@
             background: rgba(255, 165, 0, 0.3);
             border: 1px solid #ffa500;
         }
+        .badge-dss {
+            background: rgba(0, 191, 255, 0.3);
+            border: 1px solid #00BFFF;
+        }
         .book-item:hover {
             background: rgba(255, 255, 255, 0.1);
             cursor: pointer;
@@ -454,6 +458,10 @@
                 <div class="stat-label">Gnostic References</div>
             </div>
             <div class="stat-card">
+                <div class="stat-number" id="dss-refs">...</div>
+                <div class="stat-label">Dead Sea Scrolls</div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-number" id="lost-refs">...</div>
                 <div class="stat-label">Lost Text References</div>
             </div>
@@ -637,6 +645,7 @@
     <script src="js/cross-ref-loader.js"></script>
     <script src="js/bible-text-loader.js"></script>
     <script src="js/deuterocanonical-loader.js"></script>
+    <script src="js/noncanonical-text-loader.js"></script>
 
     <script>
         // Will be loaded from file
@@ -644,6 +653,7 @@
         const loader = new CrossRefLoader();
         const bibleLoader = new BibleTextLoader();
         const deuteroLoader = new DeuterocanonicalLoader();
+        const nonCanonLoader = new NonCanonicalTextLoader();
         let isLoading = true;
 
         // Temporary Ethiopian data with full text (will be merged with loaded data)
@@ -929,9 +939,13 @@
                 document.getElementById('refs-tbody').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; font-size: 1.2em;">📜 Loading deuterocanonical verse text...</td></tr>';
                 await deuteroLoader.load();
 
+                // Load non-canonical texts (Gnostic, DSS)
+                document.getElementById('refs-tbody').innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; font-size: 1.2em;">📖 Loading Gnostic & DSS texts...</td></tr>';
+                await nonCanonLoader.load();
+
                 // Populate verse text for all references
                 console.log('📝 Populating verse text...');
-                populateVerseText();
+                await populateVerseText();
 
                 // Merge Ethiopian text data (for non-canonical targets)
                 mergeTextData();
@@ -951,9 +965,9 @@
             }
         });
 
-        function populateVerseText() {
+        async function populateVerseText() {
             // Add NT verse text to all references
-            crossReferences.forEach(ref => {
+            const promises = crossReferences.map(async (ref) => {
                 ref.ntText = bibleLoader.getVerseText(ref.nt);
 
                 // For canonical targets, get that text too
@@ -968,7 +982,16 @@
                         ref.targetText = text;
                     }
                 }
+                // For Gnostic and Dead Sea Scrolls, use the non-canonical loader
+                else if (ref.type === 'Gnostic' || ref.type === 'Dead Sea Scrolls') {
+                    const text = await nonCanonLoader.getVerseText(ref.target);
+                    if (text) {
+                        ref.targetText = text;
+                    }
+                }
             });
+
+            await Promise.all(promises);
         }
 
         function mergeTextData() {
@@ -1020,6 +1043,7 @@
                 if (ref.type === 'Canonical') badgeClass = 'badge-canonical';
                 if (ref.type === 'Deuterocanonical') badgeClass = 'badge-deuterocanonical';
                 if (ref.type === 'Lost') badgeClass = 'badge-lost';
+                if (ref.type === 'Dead Sea Scrolls') badgeClass = 'badge-dss';
 
                 row.innerHTML = `
                     <td class="verse-ref">${ref.nt}</td>
@@ -1066,6 +1090,7 @@
             const deuteroRefs = filteredData.filter(r => r.type === 'Deuterocanonical').length;
             const ethiopianRefs = filteredData.filter(r => r.type === 'Ethiopian').length;
             const gnosticRefs = filteredData.filter(r => r.type === 'Gnostic').length;
+            const dssRefs = filteredData.filter(r => r.type === 'Dead Sea Scrolls').length;
             const lostRefs = filteredData.filter(r => r.type === 'Lost').length;
             const highConf = filteredData.filter(r => r.votes >= 100).length;
 
@@ -1078,6 +1103,7 @@
             document.getElementById('deutero-refs').textContent = formatNumber(deuteroRefs);
             document.getElementById('ethiopian-refs').textContent = formatNumber(ethiopianRefs);
             document.getElementById('gnostic-refs').textContent = formatNumber(gnosticRefs);
+            document.getElementById('dss-refs').textContent = formatNumber(dssRefs);
             document.getElementById('lost-refs').textContent = formatNumber(lostRefs);
             document.getElementById('high-confidence').textContent = formatNumber(highConf);
         }

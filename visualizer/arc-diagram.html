@@ -1575,10 +1575,11 @@
                     deutero: nonCanonRefs.filter(r => r.type === 'Deuterocanonical').length,
                     ethiopian: nonCanonRefs.filter(r => r.type === 'Ethiopian').length,
                     gnostic: nonCanonRefs.filter(r => r.type === 'Gnostic').length,
+                    dss: nonCanonRefs.filter(r => r.type === 'Dead Sea Scrolls').length,
                     lost: nonCanonRefs.filter(r => r.type === 'Lost').length
                 };
 
-                const total = stats.deutero + stats.ethiopian + stats.gnostic + stats.lost;
+                const total = stats.deutero + stats.ethiopian + stats.gnostic + stats.dss + stats.lost;
 
                 // Update stat card
                 document.getElementById('noncanon-count').textContent = total;
@@ -1590,7 +1591,7 @@
             } catch (error) {
                 console.error('Error loading cross-refs:', error);
                 document.getElementById('noncanon-count').textContent = '0';
-                return { refs: [], stats: { deutero: 0, ethiopian: 0, gnostic: 0, lost: 0 } };
+                return { refs: [], stats: { deutero: 0, ethiopian: 0, gnostic: 0, dss: 0, lost: 0 } };
             }
         }
 
